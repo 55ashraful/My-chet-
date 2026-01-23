@@ -1,1 +1,285 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ফ্রেন্ড গ্রুপ</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2; --secondary-color: #f5a623; --danger-color: #e74c3c;
+            --background-color: #f0f4f8; --card-bg-color: #ffffff; --text-color: #333;
+        }
+        body { font-family: 'Hind Siliguri', Arial, sans-serif; background-color: var(--background-color); color: var(--text-color); margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; background-color: var(--card-bg-color); padding: 20px; min-height: 100vh; box-sizing: border-box; }
+        .page { display: none; } .page.active { display: block; }
+        h1, h2 { text-align: center; color: var(--primary-color); }
+        #auth-page { padding-top: 50px; text-align: center; }
+        #auth-page h1 span { font-size: 36px; }
+        #google-login-btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; font-size: 18px; font-weight: bold; color: #555; background-color: #fff; border: 1px solid #ccc; border-radius: 8px; cursor: pointer; margin-top: 30px; }
+        #google-login-btn img { width: 24px; height: 24px; margin-right: 12px; }
+        .friend-card { background-color: #fdfdfd; border: 1px solid #e0e0e0; border-radius: 10px; padding: 15px; margin-bottom: 15px; display: flex; align-items: center; gap: 15px; }
+        .friend-card img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+        #logout-btn { display: block; margin: 30px auto; padding: 10px 20px; background-color: var(--danger-color); color: white; border: none; border-radius: 8px; cursor: pointer; }
 
+        #chat-page .container { padding-bottom: 140px; }
+        #chat-messages { padding-bottom: 20px; }
+        .message { display: flex; align-items: flex-end; margin-bottom: 12px; max-width: 90%; }
+        .chat-avatar { width: 35px; height: 35px; border-radius: 50%; margin: 0 8px; }
+        .message-content { padding: 10px 14px; border-radius: 18px; line-height: 1.4; position: relative; }
+        .message .sender { font-weight: bold; font-size: 13px; margin-bottom: 4px; color: var(--primary-color); }
+        .message.sent { align-self: flex-end; flex-direction: row-reverse; }
+        .message.sent .message-content { background-color: #dcf8c6; }
+        .message.received { align-self: flex-start; }
+        .message.received .message-content { background-color: #f1f1f1; }
+        .chat-image { max-width: 200px; max-height: 200px; border-radius: 15px; cursor: pointer; object-fit: cover; margin-top: 5px; }
+        .delete-icon { cursor: pointer; font-size: 20px; color: #e74c3c; position: absolute; top: -8px; right: -8px; background: white; border-radius: 50%; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; line-height: 1; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        .message.sent:hover .delete-icon { display: flex; }
+
+        #chat-form { position: fixed; bottom: 55px; left: 0; right: 0; max-width: 600px; margin: 0 auto; background-color: #fff; padding: 10px; box-shadow: 0 -2px 5px rgba(0,0,0,0.08); display: flex; align-items: center; gap: 10px; box-sizing: border-box; z-index: 100; }
+        #image-upload-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--primary-color); padding: 5px; }
+        #chat-input { flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 20px; }
+        #chat-form button[type="submit"] { padding: 10px 15px; background-color: var(--primary-color); color: white; border: none; border-radius: 20px; cursor: pointer; }
+        
+        #bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; display: none; justify-content: space-around; background-color: #fff; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); padding: 10px 0; }
+        .nav-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #aaa; }
+        .nav-btn.active { color: var(--primary-color); }
+        .message-box { padding: 20px; min-height: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .message-text { font-size: 20px; color: #333; font-weight: normal; line-height: 1.7; margin-bottom: 25px; max-width: 95%; }
+        .message-button { display: none; padding: 12px 25px; background-color: var(--secondary-color); color: white; border: none; border-radius: 8px; font-size: 18px; margin: 10px auto; cursor: pointer; }
+        #final-message { font-size: 52px; font-weight: bold; color: #d81b60; animation: pulse 1.5s infinite; text-align: center; line-height: 1.3; }
+        #final-message .heart { font-size: 90px; display: block; margin-top: 20px; }
+        @keyframes pulse { 0%{transform: scale(1);} 50%{transform: scale(1.1);} 100%{transform: scale(1);} }
+    </style>
+</head>
+<body>
+
+    <div id="auth-page" class="page active">
+        <div class="container">
+             <h1><span>🤝</span> ফ্রেন্ড গ্রুপে স্বাগতম <span>🤝</span></h1>
+            <h2>গ্রুপে যোগ দিতে লগইন করুন</h2>
+            <button id="google-login-btn"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Icon">গুগল দিয়ে লগইন করুন</button>
+        </div>
+    </div>
+
+    <div id="app-container">
+        <div id="home-page" class="page">
+            <div class="container">
+                <h1 id="welcome-title"></h1>
+                <div id="friend-list"></div>
+                <button id="logout-btn">লগ-আউট</button>
+            </div>
+        </div>
+        <div id="chat-page" class="page">
+            <div class="container">
+                <h1>💬 গ্রুপ চ্যাট 💬</h1>
+                <div id="chat-messages"></div>
+            </div>
+            <form id="chat-form">
+                <button type="button" id="image-upload-btn">📎</button>
+                <input type="file" id="image-input" accept="image/*" style="display: none;">
+                <input type="text" id="chat-input" placeholder="মেসেজ লিখুন..." autocomplete="off">
+                <button type="submit">পাঠান</button>
+            </form>
+        </div>
+        <div id="messages-page" class="page">
+             <div class="container">
+                <h1>💌 বিশেষ বার্তা 💌</h1>
+                <div id="message-display" class="message-box"></div>
+            </div>
+        </div>
+        <div id="bottom-nav">
+            <button class="nav-btn" data-page="home-page">🏠</button>
+            <button class="nav-btn" data-page="chat-page">💬</button>
+            <button class="nav-btn" data-page="messages-page">💌</button>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDEmxPZisclLYns5MKnj-ar9fSOjZ_Glho",
+            authDomain: "my-incame-chait.firebaseapp.com",
+            databaseURL: "https://my-incame-chait-default-rtdb.firebaseio.com",
+            projectId: "my-incame-chait",
+            storageBucket: "my-incame-chait.appspot.com",
+            messagingSenderId: "610034577258",
+            appId: "1:610034577258:web:cd870a6960a697258ebf13"
+        };
+        
+        const IMGBB_API_KEY = "d617dab9d2117228e38549791d42104a";
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const authPage = document.getElementById('auth-page');
+            const appContainer = document.getElementById('app-container');
+            const bottomNav = document.getElementById('bottom-nav');
+            const googleLoginBtn = document.getElementById('google-login-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+            const pages = document.querySelectorAll('#app-container .page');
+            const navBtns = document.querySelectorAll('.nav-btn');
+            const imageUploadBtn = document.getElementById('image-upload-btn');
+            const imageInput = document.getElementById('image-input');
+            const chatMessagesDiv = document.getElementById('chat-messages');
+            const chatForm = document.getElementById('chat-form');
+            const chatInput = document.getElementById('chat-input');
+            
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    database.ref('users/' + user.uid).set({ name: user.displayName, photoURL: user.photoURL });
+                    document.getElementById('welcome-title').innerText = `👋 ${user.displayName}`;
+                    authPage.style.display = 'none';
+                    appContainer.style.display = 'block';
+                    bottomNav.style.display = 'flex';
+                    showPage('home-page');
+                    listenForFriends();
+                    listenForMessages();
+                } else {
+                    authPage.style.display = 'block';
+                    appContainer.style.display = 'none';
+                    bottomNav.style.display = 'none';
+                }
+            });
+
+            googleLoginBtn.addEventListener('click', () => {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                auth.signInWithPopup(provider).catch(error => console.error("Google Sign-In Error:", error));
+            });
+
+            logoutBtn.addEventListener('click', () => auth.signOut());
+
+            const showPage = (pageId) => {
+                pages.forEach(p => p.classList.remove('active'));
+                document.getElementById(pageId).classList.add('active');
+                navBtns.forEach(b => b.classList.remove('active'));
+                document.querySelector(`.nav-btn[data-page="${pageId}"]`)?.classList.add('active');
+                if (pageId === 'messages-page') startMessageSequence();
+            };
+            navBtns.forEach(btn => btn.addEventListener('click', () => showPage(btn.dataset.page)));
+
+            imageUploadBtn.addEventListener('click', () => imageInput.click());
+            imageInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const formData = new FormData();
+                formData.append('key', IMGBB_API_KEY);
+                formData.append('image', file);
+                
+                const tempId = 'temp_' + Date.now();
+                appendMessage({ uid: auth.currentUser.uid, sender: auth.currentUser.displayName, photoURL: auth.currentUser.photoURL, text: "ছবি আপলোড হচ্ছে...", tempId: tempId });
+
+                fetch('https://api.imgbb.com/1/upload', { method: 'POST', body: formData })
+                .then(response => response.json())
+                .then(result => {
+                    document.getElementById(tempId)?.remove();
+                    if (result.success) {
+                        sendMessage(null, result.data.url);
+                    } else {
+                        alert("ছবি আপলোড করা যায়নি। কারণ: " + result.error.message);
+                    }
+                })
+                .catch(error => {
+                    document.getElementById(tempId)?.remove();
+                    alert("ছবি আপলোড করার সময় একটি নেটওয়ার্ক সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।");
+                    console.error('ImgBB Upload Error:', error);
+                });
+
+                imageInput.value = '';
+            });
+
+            chatForm.addEventListener('submit', e => {
+                e.preventDefault();
+                const text = chatInput.value.trim();
+                if (text) { sendMessage(text, null); chatInput.value = ''; }
+            });
+
+            function sendMessage(text, imageUrl) {
+                if ((!text && !imageUrl) || !auth.currentUser) return;
+                database.ref('messages').push({
+                    uid: auth.currentUser.uid, sender: auth.currentUser.displayName, photoURL: auth.currentUser.photoURL,
+                    text: text || '', imageUrl: imageUrl || '', timestamp: firebase.database.ServerValue.TIMESTAMP
+                });
+            }
+
+            function listenForMessages() {
+                const messagesRef = database.ref('messages').limitToLast(100);
+                chatMessagesDiv.innerHTML = '';
+                messagesRef.on('child_added', snapshot => appendMessage(snapshot.val(), snapshot.key));
+                messagesRef.on('child_removed', snapshot => {
+                    const elementToRemove = document.getElementById(snapshot.key);
+                    if (elementToRemove) elementToRemove.remove();
+                });
+            }
+
+            function appendMessage(msg, msgKey) {
+                 if(!msg || !auth.currentUser) return;
+                 const msgDiv = document.createElement('div');
+                 msgDiv.id = msg.tempId || msgKey;
+                 msgDiv.className = `message ${msg.uid === auth.currentUser.uid ? 'sent' : 'received'}`;
+                 const photo = msg.photoURL || `https://api.multiavatar.com/${msg.sender}.png`;
+                 let contentHTML = `<div class="sender">${msg.sender}</div>`;
+                 if (msg.imageUrl) contentHTML += `<img src="${msg.imageUrl}" class="chat-image" alt="ছবি">`;
+                 if (msg.text) contentHTML += `<div>${msg.text}</div>`;
+                 const deleteIconHTML = msg.uid === auth.currentUser.uid && !msg.tempId ? `<span class="delete-icon" data-key="${msgKey}">❌</span>` : '';
+                 msgDiv.innerHTML = `<img src="${photo}" class="chat-avatar"><div class="message-content">${contentHTML}${deleteIconHTML}</div>`;
+                 chatMessagesDiv.appendChild(msgDiv);
+                 chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+            }
+
+            chatMessagesDiv.addEventListener('click', (e) => {
+                if (e.target.classList.contains('delete-icon')) {
+                    const msgKey = e.target.dataset.key;
+                    if (confirm("আপনি কি সত্যিই এই মেসেজটি মুছে ফেলতে চান?")) {
+                        database.ref('messages/' + msgKey).remove();
+                    }
+                }
+            });
+            
+            const friendList = document.getElementById('friend-list');
+            function listenForFriends() {
+                 database.ref('users').on('value', snapshot => {
+                    friendList.innerHTML = '';
+                    const users = snapshot.val();
+                    if(users) {
+                        Object.values(users).forEach(user => {
+                            const card = document.createElement('div');
+                            card.className = 'friend-card';
+                            const photo = user.photoURL || `https://api.multiavatar.com/${user.name}.png`;
+                            card.innerHTML = `<img src="${photo}" alt="ছবি"><h3>${user.name}</h3>`;
+                            friendList.appendChild(card);
+                        });
+                    }
+                });
+            }
+
+            const messages = [ "বন্ধু, আমাদের এই গ্রুপে তোমাকে স্বাগত জানাতে পেরে আমরা সবাই অনেক আনন্দিত! 🎉 এটা শুধু একটা গ্রুপ নয়, এটা আমাদের একটা পরিবার। এখানে আমরা সবাই মিলে হাসব, গল্প করব আর একে অপরের পাশে থাকব, ঠিক যেমনটা সত্যিকারের বন্ধুরা থাকে। 🥳", "বন্ধুত্ব হলো এমন একটি সম্পর্ক যা রক্ত দিয়ে নয়, মন দিয়ে তৈরি হয়। ❤️ তোমার মতো একজন বন্ধু পাওয়া জীবনের সেরা উপহারগুলোর মধ্যে একটি। ধন্যবাদ আমার জীবনে আসার জন্য এবং এটিকে আরও সুন্দর করে তোলার জন্য। 🎁", "মনে রেখো, জীবনের পথে চলতে গিয়ে যদি কখনো নিজেকে একা মনে হয়, তাহলে শুধু একবার আমাদের কথা ভেবো। 🤝 আমরা বন্ধুরা সবসময় তোমার পাশে আছি, যেকোনো পরিস্থিতিতে, যেকোনো সময়ে। তোমার মুখের এক চিলতে হাসির জন্য আমরা সবকিছু করতে পারি। 🤗", "আমাদের একসাথে কাটানো সময়গুলো, সেইসব মজার স্মৃতি, আর পাগলামি ভরা দিনগুলোর কথা ভাবলে এখনো হাসি পায়। 😂 চলো, আমরা ভবিষ্যতেও এরকম আরও অনেক সুন্দর মুহূর্ত তৈরি করি যা সারাজীবন আমাদের মনে থাকবে। 📸", "একজন ভালো বন্ধু হলো আয়নার মতো, যে তোমার ভালো দিকগুলো দেখায়; আর ছায়ার মতো, যে তোমার কঠিন সময়েও পাশে থাকে। 🌟 আমি ভাগ্যবান যে তোমার মতো একজন বন্ধু পেয়েছি যে আমার শক্তি এবং দুর্বলতা দুটোই জানে, কিন্তু কখনো বিচার করে না।", "কিছু সম্পর্ক আমাদের জীবনে আশীর্বাদ হয়ে আসে। আমাদের বন্ধুত্ব ঠিক তেমনই একটি আশীর্বাদ। 🙏 এই সম্পর্কটা যত্ন করে বাঁচিয়ে রাখার দায়িত্ব আমাদের সবার। চলো, কথা দিই, যত ঝড়ই আসুক, আমরা একে অপরের হাত কখনো ছাড়ব না।", "জীবনের সবচেয়ে বড় পাওয়া হলো এমন কিছু বন্ধু থাকা, যাদের কাছে মন খুলে সব কথা বলা যায়, কোনো কিছু না ভেবেই। 😌 তুমি আমার সেইরকম একজন বন্ধু, যার কাছে আমি আমার সব গোপন কথা, সব স্বপ্ন, সব ভয়ের কথা বলতে পারি। তোমার কাছে আমি চিরকৃতজ্ঞ।", "আমাদের এই বন্ধুত্বের বাঁধন যেন সারাজীবন অটুট থাকে। 💪 সময়ের সাথে সাথে হয়তো অনেক কিছু বদলে যাবে, আমাদের ব্যস্ততা বাড়বে, দূরত্বও তৈরি হতে পারে, কিন্তু আমাদের এই বন্ধুত্ব যেন কখনো না বদলায়। এই প্রার্থনা করি।", "তুমি শুধু আমার বন্ধু নও, তুমি আমার অনুপ্রেরণা। তোমার ইতিবাচক মনোভাব, তোমার কাজের প্রতি একাগ্রতা আর তোমার সুন্দর মনটা আমাকে সবসময় মুগ্ধ করে। 😊 তোমার কাছ থেকে আমার অনেক কিছু শেখার আছে। পাশে থেকো এভাবেই, সারাজীবন।", "শেষ পর্যন্ত, বন্ধুত্ব কোনো বড় ব্যাপার নয়, এটা লক্ষ লক্ষ ছোট ছোট ভালো লাগার সমষ্টি। ✨ আমাদের একসাথে চা খাওয়া, অকারণে হাসা, একে অপরের বিপদে ছুটে যাওয়া—এই ছোট ছোট মুহূর্তগুলোই আমাদের বন্ধুত্বকে অসাধারণ করে তুলেছে। চলো, এই বন্ধুত্বকে প্রতিদিন উদযাপন করি! 🚀" ];
+            const messageDisplay = document.getElementById('message-display');
+            let currentMessageIndex = 0;
+            function showNextMessage() {
+                messageDisplay.innerHTML = '';
+                if (currentMessageIndex < messages.length) {
+                    const messageText = document.createElement('p');
+                    messageText.className = 'message-text';
+                    messageText.innerText = messages[currentMessageIndex];
+                    const nextButton = document.createElement('button');
+                    nextButton.className = 'message-button';
+                    nextButton.style.display = 'inline-block';
+                    nextButton.innerText = "পরবর্তী বার্তা দেখো";
+                    nextButton.onclick = () => { currentMessageIndex++; showNextMessage(); };
+                    messageDisplay.appendChild(messageText);
+                    messageDisplay.appendChild(nextButton);
+                } else {
+                    messageDisplay.innerHTML = `<div id="final-message">FRIEND<br>GROUP<br>LIFE<span class="heart">❤️</span></div>`;
+                }
+            }
+            function startMessageSequence() { currentMessageIndex = 0; showNextMessage(); }
+        });
+    </script>
+</body>
+</html>
