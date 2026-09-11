@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- জুম বন্ধ করার জন্য Meta Tag আপডেট করা হয়েছে -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   
   <!-- Google Search SEO Meta Tags -->
   <title>Secret Video - Free HD Trending Videos</title>
@@ -23,7 +24,7 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* Content Copy & Selection Protection */
+    /* Content Copy & Selection Protection & Zoom Touch Prevention */
     * { 
       box-sizing: border-box; 
       margin: 0; 
@@ -33,6 +34,7 @@
       -ms-user-select: none;
       user-select: none;
       -webkit-touch-callout: none;
+      touch-action: manipulation; /* জুমGesture নিস্ক্রিয় করার জন্য */
     }
     
     input, textarea {
@@ -300,9 +302,21 @@
     }
 
     /* Modals & Profile Forms */
-    .player-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 2000; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-    .player-modal video, .player-modal iframe { width: 100%; max-height: 70vh; background: #000; border: none; }
-    .close-modal { position: absolute; top: 15px; right: 20px; color: #fff; font-size: 26px; cursor: pointer; z-index: 2001; }
+    .player-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+    
+    /* বাম ও ডান পাশ স্ক্রিন ভরে এজ-টু-এজ ভিডিও প্লেয়ার CSS */
+    .player-modal video, .player-modal iframe { 
+      width: 100vw; 
+      max-width: 100%; 
+      height: auto; 
+      aspect-ratio: 16/9; 
+      max-height: 80vh; 
+      background: #000; 
+      border: none; 
+      object-fit: contain; 
+    }
+    
+    .close-modal { position: absolute; top: 15px; right: 20px; color: #fff; font-size: 28px; cursor: pointer; z-index: 2001; }
     .modal-title { margin-top: 12px; font-size: 14px; font-weight: 600; padding: 0 15px; text-align: center; color: #fff; }
 
     .lock-box { background: #ffffff; border-radius: 12px; width: 85%; max-width: 320px; padding: 20px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
@@ -338,6 +352,28 @@
   </style>
 
   <script>
+    /* ========================================================
+       ওয়েবসাইট জুম সম্পূর্ণ বন্ধ (Disable Zoom Functionality)
+       ======================================================== */
+    document.addEventListener('gesturestart', function (e) {
+      e.preventDefault();
+    });
+
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function (event) {
+      const now = (new Date()).getTime();
+      if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, false);
+
+    document.addEventListener('wheel', function(e) {
+      if (e.ctrlKey) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
     document.addEventListener('contextmenu', event => event.preventDefault());
     document.onkeydown = function (e) {
       if (e.keyCode == 123) { return false; }
@@ -346,6 +382,9 @@
       if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; }
       if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; }
       if (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) { return false; }
+      if (e.ctrlKey && (e.keyCode == 61 || e.keyCode == 107 || e.keyCode == 173 || e.keyCode == 109 || e.keyCode == 187 || e.keyCode == 189)) {
+        e.preventDefault();
+      }
     };
 
     window.addEventListener('load', function() {
@@ -1202,27 +1241,54 @@
       renderVideos();
     };
 
+    /* ========================================================
+       ইউটিউব স্টাইলে ফুলস্ক্রিন প্লেয়ার লজিক
+       ======================================================== */
     window.openVideoPlayer = (url, title) => {
       const modal = document.getElementById('playerModal');
       const videoContainer = document.getElementById('videoPlayerContainer');
       document.getElementById('modalTitle').innerText = title;
       
+      let playerElement = null;
+
       if (url.includes('<iframe') || url.includes('http')) {
         if (url.includes('<iframe')) {
           videoContainer.innerHTML = url;
+          playerElement = videoContainer.querySelector('iframe');
         } else if (url.endsWith('.mp4') || url.endsWith('.webm') || url.includes('cloudinary')) {
-          videoContainer.innerHTML = `<video src="${url}" controls autoplay controlsList="nodownload" oncontextmenu="return false;"></video>`;
+          videoContainer.innerHTML = `<video id="activeVideoPlayer" src="${url}" controls autoplay controlsList="nodownload" oncontextmenu="return false;" allowfullscreen></video>`;
+          playerElement = document.getElementById('activeVideoPlayer');
         } else {
-          videoContainer.innerHTML = `<iframe src="${url}" frameborder="0" allowfullscreen></iframe>`;
+          videoContainer.innerHTML = `<iframe id="activeIframePlayer" src="${url}" frameborder="0" allow="fullscreen; autoplay" allowfullscreen></iframe>`;
+          playerElement = document.getElementById('activeIframePlayer');
         }
       }
 
       modal.style.display = 'flex';
+
+      // ফুলস্ক্রিন ইভেন্ট লিসেনার (ইউটিউব এর মতো ফুলস্ক্রিন ফিচার)
+      if (playerElement) {
+        playerElement.addEventListener('fullscreenchange', handleFullScreenChange);
+        playerElement.addEventListener('webkitfullscreenchange', handleFullScreenChange);
+      }
     };
+
+    function handleFullScreenChange() {
+      // ডিভাইস অনুযায়ী ইউটিউব লেআউটের অভিজ্ঞতা দেওয়ার জন্য প্রয়োজনীয় হ্যান্ডলিং
+    }
 
     window.closePlayer = () => {
       const modal = document.getElementById('playerModal');
       const videoContainer = document.getElementById('videoPlayerContainer');
+      
+      if (document.fullscreenElement || document.webkitFullscreenElement) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+      }
+
       videoContainer.innerHTML = "";
       modal.style.display = 'none';
     };
@@ -1276,7 +1342,7 @@
   <!-- Player Modal -->
   <div class="player-modal" id="playerModal">
     <span class="close-modal" onclick="closePlayer()">&times;</span>
-    <div id="videoPlayerContainer" style="width:100%; display:flex; justify-content:center;"></div>
+    <div id="videoPlayerContainer" style="width:100%; display:flex; justify-content:center; align-items:center;"></div>
     <div class="modal-title" id="modalTitle"></div>
   </div>
 
