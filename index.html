@@ -299,11 +299,70 @@
       z-index: 999;
     }
 
-    /* Modals & Profile Forms */
-    .player-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 2000; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-    .player-modal video, .player-modal iframe { width: 100%; max-height: 70vh; background: #000; border: none; }
-    .close-modal { position: absolute; top: 15px; right: 20px; color: #fff; font-size: 26px; cursor: pointer; z-index: 2001; }
-    .modal-title { margin-top: 12px; font-size: 14px; font-weight: 600; padding: 0 15px; text-align: center; color: #fff; }
+    /* Modals & Player Styling (YouTube Responsive Style) */
+    .player-modal { 
+      display: none; 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      background: rgba(0,0,0,0.95); 
+      z-index: 2000; 
+      flex-direction: column; 
+      justify-content: center; 
+      align-items: center; 
+      backdrop-filter: blur(5px); 
+    }
+
+    /* YouTube Like Video Box Wrapper */
+    .video-box-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      background: #000;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+    }
+
+    .video-box-wrapper video, 
+    .video-box-wrapper iframe { 
+      width: 100%; 
+      height: 100%; 
+      border: none; 
+      object-fit: contain;
+    }
+
+    .close-modal { 
+      position: absolute; 
+      top: 15px; 
+      right: 20px; 
+      color: #fff; 
+      font-size: 28px; 
+      cursor: pointer; 
+      z-index: 2001; 
+      background: rgba(0,0,0,0.5);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-title { 
+      margin-top: 14px; 
+      font-size: 15px; 
+      font-weight: 600; 
+      padding: 0 15px; 
+      text-align: center; 
+      color: #fff; 
+      max-width: 900px;
+      width: 100%;
+    }
 
     .lock-box { background: #ffffff; border-radius: 12px; width: 85%; max-width: 320px; padding: 20px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
     .lock-box i { font-size: 40px; color: #e50914; margin-bottom: 12px; }
@@ -384,41 +443,6 @@
     let adTimerInterval = null;
     let userAccessStatus = 'none';
 
-    /* ========================================================
-       স্ক্রিনে টাচ করলে ১০ সেকেন্ড পর অ্যাড শো করার লজিক
-       ======================================================== */
-    let lastTouchStartTime = 0;
-
-    document.addEventListener('click', function(e) {
-      // যদি প্লেয়ার মোডাল অথবা লক মোডাল ওপেন থাকে তবে স্ক্রিন টাচ এড অফ থাকবে
-      const playerModal = document.getElementById('playerModal');
-      const lockModal = document.getElementById('lockModal');
-      if ((playerModal && playerModal.style.display === 'flex') || (lockModal && lockModal.style.display === 'flex')) {
-        return;
-      }
-
-      const now = Date.now();
-
-      // প্রথমবার টাচ করলে শুধু টাইমার সেট হবে
-      if (lastTouchStartTime === 0) {
-        lastTouchStartTime = now;
-        return;
-      }
-
-      // ১০ সেকেন্ড পার হওয়ার পর ইউজার টাচ করলে অ্যাড শো হবে
-      if (now - lastTouchStartTime >= 10000) {
-        let targetUrl = adUrlData.trim() || "https://google.com";
-        if (targetUrl.includes("src=")) {
-          const match = targetUrl.match(/src=["']([^"']+)["']/);
-          if (match && match[1]) targetUrl = match[1];
-        }
-        window.open(targetUrl, '_blank');
-        
-        // অ্যাড খোলার পর টাইমার রিসেট করে আবার নতুন করে স্টার্ট হবে
-        lastTouchStartTime = now;
-      }
-    }, true);
-
     onAuthStateChanged(auth, (user) => {
       currentUser = user;
       updateProfileUI();
@@ -468,6 +492,30 @@
         if (config.socialBarAdCode) injectAdsterraScript(config.socialBarAdCode, 'socialBarAdContainer');
       }
     });
+
+    // Universal Screen Click Handler (15 Seconds Popunder Trigger)
+    document.addEventListener('click', function(e) {
+      if (!adUrlData) return;
+      
+      // Ignore clicks on close buttons or inputs to avoid frustrating the user
+      if (e.target.closest('.close-modal, input, textarea, button')) return;
+
+      const lastClickAdTime = localStorage.getItem('lastClickAdTime') || 0;
+      const now = Date.now();
+
+      // 15000ms = 15 seconds interval logic
+      if (now - lastClickAdTime >= 15000) {
+        let targetUrl = adUrlData.trim();
+        if (targetUrl.includes("src=")) {
+          const match = targetUrl.match(/src=["']([^"']+)["']/);
+          if (match && match[1]) targetUrl = match[1];
+        }
+        if (targetUrl) {
+          window.open(targetUrl, '_blank');
+          localStorage.setItem('lastClickAdTime', now);
+        }
+      }
+    }, true);
 
     function injectAdsterraScript(scriptCode, containerId) {
       if (!scriptCode) return;
@@ -782,7 +830,6 @@
       
       const isUnlocked = isPremium ? (userAccessStatus === 'approved' || currentCount >= requiredAds) : true;
 
-      // ফায়ারবেস ইমেজের ডায়নামিক লিঙ্ক চেক করা
       const rawCover = item.imgUrl || item.posterUrl || item.thumbnailUrl || (item.episodes && item.episodes[0] ? item.episodes[0].thumbnailUrl : '');
       const coverImage = (rawCover && rawCover.trim() !== '') ? rawCover : 'https://via.placeholder.com/300x450/1e1e1e/ffffff?text=Secret+Video';
 
@@ -813,59 +860,7 @@
     }
 
     window.handleNormalVideoClick = (videoUrl, title, specificAdUrl) => {
-      const lastAdTime = localStorage.getItem('lastAdTime') || 0;
-      const now = Date.now();
-      const intervalMs = adInterval * 60 * 1000;
-
-      if (adInterval === 0 || (now - lastAdTime >= intervalMs)) {
-        let targetUrl = specificAdUrl || adUrlData.trim() || "https://google.com";
-        if (targetUrl.includes("src=")) {
-          const match = targetUrl.match(/src=["']([^"']+)["']/);
-          if (match && match[1]) targetUrl = match[1];
-        }
-        
-        window.open(targetUrl, '_blank');
-        localStorage.setItem('lastAdTime', now);
-
-        const modal = document.getElementById('lockModal');
-        const lockBox = modal.querySelector('.lock-box, .timer-overlay-card');
-
-        lockBox.className = "timer-overlay-card";
-        lockBox.innerHTML = `
-          <i class="fa-solid fa-clock" style="font-size:35px; color:#ffc107; margin-bottom:8px;"></i>
-          <h3 style="font-size:15px; margin-bottom:5px;">ভিডিওটি প্লে হতে অপেক্ষা করুন</h3>
-          <p style="font-size:11px; color:#aaa;">নতুন ট্যাবে অ্যাড দেখা শেষ হলে 'ভিডিও দেখুন' বাটন আসবে।</p>
-          
-          <div id="adTimerBox" class="timer-badge">
-            অপেক্ষা করুন: <span id="adSecondsLeft">10</span> সেকেন্ড
-          </div>
-
-          <button id="adCloseXBtn" class="ad-x-close-btn" style="display:none;" onclick="startNormalVideoAfterAd('${videoUrl}', '${title}')">
-            ✕ বন্ধ করুন ও ভিডিও দেখুন
-          </button>
-        `;
-
-        modal.style.display = 'flex';
-
-        let timeLeft = 10; 
-        if (adTimerInterval) clearInterval(adTimerInterval);
-
-        adTimerInterval = setInterval(() => {
-          timeLeft--;
-          const timerElem = document.getElementById('adSecondsLeft');
-          if (timerElem) timerElem.innerText = timeLeft;
-
-          if (timeLeft <= 0) {
-            clearInterval(adTimerInterval);
-            const timerBox = document.getElementById('adTimerBox');
-            const closeBtn = document.getElementById('adCloseXBtn');
-            if (timerBox) timerBox.style.display = 'none';
-            if (closeBtn) closeBtn.style.display = 'block';
-          }
-        }, 1000);
-      } else {
-        openVideoPlayer(videoUrl, title);
-      }
+      openVideoPlayer(videoUrl, title);
     };
 
     window.startNormalVideoAfterAd = (videoUrl, title) => {
@@ -1202,6 +1197,7 @@
       renderVideos();
     };
 
+    // YouTube Responsive Player
     window.openVideoPlayer = (url, title) => {
       const modal = document.getElementById('playerModal');
       const videoContainer = document.getElementById('videoPlayerContainer');
@@ -1210,10 +1206,16 @@
       if (url.includes('<iframe') || url.includes('http')) {
         if (url.includes('<iframe')) {
           videoContainer.innerHTML = url;
+          const iframe = videoContainer.querySelector('iframe');
+          if (iframe) {
+            iframe.setAttribute('allowfullscreen', 'true');
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+          }
         } else if (url.endsWith('.mp4') || url.endsWith('.webm') || url.includes('cloudinary')) {
-          videoContainer.innerHTML = `<video src="${url}" controls autoplay controlsList="nodownload" oncontextmenu="return false;"></video>`;
+          videoContainer.innerHTML = `<video src="${url}" controls autoplay controlsList="nodownload" allowfullscreen oncontextmenu="return false;"></video>`;
         } else {
-          videoContainer.innerHTML = `<iframe src="${url}" frameborder="0" allowfullscreen></iframe>`;
+          videoContainer.innerHTML = `<iframe src="${url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:100%;"></iframe>`;
         }
       }
 
@@ -1276,7 +1278,7 @@
   <!-- Player Modal -->
   <div class="player-modal" id="playerModal">
     <span class="close-modal" onclick="closePlayer()">&times;</span>
-    <div id="videoPlayerContainer" style="width:100%; display:flex; justify-content:center;"></div>
+    <div class="video-box-wrapper" id="videoPlayerContainer"></div>
     <div class="modal-title" id="modalTitle"></div>
   </div>
 
