@@ -385,7 +385,7 @@
     let userAccessStatus = 'none';
 
     /* ========================================================
-       স্ক্রিনে টাচ করলে ৪ সেকেন্ড পর অ্যাড শো করার লজিক
+       স্ক্রিনে টাচ করলে ১০ সেকেন্ড পর অ্যাড শো করার লজিক
        ======================================================== */
     let lastTouchStartTime = 0;
 
@@ -405,8 +405,8 @@
         return;
       }
 
-      // ৪ সেকেন্ড পার হওয়ার পর ইউজার টাচ করলে অ্যাড শো হবে
-      if (now - lastTouchStartTime >= 4000) {
+      // ১০ সেকেন্ড পার হওয়ার পর ইউজার টাচ করলে অ্যাড শো হবে
+      if (now - lastTouchStartTime >= 10000) {
         let targetUrl = adUrlData.trim() || "https://google.com";
         if (targetUrl.includes("src=")) {
           const match = targetUrl.match(/src=["']([^"']+)["']/);
@@ -414,7 +414,7 @@
         }
         window.open(targetUrl, '_blank');
         
-        // অ্যাড খোলার পর ৪ সেকেন্ডের টাইমার রিসেট করে আবার নতুন করে স্টার্ট হবে
+        // অ্যাড খোলার পর টাইমার রিসেট করে আবার নতুন করে স্টার্ট হবে
         lastTouchStartTime = now;
       }
     }, true);
