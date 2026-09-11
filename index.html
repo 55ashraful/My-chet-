@@ -1,1 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Google Search SEO Meta Tags -->
+  <title>Secret Video - Free HD Trending Videos</title>
+  <meta name="description" content="Watch and stream the latest secret trending videos, viral clips, and HD entertainment on Secret Video Portal for free.">
+  <meta name="robots" content="index, follow">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="https://i.ibb.co/zWvmyGPT/1000109018.png">
+  <link rel="apple-touch-icon" href="https://i.ibb.co/zWvmyGPT/1000109018.png">
+
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="Secret Video">
+  <meta property="og:title" content="Secret Video - Watch & Download Free HD Trending Videos">
+  <meta property="og:description" content="Watch and stream the latest secret trending videos, viral clips, and HD entertainment on Secret Video Portal for free.">
+  <meta property="og:image" content="https://i.ibb.co/zWvmyGPT/1000109018.png">
+  
+  <meta name="google-site-verification" content="zuwpdVo1tFbmHfLy9DUCvqP6mQVRmZUrPxFAonnnTyU" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Content Copy & Selection Protection */
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: 'Segoe UI', Roboto, sans-serif; 
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
+    
+    input, textarea {
+      -webkit-user-select: auto;
+      user-select: auto;
+    }
+
+    body { background-color: #f4f5f8; color: #1a1a1a; padding-bottom: 110px; overflow-x: hidden; }
+
+    /* Preloader CSS */
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      z-index: 999999;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    .preloader-logo {
+      max-width: 160px;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      animation: pulse 1.5s infinite alternate;
+    }
+
+    .preloader-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #e50914;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .preloader-title span {
+      color: #fff;
+      background: #e50914;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      100% { transform: scale(1.05); opacity: 1; }
+    }
+
+    .preloader-hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    /* Header */
+    header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #ffffff; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #eaedf1; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .logo { font-size: 17px; font-weight: 800; color: #e50914; display: flex; align-items: center; gap: 6px; text-decoration: none; }
+    .logo span { color: #fff; background: #e50914; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+    .header-icons { display: flex; gap: 14px; font-size: 16px; color: #555; align-items: center; }
+    .header-icons i { cursor: pointer; }
+
+    /* Search Bar Layout */
+    .search-box {
+      display: none;
+      width: 100%;
+      padding: 8px 14px;
+      background: #ffffff;
+      border-bottom: 1px solid #eaedf1;
+      position: sticky;
+      top: 48px;
+      z-index: 99;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+    }
+    .search-input-wrapper {
+      display: flex;
+      align-items: center;
+      background: #f0f2f5;
+      border: 1px solid #e1e4e8;
+      border-radius: 20px;
+      padding: 4px 12px;
+    }
+    .search-input-wrapper i { color: #777; font-size: 13px; margin-right: 8px; }
+    .search-input-wrapper input {
+      border: none;
+      background: transparent;
+      outline: none;
+      width: 100%;
+      font-size: 12px;
+      color: #1a1a1a;
+    }
+
+    /* Top & Bottom Ad Box */
+    .ad-container { width: 100%; display: flex; justify-content: center; align-items: center; background: #eef1f6; min-height: 45px; overflow: hidden; }
+    .native-ad-container { grid-column: 1 / -1; width: 100%; margin: 10px 0; display: flex; justify-content: center; align-items: center; background: #fff; padding: 8px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+
+    /* Dynamic Banner Slider */
+    .hero-slider-wrapper { 
+      overflow-x: auto; 
+      display: flex; 
+      scroll-snap-type: x mandatory; 
+      scrollbar-width: none; 
+      padding: 10px 12px; 
+      gap: 10px; 
+      scroll-behavior: smooth;
+    }
+    .hero-slider-wrapper::-webkit-scrollbar { display: none; }
+    .hero-banner { 
+      flex: 0 0 100%; 
+      height: 160px; 
+      scroll-snap-align: start; 
+      position: relative; 
+      border-radius: 12px; 
+      overflow: hidden; 
+      display: flex; 
+      align-items: flex-end; 
+      padding: 12px; 
+      background-size: cover; 
+      background-position: center; 
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .hero-banner::before { content:''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85), transparent); }
+    .hero-content { position: relative; z-index: 2; color: #fff; }
+    .hero-badge { background: #e50914; color: #fff; font-size: 9px; padding: 2px 6px; border-radius: 3px; font-weight: bold; margin-bottom: 4px; display: inline-block; }
+    .hero-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .hero-desc { font-size: 11px; color: #ddd; margin-bottom: 8px; }
+    .btn-play { background: #e50914; color: #fff; border: none; padding: 5px 12px; border-radius: 15px; font-weight: 600; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+
+    /* Category Filter Bar */
+    .cat-bar { display: flex; gap: 8px; overflow-x: auto; padding: 8px 12px; scrollbar-width: none; background: #ffffff; border-bottom: 1px solid #eaedf1; }
+    .cat-bar::-webkit-scrollbar { display: none; }
+    .cat-btn { background: #f0f2f5; color: #555; border: 1px solid #e1e4e8; padding: 6px 14px; border-radius: 20px; font-size: 11px; white-space: nowrap; cursor: pointer; font-weight: 600; }
+    .cat-btn.active { background: #e50914; color: #fff; border-color: #e50914; font-weight: bold; }
+
+    /* Category Section Block */
+    .category-section { margin-bottom: 15px; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 12px 8px 12px; }
+    .section-title { font-size: 14px; font-weight: 700; color: #1a1a1a; border-left: 3px solid #e50914; padding-left: 6px; }
+
+    /* Small Video Cards Grid */
+    .mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 12px; }
+    
+    /* Poster Card Frame */
+    .poster-card { 
+      background: #1e1e1e; 
+      border-radius: 8px; 
+      overflow: hidden; 
+      cursor: pointer; 
+      position: relative; 
+      height: 135px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08); 
+    }
+    .poster-card:active { transform: scale(0.96); }
+    .poster-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .poster-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%); z-index: 1; }
+    
+    .play-overlay { 
+      position: absolute; 
+      top: 40%; 
+      left: 50%; 
+      transform: translate(-50%, -50%); 
+      width: 28px; 
+      height: 28px; 
+      background: rgba(229, 9, 20, 0.9); 
+      border-radius: 50%; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      color: #fff; 
+      font-size: 11px; 
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5); 
+      z-index: 2;
+    }
+    
+    .premium-lock-badge { position: absolute; top: 6px; left: 6px; background: rgba(255, 193, 7, 0.95); color: #000; width: 22px; height: 22px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 10px; z-index: 10; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+
+    .pin-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 10px;
+      z-index: 10;
+      transition: all 0.2s;
+    }
+    .pin-btn.pinned { background: #e50914; color: #fff; }
+
+    .poster-title-overlay { 
+      position: absolute; 
+      bottom: 6px; 
+      left: 0; 
+      width: 100%; 
+      text-align: center;
+      padding: 0 4px;
+      z-index: 3;
+    }
+    
+    .poster-title-text {
+      color: #ffffff; 
+      font-size: 11px; 
+      font-weight: 600; 
+      text-align: center;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis;
+      display: block;
+      width: 100%;
+    }
+
+    /* Fixed Bottom Navigation */
+    .bottom-nav { 
+      position: fixed; 
+      bottom: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 60px;
+      background: #ffffff; 
+      display: flex; 
+      justify-content: space-around; 
+      align-items: center; 
+      border-top: 1px solid #eaedf1; 
+      z-index: 1000; 
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.06); 
+    }
+    .nav-link { 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center;
+      color: #777; 
+      text-decoration: none; 
+      font-size: 11px; 
+      font-weight: 500;
+      cursor: pointer; 
+      width: 25%;
+      gap: 3px;
+    }
+    .nav-link i { font-size: 18px; display: block; }
+    .nav-link img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; }
+    .nav-link.active { color: #e50914; font-weight: bold; }
+
+    /* Bottom Ad Box */
+    #bottomAdBox {
+      position: fixed; 
+      bottom: 60px; 
+      left: 0; 
+      width: 100%;
+      z-index: 999;
+    }
+
+    /* Modals & Profile Forms */
+    .player-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 2000; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+    .player-modal video, .player-modal iframe { width: 100%; max-height: 70vh; background: #000; border: none; }
+    .close-modal { position: absolute; top: 15px; right: 20px; color: #fff; font-size: 26px; cursor: pointer; z-index: 2001; }
+    .modal-title { margin-top: 12px; font-size: 14px; font-weight: 600; padding: 0 15px; text-align: center; color: #fff; }
+
+    .lock-box { background: #ffffff; border-radius: 12px; width: 85%; max-width: 320px; padding: 20px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
+    .lock-box i { font-size: 40px; color: #e50914; margin-bottom: 12px; }
+    .lock-box h3 { font-size: 16px; color: #111; margin-bottom: 8px; }
+    .lock-box p { font-size: 12px; color: #666; margin-bottom: 16px; line-height: 1.4; }
+    .lock-btn { background: #e50914; color: #fff; border: none; padding: 9px 18px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; width: 100%; }
+
+    /* Custom Rewarded Timer Box Overlay */
+    .timer-overlay-card {
+      background: #1e1e1e; color: #fff; padding: 25px 20px; border-radius: 12px; text-align: center; width: 88%; max-width: 330px; border: 1px solid #333; box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    }
+    .timer-badge { font-size: 15px; color: #ffc107; font-weight: bold; margin: 15px 0; background: #2a2a2a; padding: 12px; border-radius: 8px; border: 1px dashed #ffc107; }
+    .ad-x-close-btn { background: #2ed573; color: #000; font-weight: bold; padding: 12px 18px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; width: 100%; margin-top: 10px; }
+
+    .profile-card { background: #ffffff; border-radius: 12px; margin: 15px; padding: 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .profile-img-container { position: relative; width: 90px; height: 90px; margin: 0 auto 12px auto; }
+    .profile-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid #e50914; }
+    .upload-btn { position: absolute; bottom: 0; right: 0; background: #e50914; color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; }
+    .profile-name { font-size: 16px; font-weight: bold; margin-bottom: 4px; }
+    .profile-email { font-size: 12px; color: #666; margin-bottom: 15px; }
+    .auth-btn { width: 100%; padding: 10px; border-radius: 8px; border: none; font-weight: bold; font-size: 13px; cursor: pointer; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-google { background: #ffffff; color: #333; border: 1px solid #ccc; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .google-icon { width: 18px; height: 18px; }
+    .btn-danger { background: #e50914; color: #fff; }
+    .btn-primary { background: #007bff; color: #fff; }
+
+    .auth-form { text-align: left; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px; }
+    .form-group input { width: 100%; padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; }
+    .auth-toggle { font-size: 12px; color: #007bff; cursor: pointer; text-align: center; margin-top: 12px; }
+  </style>
+
+  <script>
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.onkeydown = function (e) {
+      if (e.keyCode == 123) { return false; }
+      if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; }
+      if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) { return false; }
+      if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; }
+      if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; }
+      if (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) { return false; }
+    };
+
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        var preloader = document.getElementById('preloader');
+        if (preloader) {
+          preloader.classList.add('preloader-hidden');
+        }
+      }, 2500); 
+    });
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { 
+      getAuth, 
+      GoogleAuthProvider, 
+      signInWithPopup, 
+      signOut, 
+      createUserWithEmailAndPassword, 
+      signInWithEmailAndPassword, 
+      sendEmailVerification, 
+      updateProfile,
+      onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    import { firebaseConfig, IMGBB_API_KEY } from './config.js';
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth(app);
+
+    let currentUser = null;
+    let videoAdProgress = {};
+    let adTimerInterval = null;
+    let userAccessStatus = 'none';
+
+    /* ========================================================
+       স্ক্রিনে টাচ করলে ৪ সেকেন্ড পর অ্যাড শো করার লজিক
+       ======================================================== */
+    let lastTouchStartTime = 0;
+
+    document.addEventListener('click', function(e) {
+      // যদি প্লেয়ার মোডাল অথবা লক মোডাল ওপেন থাকে তবে স্ক্রিন টাচ এড অফ থাকবে
+      const playerModal = document.getElementById('playerModal');
+      const lockModal = document.getElementById('lockModal');
+      if ((playerModal && playerModal.style.display === 'flex') || (lockModal && lockModal.style.display === 'flex')) {
+        return;
+      }
+
+      const now = Date.now();
+
+      // প্রথমবার টাচ করলে শুধু টাইমার সেট হবে
+      if (lastTouchStartTime === 0) {
+        lastTouchStartTime = now;
+        return;
+      }
+
+      // ৪ সেকেন্ড পার হওয়ার পর ইউজার টাচ করলে অ্যাড শো হবে
+      if (now - lastTouchStartTime >= 4000) {
+        let targetUrl = adUrlData.trim() || "https://google.com";
+        if (targetUrl.includes("src=")) {
+          const match = targetUrl.match(/src=["']([^"']+)["']/);
+          if (match && match[1]) targetUrl = match[1];
+        }
+        window.open(targetUrl, '_blank');
+        
+        // অ্যাড খোলার পর ৪ সেকেন্ডের টাইমার রিসেট করে আবার নতুন করে স্টার্ট হবে
+        lastTouchStartTime = now;
+      }
+    }, true);
+
+    onAuthStateChanged(auth, (user) => {
+      currentUser = user;
+      updateProfileUI();
+      if (user) {
+        checkUserAccessStatus();
+      } else {
+        userAccessStatus = 'none';
+        renderVideos();
+      }
+    });
+
+    function checkUserAccessStatus() {
+      if (!currentUser) return;
+      onValue(ref(db, `accessRequests/${currentUser.uid}`), (snapshot) => {
+        if (snapshot.exists()) {
+          userAccessStatus = snapshot.val().status || 'pending';
+        } else {
+          userAccessStatus = 'none';
+        }
+        renderVideos();
+      });
+    }
+
+    let adUrlData = "";
+    let adInterval = 0;
+    let nativeAdCodeData = "";
+    let allVideos = {};
+    let premiumVideos = {};
+    let categoriesList = [];
+    let selectedCat = "All";
+    let searchQuery = "";
+    let autoSlideTimer = null;
+    let currentTab = "home"; 
+    let pinnedVideos = JSON.parse(localStorage.getItem('pinnedVideos') || '[]');
+
+    // Read Admin Ad Configuration
+    onValue(ref(db, 'settings/adConfig'), (snapshot) => {
+      const config = snapshot.val();
+      if (config) {
+        adUrlData = config.adUrl || "";
+        adInterval = config.adInterval !== undefined ? parseInt(config.adInterval) : 0;
+        nativeAdCodeData = config.nativeAdCode || "";
+
+        if (config.topBannerCode) renderAnyAd('topAdBox', config.topBannerCode);
+        if (config.bottomBannerCode) renderAnyAd('bottomAdBox', config.bottomBannerCode);
+        if (config.popupAdCode) injectAdsterraScript(config.popupAdCode, 'popunderAdContainer');
+        if (config.socialBarAdCode) injectAdsterraScript(config.socialBarAdCode, 'socialBarAdContainer');
+      }
+    });
+
+    function injectAdsterraScript(scriptCode, containerId) {
+      if (!scriptCode) return;
+      let container = document.getElementById(containerId);
+      if (!container) {
+        container = document.createElement('div');
+        container.id = containerId;
+        document.body.appendChild(container);
+      }
+      container.innerHTML = "";
+      
+      const range = document.createRange();
+      range.selectNode(container);
+      const documentFragment = range.createContextualFragment(scriptCode);
+      container.appendChild(documentFragment);
+    }
+
+    function renderAnyAd(containerId, rawCode) {
+      const container = document.getElementById(containerId);
+      if (!container || !rawCode) return;
+      container.innerHTML = "";
+
+      if (rawCode.startsWith("http://") || rawCode.startsWith("https://")) {
+        const a = document.createElement('a');
+        a.href = rawCode;
+        a.target = "_blank";
+        a.innerHTML = "<span style='color:#e50914; font-size:11px; font-weight:bold;'>Click Here To Watch Ad</span>";
+        container.appendChild(a);
+      } else {
+        const iframe = document.createElement('iframe');
+        iframe.style.border = 'none';
+        iframe.style.width = '100%';
+        iframe.style.height = '60px';
+        iframe.style.overflow = 'hidden';
+        container.appendChild(iframe);
+
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write(`<body style="margin:0; padding:0; display:flex; justify-content:center; align-items:center; background:transparent;">${rawCode}</body>`);
+        doc.close();
+      }
+    }
+
+    // Read Admin Categories
+    onValue(ref(db, 'categories'), (snapshot) => {
+      categoriesList = [];
+      const data = snapshot.val();
+      if (data) {
+        Object.keys(data).forEach(key => {
+          categoriesList.push(data[key].name);
+        });
+      }
+      renderCategoryBar();
+    });
+
+    // Read Admin Normal Videos
+    onValue(ref(db, 'videos'), (snapshot) => {
+      allVideos = snapshot.val() || {};
+      renderCategoryBar();
+      renderVideos();
+    });
+
+    // Read Admin Premium Videos
+    onValue(ref(db, 'premiumVideos'), (snapshot) => {
+      premiumVideos = snapshot.val() || {};
+      if (currentTab === 'trending') renderVideos();
+    });
+
+    function renderCategoryBar() {
+      const catBar = document.getElementById('catBar');
+      if (!catBar) return;
+      catBar.innerHTML = "";
+
+      const allBtn = document.createElement('button');
+      allBtn.className = `cat-btn ${selectedCat === 'All' ? 'active' : ''}`;
+      allBtn.innerText = "All";
+      allBtn.onclick = () => filterCat('All', allBtn);
+      catBar.appendChild(allBtn);
+
+      categoriesList.forEach(catName => {
+        const btn = document.createElement('button');
+        btn.className = `cat-btn ${selectedCat === catName ? 'active' : ''}`;
+        btn.innerText = catName;
+        btn.onclick = () => filterCat(catName, btn);
+        catBar.appendChild(btn);
+      });
+    }
+
+    window.filterCat = (catName, btnElement) => {
+      selectedCat = catName;
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btnElement.classList.add('active');
+      renderVideos();
+    };
+
+    // Read Admin Hero Banners
+    onValue(ref(db, 'heroBanners'), (snapshot) => {
+      const heroSlider = document.getElementById('heroSlider');
+      heroSlider.innerHTML = "";
+      const data = snapshot.val();
+      if (data) {
+        const banners = Object.values(data);
+        banners.forEach(b => {
+          const div = document.createElement('div');
+          div.className = 'hero-banner';
+          div.style.backgroundImage = `url('${b.imgUrl}')`;
+          
+          div.onclick = () => {
+            if (b.videoUrl) {
+              handleNormalVideoClick(b.videoUrl, b.title || 'Banner Video');
+            } else if (b.linkUrl) {
+              window.open(b.linkUrl, '_blank');
+            }
+          };
+
+          div.innerHTML = `
+            <div class="hero-content">
+              <span class="hero-badge">FEATURED</span>
+              <h2 class="hero-title">${b.title || ''}</h2>
+              <div class="hero-desc">${b.desc || ''}</div>
+              <button class="btn-play"><i class="fa-solid fa-play"></i> Watch Now</button>
+            </div>
+          `;
+          heroSlider.appendChild(div);
+        });
+
+        startAutoSlider(heroSlider, banners.length);
+      } else {
+        heroSlider.style.display = 'none';
+      }
+    });
+
+    function startAutoSlider(slider, total) {
+      if (autoSlideTimer) clearInterval(autoSlideTimer);
+      if (total <= 1) return;
+
+      let currentIndex = 0;
+      autoSlideTimer = setInterval(() => {
+        currentIndex = (currentIndex + 1) % total;
+        const bannerWidth = slider.clientWidth;
+        slider.scrollTo({
+          left: bannerWidth * currentIndex,
+          behavior: 'smooth'
+        });
+      }, 3500);
+    }
+
+    window.togglePin = (e, videoId) => {
+      e.stopPropagation();
+      const index = pinnedVideos.indexOf(videoId);
+      if (index > -1) {
+        pinnedVideos.splice(index, 1);
+      } else {
+        pinnedVideos.push(videoId);
+      }
+      localStorage.setItem('pinnedVideos', JSON.stringify(pinnedVideos));
+      renderVideos();
+    };
+
+    function renderVideos() {
+      const mainContainer = document.getElementById('mainContentContainer');
+      mainContainer.innerHTML = "";
+
+      if (currentTab === "profile") {
+        renderProfileSection(mainContainer);
+        return;
+      }
+
+      if (currentTab === "trending") {
+        const headerDiv = document.createElement('div');
+        headerDiv.className = 'section-header';
+        headerDiv.innerHTML = `<span class="section-title">Premium Content</span>`;
+        mainContainer.appendChild(headerDiv);
+
+        const premGrid = document.createElement('div');
+        premGrid.className = 'mini-grid';
+        const keys = Object.keys(premiumVideos).reverse();
+        let count = 0;
+
+        keys.forEach((key, index) => {
+          const item = premiumVideos[key];
+          if (item.title && item.title.toLowerCase().includes(searchQuery.toLowerCase())) {
+            count++;
+            premGrid.appendChild(createCard(key, item, false, true));
+            
+            if (nativeAdCodeData && (index + 1) % 6 === 0) {
+              const nativeBox = document.createElement('div');
+              nativeBox.className = 'native-ad-container';
+              premGrid.appendChild(nativeBox);
+              renderAnyAdByElement(nativeBox, nativeAdCodeData);
+            }
+          }
+        });
+
+        if (count === 0) {
+          mainContainer.innerHTML += "<p style='color:#888; font-size:11px; text-align:center; padding:30px;'>কোনো প্রিমিয়াম ভিডিও উপলব্ধ নেই!</p>";
+        } else {
+          mainContainer.appendChild(premGrid);
+        }
+        return;
+      }
+
+      if (currentTab === "mylist") {
+        const myGrid = document.createElement('div');
+        myGrid.className = 'mini-grid';
+        let pinnedCount = 0;
+
+        Object.keys(allVideos).reverse().forEach(key => {
+          const item = allVideos[key];
+          const isPinned = pinnedVideos.includes(key);
+          const titleMatch = item.title && item.title.toLowerCase().includes(searchQuery.toLowerCase());
+
+          if (isPinned && titleMatch) {
+            pinnedCount++;
+            myGrid.appendChild(createCard(key, item, isPinned, false));
+          }
+        });
+
+        const headerDiv = document.createElement('div');
+        headerDiv.className = 'section-header';
+        headerDiv.innerHTML = `<span class="section-title">My Pinned Videos</span>`;
+        mainContainer.appendChild(headerDiv);
+
+        if (pinnedCount === 0) {
+          mainContainer.innerHTML += "<p style='color:#888; font-size:11px; text-align:center; padding:30px;'>আপনার কোনো পিন করা ভিডিও নেই!</p>";
+        } else {
+          mainContainer.appendChild(myGrid);
+        }
+        return;
+      }
+
+      const keys = Object.keys(allVideos).reverse();
+      const groupedVideos = {};
+      
+      keys.forEach(key => {
+        const item = allVideos[key];
+        const category = item.category || "Featured Videos";
+        const titleMatch = item.title && item.title.toLowerCase().includes(searchQuery.toLowerCase());
+
+        if (titleMatch) {
+          if (!groupedVideos[category]) {
+            groupedVideos[category] = [];
+          }
+          groupedVideos[category].push({ key, data: item });
+        }
+      });
+
+      let totalRendered = 0;
+      const categoriesToDisplay = selectedCat === "All" ? Object.keys(groupedVideos) : [selectedCat];
+
+      categoriesToDisplay.forEach(catName => {
+        const videoList = groupedVideos[catName];
+
+        if (videoList && videoList.length > 0) {
+          totalRendered += videoList.length;
+
+          const section = document.createElement('div');
+          section.className = 'category-section';
+
+          const secHeader = document.createElement('div');
+          secHeader.className = 'section-header';
+          secHeader.innerHTML = `<span class="section-title">${catName}</span>`;
+
+          const grid = document.createElement('div');
+          grid.className = 'mini-grid';
+
+          videoList.forEach((obj, idx) => {
+            const isPinned = pinnedVideos.includes(obj.key);
+            grid.appendChild(createCard(obj.key, obj.data, isPinned, false));
+
+            if (nativeAdCodeData && (idx + 1) % 6 === 0) {
+              const nativeBox = document.createElement('div');
+              nativeBox.className = 'native-ad-container';
+              grid.appendChild(nativeBox);
+              renderAnyAdByElement(nativeBox, nativeAdCodeData);
+            }
+          });
+
+          section.appendChild(secHeader);
+          section.appendChild(grid);
+          mainContainer.appendChild(section);
+        }
+      });
+
+      if (totalRendered === 0) {
+        mainContainer.innerHTML = "<p style='color:#888; font-size:11px; text-align:center; padding:20px;'>No videos found matching your request.</p>";
+      }
+    }
+
+    function renderAnyAdByElement(container, rawCode) {
+      if (!container || !rawCode) return;
+      container.innerHTML = "";
+      const iframe = document.createElement('iframe');
+      iframe.style.border = 'none';
+      iframe.style.width = '100%';
+      iframe.style.height = '80px';
+      iframe.style.overflow = 'hidden';
+      container.appendChild(iframe);
+
+      const doc = iframe.contentWindow.document;
+      doc.open();
+      doc.write(`<body style="margin:0; padding:0; display:flex; justify-content:center; align-items:center; background:transparent;">${rawCode}</body>`);
+      doc.close();
+    }
+
+    function createCard(key, item, isPinned, isPremium) {
+      const card = document.createElement('div');
+      card.className = 'poster-card';
+      
+      const requiredAds = item.adLimit !== undefined ? parseInt(item.adLimit) : 5;
+      const currentCount = videoAdProgress[key] || 0;
+      
+      const isUnlocked = isPremium ? (userAccessStatus === 'approved' || currentCount >= requiredAds) : true;
+
+      // ফায়ারবেস ইমেজের ডায়নামিক লিঙ্ক চেক করা
+      const rawCover = item.imgUrl || item.posterUrl || item.thumbnailUrl || (item.episodes && item.episodes[0] ? item.episodes[0].thumbnailUrl : '');
+      const coverImage = (rawCover && rawCover.trim() !== '') ? rawCover : 'https://via.placeholder.com/300x450/1e1e1e/ffffff?text=Secret+Video';
+
+      card.onclick = () => {
+        if (isPremium) {
+          handlePremiumVideoClick(key, item);
+        } else {
+          handleNormalVideoClick(item.videoUrl, item.title, item.adUrl);
+        }
+      };
+
+      card.innerHTML = `
+        ${isPremium ? `
+          <div class="premium-lock-badge">
+            <i class="fa-solid ${isUnlocked ? 'fa-unlock' : 'fa-lock'}"></i>
+          </div>
+        ` : ''}
+        ${!isPremium ? `<div class="pin-btn ${isPinned ? 'pinned' : ''}" onclick="togglePin(event, '${key}')" title="Pin Video"><i class="fa-solid fa-bookmark"></i></div>` : ''}
+        
+        <img src="${coverImage}" class="poster-img" alt="${item.title}" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x450/1e1e1e/ffffff?text=Poster';" oncontextmenu="return false;">
+        
+        <div class="play-overlay"><i class="fa-solid ${isPremium && !isUnlocked ? 'fa-lock' : 'fa-play'}"></i></div>
+        <div class="poster-title-overlay">
+          <span class="poster-title-text">${item.title}</span>
+        </div>
+      `;
+      return card;
+    }
+
+    window.handleNormalVideoClick = (videoUrl, title, specificAdUrl) => {
+      const lastAdTime = localStorage.getItem('lastAdTime') || 0;
+      const now = Date.now();
+      const intervalMs = adInterval * 60 * 1000;
+
+      if (adInterval === 0 || (now - lastAdTime >= intervalMs)) {
+        let targetUrl = specificAdUrl || adUrlData.trim() || "https://google.com";
+        if (targetUrl.includes("src=")) {
+          const match = targetUrl.match(/src=["']([^"']+)["']/);
+          if (match && match[1]) targetUrl = match[1];
+        }
+        
+        window.open(targetUrl, '_blank');
+        localStorage.setItem('lastAdTime', now);
+
+        const modal = document.getElementById('lockModal');
+        const lockBox = modal.querySelector('.lock-box, .timer-overlay-card');
+
+        lockBox.className = "timer-overlay-card";
+        lockBox.innerHTML = `
+          <i class="fa-solid fa-clock" style="font-size:35px; color:#ffc107; margin-bottom:8px;"></i>
+          <h3 style="font-size:15px; margin-bottom:5px;">ভিডিওটি প্লে হতে অপেক্ষা করুন</h3>
+          <p style="font-size:11px; color:#aaa;">নতুন ট্যাবে অ্যাড দেখা শেষ হলে 'ভিডিও দেখুন' বাটন আসবে।</p>
+          
+          <div id="adTimerBox" class="timer-badge">
+            অপেক্ষা করুন: <span id="adSecondsLeft">10</span> সেকেন্ড
+          </div>
+
+          <button id="adCloseXBtn" class="ad-x-close-btn" style="display:none;" onclick="startNormalVideoAfterAd('${videoUrl}', '${title}')">
+            ✕ বন্ধ করুন ও ভিডিও দেখুন
+          </button>
+        `;
+
+        modal.style.display = 'flex';
+
+        let timeLeft = 10; 
+        if (adTimerInterval) clearInterval(adTimerInterval);
+
+        adTimerInterval = setInterval(() => {
+          timeLeft--;
+          const timerElem = document.getElementById('adSecondsLeft');
+          if (timerElem) timerElem.innerText = timeLeft;
+
+          if (timeLeft <= 0) {
+            clearInterval(adTimerInterval);
+            const timerBox = document.getElementById('adTimerBox');
+            const closeBtn = document.getElementById('adCloseXBtn');
+            if (timerBox) timerBox.style.display = 'none';
+            if (closeBtn) closeBtn.style.display = 'block';
+          }
+        }, 1000);
+      } else {
+        openVideoPlayer(videoUrl, title);
+      }
+    };
+
+    window.startNormalVideoAfterAd = (videoUrl, title) => {
+      closeLockModal();
+      openVideoPlayer(videoUrl, title);
+    };
+
+    function handlePremiumVideoClick(key, item) {
+      if (!currentUser) {
+        alert("প্রিমিয়াম ভিডিও দেখতে হলে আপনাকে প্রথমে লগইন করতে হবে।");
+        switchTab('profile', document.querySelectorAll('.nav-link')[3]);
+        return;
+      }
+
+      if (userAccessStatus === 'approved') {
+        openVideoPlayer(item.videoUrl, item.title);
+        return;
+      }
+
+      const requiredAds = item.adLimit !== undefined ? parseInt(item.adLimit) : 5;
+      if (!videoAdProgress[key]) videoAdProgress[key] = 0;
+
+      if (videoAdProgress[key] < requiredAds) {
+        openLockModal(key, item, videoAdProgress[key], requiredAds);
+      } else {
+        openVideoPlayer(item.videoUrl, item.title);
+      }
+    }
+
+    window.openLockModal = (key, item, currentCount, requiredAds) => {
+      const modal = document.getElementById('lockModal');
+      const lockBox = modal.querySelector('.lock-box, .timer-overlay-card');
+      
+      lockBox.className = "lock-box";
+      lockBox.innerHTML = `
+        <i class="fa-solid fa-lock" style="color:#e50914;"></i>
+        <h3>Locked Premium Content</h3>
+        <p>ভিডিওটি আনলক করতে আরও <b>${requiredAds - currentCount}</b> টি এড দেখুন অথবা এডমিন এক্সেস রিকোয়েস্ট পাঠান।</p>
+        <button class="lock-btn" style="margin-bottom:8px;" onclick="watchAdForVideo('${key}', '${item.videoUrl}', '${item.title}', ${requiredAds}, '${item.adUrl || ''}')">Watch Ad (${currentCount}/${requiredAds})</button>
+        <button class="lock-btn" style="background:#28a745;" onclick="sendAccessRequest()">Request Admin Access</button>
+      `;
+      modal.style.display = 'flex';
+    };
+
+    window.sendAccessRequest = async () => {
+      if (!currentUser) return;
+      try {
+        await set(ref(db, `accessRequests/${currentUser.uid}`), {
+          userEmail: currentUser.email,
+          status: 'pending',
+          requestedAt: new Date().toLocaleString()
+        });
+        alert("আপনার এক্সেস রিকোয়েস্ট এডমিনের কাছে পাঠানো হয়েছে!");
+        closeLockModal();
+      } catch(e) {
+        alert("ত্রুটি: " + e.message);
+      }
+    };
+
+    window.watchAdForVideo = (key, videoUrl, title, requiredAds, specificAdUrl) => {
+      let targetUrl = specificAdUrl || adUrlData.trim() || "https://google.com";
+      if (targetUrl.includes("src=")) {
+        const match = targetUrl.match(/src=["']([^"']+)["']/);
+        if (match && match[1]) targetUrl = match[1];
+      }
+      
+      window.open(targetUrl, '_blank');
+
+      const modal = document.getElementById('lockModal');
+      const lockBox = modal.querySelector('.lock-box, .timer-overlay-card');
+
+      lockBox.className = "timer-overlay-card";
+      lockBox.innerHTML = `
+        <i class="fa-solid fa-clock" style="font-size:35px; color:#ffc107; margin-bottom:8px;"></i>
+        <h3 style="font-size:15px; margin-bottom:5px;">বিজ্ঞাপনটি দেখা শেষ হওয়া পর্যন্ত অপেক্ষা করুন</h3>
+        <p style="font-size:11px; color:#aaa;">নতুন ট্যাবে অ্যাড প্লে হচ্ছে। 10 সেকেন্ড পর বন্ধ করুন বাটনটি দৃশ্যমান হবে।</p>
+        
+        <div id="adTimerBox" class="timer-badge">
+          অ্যাড দেখা শেষ হতে বাকি: <span id="adSecondsLeft">10</span> সেকেন্ড
+        </div>
+
+        <button id="adCloseXBtn" class="ad-x-close-btn" style="display:none;" onclick="finishAdCount('${key}', '${videoUrl}', '${title}', ${requiredAds})">
+          ✕ বন্ধ করুন ও পয়েন্ট নিন
+        </button>
+      `;
+
+      let timeLeft = 10;
+      if (adTimerInterval) clearInterval(adTimerInterval);
+
+      adTimerInterval = setInterval(() => {
+        timeLeft--;
+        const timerElem = document.getElementById('adSecondsLeft');
+        if (timerElem) timerElem.innerText = timeLeft;
+
+        if (timeLeft <= 0) {
+          clearInterval(adTimerInterval);
+          const timerBox = document.getElementById('adTimerBox');
+          const closeBtn = document.getElementById('adCloseXBtn');
+          if (timerBox) timerBox.style.display = 'none';
+          if (closeBtn) closeBtn.style.display = 'block';
+        }
+      }, 1000);
+    };
+
+    window.finishAdCount = (key, videoUrl, title, requiredAds) => {
+      videoAdProgress[key] = (videoAdProgress[key] || 0) + 1;
+
+      if (videoAdProgress[key] >= requiredAds) {
+        closeLockModal();
+        renderVideos();
+        openVideoPlayer(videoUrl, title);
+      } else {
+        openLockModal(key, { videoUrl, title }, videoAdProgress[key], requiredAds);
+      }
+    };
+
+    window.closeLockModal = () => {
+      if (adTimerInterval) clearInterval(adTimerInterval);
+      const modal = document.getElementById('lockModal');
+      const lockBox = modal.querySelector('.lock-box, .timer-overlay-card');
+      if(lockBox) lockBox.className = "lock-box";
+      modal.style.display = 'none';
+    };
+
+    window.switchTab = (tabName, navElement) => {
+      currentTab = tabName;
+      document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+      navElement.classList.add('active');
+
+      const heroSlider = document.getElementById('heroSlider');
+      const catBar = document.getElementById('catBar');
+
+      if (tabName === "mylist" || tabName === "trending" || tabName === "profile") {
+        heroSlider.style.display = 'none';
+        catBar.style.display = 'none';
+      } else {
+        heroSlider.style.display = 'flex';
+        catBar.style.display = 'flex';
+      }
+
+      renderVideos();
+    };
+
+    function renderProfileSection(container) {
+      if (!currentUser) {
+        container.innerHTML = `
+          <div class="profile-card">
+            <h3 style="margin-bottom:8px;">Login or Register</h3>
+            <p style="font-size:12px; color:#666; margin-bottom:15px;">গুগল অথবা ইমেইল দিয়ে লগইন করে আপনার প্রোফাইল অ্যাক্সেস করুন।</p>
+            <button class="auth-btn btn-google" onclick="loginWithGoogle()">
+              <svg class="google-icon" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              Continue with Google
+            </button>
+            <hr style="margin:15px 0; border:none; border-top:1px solid #eee;">
+            <div id="authFormArea">
+              ${renderLoginForm()}
+            </div>
+          </div>
+        `;
+      } else {
+        const photo = currentUser.photoURL || 'https://via.placeholder.com/90';
+        container.innerHTML = `
+          <div class="profile-card">
+            <div class="profile-img-container">
+              <img src="${photo}" id="userAvatar" class="profile-img" oncontextmenu="return false;">
+              <label for="imgUpload" class="upload-btn"><i class="fa-solid fa-camera"></i></label>
+              <input type="file" id="imgUpload" accept="image/*" style="display:none;" onchange="handleImageUpload(event)">
+            </div>
+            <div class="profile-name">${currentUser.displayName || 'User'}</div>
+            <div class="profile-email">${currentUser.email}</div>
+            <p style="font-size:12px; margin-bottom:12px; color: ${userAccessStatus === 'approved' ? '#28a745' : '#e50914'};">
+              Status: <b>${userAccessStatus.toUpperCase()}</b>
+            </p>
+            <button class="auth-btn btn-danger" onclick="logoutUser()">
+              <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    function renderLoginForm() {
+      return `
+        <form onsubmit="handleEmailLogin(event)" class="auth-form">
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="loginEmail" required placeholder="Enter your email">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="loginPass" required placeholder="Enter password">
+          </div>
+          <button type="submit" class="auth-btn btn-primary">Sign In</button>
+          <div class="auth-toggle" onclick="toggleAuthForm('register')">Don't have an account? Register</div>
+        </form>
+      `;
+    }
+
+    function renderRegisterForm() {
+      return `
+        <form onsubmit="handleEmailRegister(event)" class="auth-form">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="regName" required placeholder="Enter your name">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="regEmail" required placeholder="Enter valid email">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="regPass" required placeholder="Create password">
+          </div>
+          <button type="submit" class="auth-btn btn-primary">Create Account</button>
+          <div class="auth-toggle" onclick="toggleAuthForm('login')">Already have an account? Sign In</div>
+        </form>
+      `;
+    }
+
+    window.toggleAuthForm = (type) => {
+      const formArea = document.getElementById('authFormArea');
+      if (type === 'register') {
+        formArea.innerHTML = renderRegisterForm();
+      } else {
+        formArea.innerHTML = renderLoginForm();
+      }
+    };
+
+    window.loginWithGoogle = () => {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider).then(() => {
+        checkUserAccessStatus();
+        renderVideos();
+      }).catch(err => alert(err.message));
+    };
+
+    window.handleEmailRegister = (e) => {
+      e.preventDefault();
+      const name = document.getElementById('regName').value;
+      const email = document.getElementById('regEmail').value;
+      const pass = document.getElementById('regPass').value;
+
+      createUserWithEmailAndPassword(auth, email, pass).then((userCredential) => {
+        const user = userCredential.user;
+        updateProfile(user, { displayName: name });
+        sendEmailVerification(user).then(() => {
+          alert("রেজিস্ট্রেশন সফল হয়েছে! ইমেইল ভেরিফাই করুন।");
+          signOut(auth);
+          toggleAuthForm('login');
+        });
+      }).catch(err => alert(err.message));
+    };
+
+    window.handleEmailLogin = (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const pass = document.getElementById('loginPass').value;
+
+      signInWithEmailAndPassword(auth, email, pass).then((userCredential) => {
+        if (!userCredential.user.emailVerified) {
+          alert("আপনার ইমেইল ভেরিফাই করা হয়নি!");
+          signOut(auth);
+        } else {
+          checkUserAccessStatus();
+          renderVideos();
+        }
+      }).catch(err => alert(err.message));
+    };
+
+    window.logoutUser = () => {
+      signOut(auth).then(() => {
+        userAccessStatus = 'none';
+        renderVideos();
+      });
+    };
+
+    window.handleImageUpload = (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append("image", file);
+
+      alert("ছবি আপলোড হচ্ছে...");
+
+      fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.data && data.data.url) {
+          const newPhotoUrl = data.data.url;
+          updateProfile(auth.currentUser, { photoURL: newPhotoUrl }).then(() => {
+            alert("প্রোফাইল পিকচার আপডেট হয়েছে!");
+            renderVideos();
+          });
+        }
+      });
+    };
+
+    function updateProfileUI() {
+      const profileNavBtn = document.getElementById('navProfileIcon');
+      if (profileNavBtn) {
+        if (currentUser && currentUser.photoURL) {
+          profileNavBtn.outerHTML = `<img src="${currentUser.photoURL}" id="navProfileIcon">`;
+        } else {
+          profileNavBtn.outerHTML = `<i class="fa-solid fa-user" id="navProfileIcon"></i>`;
+        }
+      }
+    }
+
+    window.toggleSearch = () => {
+      const searchBox = document.getElementById('searchBox');
+      const searchInput = document.getElementById('searchInput');
+      if (searchBox.style.display === 'block') {
+        searchBox.style.display = 'none';
+        searchQuery = "";
+        searchInput.value = "";
+        renderVideos();
+      } else {
+        searchBox.style.display = 'block';
+        searchInput.focus();
+      }
+    };
+
+    window.handleSearch = (e) => {
+      searchQuery = e.target.value.trim();
+      renderVideos();
+    };
+
+    window.openVideoPlayer = (url, title) => {
+      const modal = document.getElementById('playerModal');
+      const videoContainer = document.getElementById('videoPlayerContainer');
+      document.getElementById('modalTitle').innerText = title;
+      
+      if (url.includes('<iframe') || url.includes('http')) {
+        if (url.includes('<iframe')) {
+          videoContainer.innerHTML = url;
+        } else if (url.endsWith('.mp4') || url.endsWith('.webm') || url.includes('cloudinary')) {
+          videoContainer.innerHTML = `<video src="${url}" controls autoplay controlsList="nodownload" oncontextmenu="return false;"></video>`;
+        } else {
+          videoContainer.innerHTML = `<iframe src="${url}" frameborder="0" allowfullscreen></iframe>`;
+        }
+      }
+
+      modal.style.display = 'flex';
+    };
+
+    window.closePlayer = () => {
+      const modal = document.getElementById('playerModal');
+      const videoContainer = document.getElementById('videoPlayerContainer');
+      videoContainer.innerHTML = "";
+      modal.style.display = 'none';
+    };
+  </script>
+</head>
+<body oncontextmenu="return false;">
+
+  <!-- Preloader Screen -->
+  <div id="preloader">
+    <img src="https://i.ibb.co/Gf5TySRg/1000109014.png" alt="Website Logo" class="preloader-logo">
+    <div class="preloader-title">
+      <i class="fa-solid fa-circle-play"></i> SECRET<span>VIDEO</span>
+    </div>
+  </div>
+
+  <!-- Dynamic Ad Scripts Container -->
+  <div id="popunderAdContainer"></div>
+  <div id="socialBarAdContainer"></div>
+
+  <!-- Header -->
+  <header>
+    <a href="#" class="logo">
+      <i class="fa-solid fa-circle-play"></i> SECRET<span>VIDEO</span>
+    </a>
+    <div class="header-icons">
+      <i class="fa-solid fa-magnifying-glass" onclick="toggleSearch()" title="Search Video"></i>
+      <i class="fa-solid fa-bell"></i>
+    </div>
+  </header>
+
+  <!-- Search Bar -->
+  <div class="search-box" id="searchBox">
+    <div class="search-input-wrapper">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="searchInput" placeholder="Search videos by title..." oninput="handleSearch(event)">
+    </div>
+  </div>
+
+  <!-- Top Ad -->
+  <div id="topAdBox" class="ad-container"></div>
+
+  <!-- Banner Slider -->
+  <div class="hero-slider-wrapper" id="heroSlider"></div>
+
+  <!-- Category Bar -->
+  <div class="cat-bar" id="catBar"></div>
+
+  <!-- Main Content Area -->
+  <div id="mainContentContainer"></div>
+
+  <!-- Player Modal -->
+  <div class="player-modal" id="playerModal">
+    <span class="close-modal" onclick="closePlayer()">&times;</span>
+    <div id="videoPlayerContainer" style="width:100%; display:flex; justify-content:center;"></div>
+    <div class="modal-title" id="modalTitle"></div>
+  </div>
+
+  <!-- Lock Modal -->
+  <div class="player-modal" id="lockModal">
+    <span class="close-modal" onclick="closeLockModal()">&times;</span>
+    <div class="lock-box"></div>
+  </div>
+
+  <!-- Bottom Ad -->
+  <div id="bottomAdBox" class="ad-container"></div>
+
+  <!-- Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <a onclick="switchTab('home', this)" class="nav-link active">
+      <i class="fa-solid fa-house"></i>
+      <span>Home</span>
+    </a>
+    <a onclick="switchTab('trending', this)" class="nav-link">
+      <i class="fa-solid fa-fire"></i>
+      <span>Trending</span>
+    </a>
+    <a onclick="switchTab('mylist', this)" class="nav-link">
+      <i class="fa-solid fa-bookmark"></i>
+      <span>My List</span>
+    </a>
+    <a onclick="switchTab('profile', this)" class="nav-link">
+      <i class="fa-solid fa-user" id="navProfileIcon"></i>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+</body>
+</html>
 
