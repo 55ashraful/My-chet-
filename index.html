@@ -364,6 +364,35 @@
       width: 100%;
     }
 
+    /* Episodes Container inside Player */
+    .episodes-selector-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      max-width: 900px;
+      width: 100%;
+      padding: 10px 15px;
+      background: #121212;
+      margin-top: 10px;
+      border-radius: 6px;
+      scrollbar-width: thin;
+    }
+    .ep-btn {
+      background: #2a2a2a;
+      color: #fff;
+      border: 1px solid #444;
+      padding: 6px 14px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .ep-btn.active {
+      background: #e50914;
+      border-color: #e50914;
+      font-weight: bold;
+    }
+
     .lock-box { background: #ffffff; border-radius: 12px; width: 85%; max-width: 320px; padding: 20px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
     .lock-box i { font-size: 40px; color: #e50914; margin-bottom: 12px; }
     .lock-box h3 { font-size: 16px; color: #111; margin-bottom: 8px; }
@@ -432,7 +461,18 @@
       onAuthStateChanged 
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    import { firebaseConfig, IMGBB_API_KEY } from './config.js';
+    // এডমিন প্যানেলের সাথে সামঞ্জস্যপূর্ণ Firebase কনফিগ
+    const firebaseConfig = {
+      apiKey: "AIzaSyC3tgTH-Cp16LrJzAjgisfgvBTibRF0T4g",
+      authDomain: "studio-ar1ak.firebaseapp.com",
+      databaseURL: "https://studio-ar1ak-default-rtdb.firebaseio.com",
+      projectId: "studio-ar1ak",
+      storageBucket: "studio-ar1ak.firebasestorage.app",
+      messagingSenderId: "77389723660",
+      appId: "1:77389723660:web:2e35437b147041db02d629"
+    };
+
+    const IMGBB_API_KEY = ""; // প্রয়োজনে আপনার ImgBB API Key দিতে পারেন
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
@@ -493,10 +533,9 @@
       }
     });
 
-    // Universal Screen Click Handler (4 Seconds Popunder Trigger)
+    // Universal Screen Click Handler (Popunder Trigger)
     document.addEventListener('click', function(e) {
       if (!adUrlData) return;
-      
       if (e.target.closest('.close-modal, input, textarea, button')) return;
 
       const lastClickAdTime = localStorage.getItem('lastClickAdTime') || 0;
@@ -524,7 +563,6 @@
         document.body.appendChild(container);
       }
       container.innerHTML = "";
-      
       const range = document.createRange();
       range.selectNode(container);
       const documentFragment = range.createContextualFragment(scriptCode);
@@ -569,7 +607,7 @@
       renderCategoryBar();
     });
 
-    // Read Admin Normal Videos with High Performance Limit
+    // Read Admin Normal Videos
     const videosRefQuery = query(ref(db, 'videos'), limitToLast(1000));
     onValue(videosRefQuery, (snapshot) => {
       allVideos = snapshot.val() || {};
@@ -577,7 +615,7 @@
       renderVideos();
     });
 
-    // Read Admin Premium Videos with High Performance Limit
+    // Read Admin Premium Videos
     const premiumRefQuery = query(ref(db, 'premiumVideos'), limitToLast(1000));
     onValue(premiumRefQuery, (snapshot) => {
       premiumVideos = snapshot.val() || {};
@@ -624,9 +662,7 @@
           div.style.backgroundImage = `url('${b.imgUrl}')`;
           
           div.onclick = () => {
-            if (b.videoUrl) {
-              handleNormalVideoClick(b.videoUrl, b.title || 'Banner Video');
-            } else if (b.linkUrl) {
+            if (b.linkUrl) {
               window.open(b.linkUrl, '_blank');
             }
           };
@@ -635,7 +671,6 @@
             <div class="hero-content">
               <span class="hero-badge">FEATURED</span>
               <h2 class="hero-title">${b.title || ''}</h2>
-              <div class="hero-desc">${b.desc || ''}</div>
               <button class="btn-play"><i class="fa-solid fa-play"></i> Watch Now</button>
             </div>
           `;
@@ -832,14 +867,14 @@
       
       const isUnlocked = isPremium ? (userAccessStatus === 'approved' || currentCount >= requiredAds) : true;
 
-      const rawCover = item.imgUrl || item.posterUrl || item.thumbnailUrl || (item.episodes && item.episodes[0] ? item.episodes[0].thumbnailUrl : '');
+      const rawCover = item.imgUrl || item.posterUrl || item.thumbnailUrl;
       const coverImage = (rawCover && rawCover.trim() !== '') ? rawCover : 'https://via.placeholder.com/300x450/1e1e1e/ffffff?text=Secret+Video';
 
       card.onclick = () => {
         if (isPremium) {
           handlePremiumVideoClick(key, item);
         } else {
-          handleNormalVideoClick(item.videoUrl, item.title, item.adUrl);
+          openVideoPlayer(item);
         }
       };
 
@@ -861,15 +896,6 @@
       return card;
     }
 
-    window.handleNormalVideoClick = (videoUrl, title, specificAdUrl) => {
-      openVideoPlayer(videoUrl, title);
-    };
-
-    window.startNormalVideoAfterAd = (videoUrl, title) => {
-      closeLockModal();
-      openVideoPlayer(videoUrl, title);
-    };
-
     function handlePremiumVideoClick(key, item) {
       if (!currentUser) {
         alert("প্রিমিয়াম ভিডিও দেখতে হলে আপনাকে প্রথমে লগইন করতে হবে।");
@@ -878,7 +904,7 @@
       }
 
       if (userAccessStatus === 'approved') {
-        openVideoPlayer(item.videoUrl, item.title);
+        openVideoPlayer(item);
         return;
       }
 
@@ -888,7 +914,7 @@
       if (videoAdProgress[key] < requiredAds) {
         openLockModal(key, item, videoAdProgress[key], requiredAds);
       } else {
-        openVideoPlayer(item.videoUrl, item.title);
+        openVideoPlayer(item);
       }
     }
 
@@ -901,7 +927,7 @@
         <i class="fa-solid fa-lock" style="color:#e50914;"></i>
         <h3>Locked Premium Content</h3>
         <p>ভিডিওটি আনলক করতে আরও <b>${requiredAds - currentCount}</b> টি এড দেখুন অথবা এডমিন এক্সেস রিকোয়েস্ট পাঠান।</p>
-        <button class="lock-btn" style="margin-bottom:8px;" onclick="watchAdForVideo('${key}', '${item.videoUrl}', '${item.title}', ${requiredAds}, '${item.adUrl || ''}')">Watch Ad (${currentCount}/${requiredAds})</button>
+        <button class="lock-btn" style="margin-bottom:8px;" onclick="watchAdForVideo('${key}', ${requiredAds}, '${item.adUrl || ''}')">Watch Ad (${currentCount}/${requiredAds})</button>
         <button class="lock-btn" style="background:#28a745;" onclick="sendAccessRequest()">Request Admin Access</button>
       `;
       modal.style.display = 'flex';
@@ -922,7 +948,7 @@
       }
     };
 
-    window.watchAdForVideo = (key, videoUrl, title, requiredAds, specificAdUrl) => {
+    window.watchAdForVideo = (key, requiredAds, specificAdUrl) => {
       let targetUrl = specificAdUrl || adUrlData.trim() || "https://google.com";
       if (targetUrl.includes("src=")) {
         const match = targetUrl.match(/src=["']([^"']+)["']/);
@@ -938,13 +964,13 @@
       lockBox.innerHTML = `
         <i class="fa-solid fa-clock" style="font-size:35px; color:#ffc107; margin-bottom:8px;"></i>
         <h3 style="font-size:15px; margin-bottom:5px;">বিজ্ঞাপনটি দেখা শেষ হওয়া পর্যন্ত অপেক্ষা করুন</h3>
-        <p style="font-size:11px; color:#aaa;">নতুন ট্যাবে অ্যাড প্লে হচ্ছে। 10 সেকেন্ড পর বন্ধ করুন বাটনটি দৃশ্যমান হবে।</p>
+        <p style="font-size:11px; color:#aaa;">নতুন ট্যাবে অ্যাড প্লে হচ্ছে। ১০ সেকেন্ড পর বন্ধ করুন বাটনটি দৃশ্যমান হবে।</p>
         
         <div id="adTimerBox" class="timer-badge">
           অ্যাড দেখা শেষ হতে বাকি: <span id="adSecondsLeft">10</span> সেকেন্ড
         </div>
 
-        <button id="adCloseXBtn" class="ad-x-close-btn" style="display:none;" onclick="finishAdCount('${key}', '${videoUrl}', '${title}', ${requiredAds})">
+        <button id="adCloseXBtn" class="ad-x-close-btn" style="display:none;" onclick="finishAdCount('${key}', ${requiredAds})">
           ✕ বন্ধ করুন ও পয়েন্ট নিন
         </button>
       `;
@@ -967,15 +993,14 @@
       }, 1000);
     };
 
-    window.finishAdCount = (key, videoUrl, title, requiredAds) => {
+    window.finishAdCount = (key, requiredAds) => {
       videoAdProgress[key] = (videoAdProgress[key] || 0) + 1;
 
       if (videoAdProgress[key] >= requiredAds) {
         closeLockModal();
         renderVideos();
-        openVideoPlayer(videoUrl, title);
       } else {
-        openLockModal(key, { videoUrl, title }, videoAdProgress[key], requiredAds);
+        openLockModal(key, { adLimit: requiredAds }, videoAdProgress[key], requiredAds);
       }
     };
 
@@ -1146,7 +1171,10 @@
 
     window.handleImageUpload = (event) => {
       const file = event.target.files[0];
-      if (!file) return;
+      if (!file || !IMGBB_API_KEY) {
+        alert("ImgBB API Key সেট করা নেই!");
+        return;
+      }
 
       const formData = new FormData();
       formData.append("image", file);
@@ -1199,35 +1227,60 @@
       renderVideos();
     };
 
-    // YouTube Responsive Player
-    window.openVideoPlayer = (url, title) => {
+    // Video Player with Multi-Episode Support
+    window.openVideoPlayer = (item) => {
       const modal = document.getElementById('playerModal');
       const videoContainer = document.getElementById('videoPlayerContainer');
-      document.getElementById('modalTitle').innerText = title;
+      const episodesBar = document.getElementById('episodesSelectorBar');
+      document.getElementById('modalTitle').innerText = item.title;
       
-      if (url.includes('<iframe') || url.includes('http')) {
-        if (url.includes('<iframe')) {
-          videoContainer.innerHTML = url;
-          const iframe = videoContainer.querySelector('iframe');
-          if (iframe) {
-            iframe.setAttribute('allowfullscreen', 'true');
-            iframe.style.width = '100%';
-            iframe.style.height = '100%';
-          }
-        } else if (url.endsWith('.mp4') || url.endsWith('.webm') || url.includes('cloudinary')) {
-          videoContainer.innerHTML = `<video src="${url}" controls autoplay controlsList="nodownload" allowfullscreen oncontextmenu="return false;"></video>`;
-        } else {
-          videoContainer.innerHTML = `<iframe src="${url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:100%;"></iframe>`;
-        }
+      episodesBar.innerHTML = "";
+
+      if (item.episodes && item.episodes.length > 0) {
+        item.episodes.forEach((ep, index) => {
+          const btn = document.createElement('button');
+          btn.className = `ep-btn ${index === 0 ? 'active' : ''}`;
+          btn.innerText = ep.epName || `Episode ${index + 1}`;
+          btn.onclick = () => {
+            document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            playUrlInContainer(ep.videoUrl);
+          };
+          episodesBar.appendChild(btn);
+        });
+
+        playUrlInContainer(item.episodes[0].videoUrl);
+      } else {
+        playUrlInContainer(item.videoUrl);
       }
 
       modal.style.display = 'flex';
     };
 
+    function playUrlInContainer(url) {
+      const videoContainer = document.getElementById('videoPlayerContainer');
+      if (!url) return;
+
+      if (url.includes('<iframe')) {
+        videoContainer.innerHTML = url;
+        const iframe = videoContainer.querySelector('iframe');
+        if (iframe) {
+          iframe.setAttribute('allowfullscreen', 'true');
+          iframe.style.width = '100%';
+          iframe.style.height = '100%';
+        }
+      } else if (url.endsWith('.mp4') || url.endsWith('.webm') || url.includes('cloudinary')) {
+        videoContainer.innerHTML = `<video src="${url}" controls autoplay controlsList="nodownload" allowfullscreen oncontextmenu="return false;"></video>`;
+      } else {
+        videoContainer.innerHTML = `<iframe src="${url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:100%;"></iframe>`;
+      }
+    }
+
     window.closePlayer = () => {
       const modal = document.getElementById('playerModal');
       const videoContainer = document.getElementById('videoPlayerContainer');
       videoContainer.innerHTML = "";
+      document.getElementById('episodesSelectorBar').innerHTML = "";
       modal.style.display = 'none';
     };
   </script>
@@ -1282,6 +1335,7 @@
     <span class="close-modal" onclick="closePlayer()">&times;</span>
     <div class="video-box-wrapper" id="videoPlayerContainer"></div>
     <div class="modal-title" id="modalTitle"></div>
+    <div class="episodes-selector-bar" id="episodesSelectorBar"></div>
   </div>
 
   <!-- Lock Modal -->
