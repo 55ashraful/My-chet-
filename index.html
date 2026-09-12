@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Secret Video Portal</title>
 
-  <!-- Favicon -->
+  <!-- Favicon & Icons -->
   <link rel="icon" type="image/png" href="https://i.ibb.co/zWvmyGPT/1000109018.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
@@ -223,53 +223,61 @@
     import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
     import { firebaseConfig } from './config.js';
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+    let db;
+    try {
+      const app = initializeApp(firebaseConfig);
+      db = getDatabase(app);
+    } catch (e) {
+      console.error("Firebase init failed: ", e);
+    }
 
     let allVideos = {};
     let categoriesList = [];
     let selectedCat = "All";
     let searchQuery = "";
 
-    // Load Categories
-    onValue(ref(db, 'categories'), (snapshot) => {
-      categoriesList = [];
-      const data = snapshot.val();
-      if (data) {
-        Object.keys(data).forEach(key => {
-          if (data[key].name) categoriesList.push(data[key].name);
-        });
-      }
-      renderCategoryBar();
-    });
+    if (db) {
+      // Load Categories
+      onValue(ref(db, 'categories'), (snapshot) => {
+        categoriesList = [];
+        const data = snapshot.val();
+        if (data) {
+          Object.keys(data).forEach(key => {
+            if (data[key].name) categoriesList.push(data[key].name);
+          });
+        }
+        renderCategoryBar();
+      });
 
-    // Load All Videos (No limit - Handles 50GB+ Links)
-    onValue(ref(db, 'videos'), (snapshot) => {
-      allVideos = snapshot.val() || {};
-      renderVideos();
-    });
+      // Load All Videos
+      onValue(ref(db, 'videos'), (snapshot) => {
+        allVideos = snapshot.val() || {};
+        renderVideos();
+      });
 
-    // Load Banners
-    onValue(ref(db, 'heroBanners'), (snapshot) => {
-      const heroSlider = document.getElementById('heroSlider');
-      heroSlider.innerHTML = "";
-      const data = snapshot.val();
-      if (data) {
-        Object.values(data).forEach(b => {
-          const div = document.createElement('div');
-          div.className = 'hero-banner';
-          div.style.backgroundImage = `url('${b.imgUrl}')`;
-          div.onclick = () => { if (b.videoUrl) openVideoPlayer(b.videoUrl, b.title); };
-          div.innerHTML = `
-            <div class="hero-content">
-              <div class="hero-title">${b.title || ''}</div>
-              <button class="btn-play"><i class="fa-solid fa-play"></i> Watch</button>
-            </div>
-          `;
-          heroSlider.appendChild(div);
-        });
-      }
-    });
+      // Load Banners
+      onValue(ref(db, 'heroBanners'), (snapshot) => {
+        const heroSlider = document.getElementById('heroSlider');
+        if (!heroSlider) return;
+        heroSlider.innerHTML = "";
+        const data = snapshot.val();
+        if (data) {
+          Object.values(data).forEach(b => {
+            const div = document.createElement('div');
+            div.className = 'hero-banner';
+            div.style.backgroundImage = `url('${b.imgUrl || ''}')`;
+            div.onclick = () => { if (b.videoUrl) openVideoPlayer(b.videoUrl, b.title); };
+            div.innerHTML = `
+              <div class="hero-content">
+                <div class="hero-title">${b.title || ''}</div>
+                <button class="btn-play"><i class="fa-solid fa-play"></i> Watch</button>
+              </div>
+            `;
+            heroSlider.appendChild(div);
+          });
+        }
+      });
+    }
 
     function renderCategoryBar() {
       const catBar = document.getElementById('catBar');
@@ -298,9 +306,9 @@
       renderVideos();
     };
 
-    // --- FIX FOR ALL VIDEOS RENDERING ---
     function renderVideos() {
       const mainContainer = document.getElementById('mainContentContainer');
+      if (!mainContainer) return;
       mainContainer.innerHTML = "";
 
       const keys = Object.keys(allVideos).reverse();
@@ -308,10 +316,10 @@
 
       keys.forEach(key => {
         const item = allVideos[key];
-        const category = (item.category && item.category.trim() !== "") ? item.category : "General Videos";
-        const titleMatch = !searchQuery || (item.title && item.title.toLowerCase().includes(searchQuery.toLowerCase()));
+        const category = (item && item.category && item.category.trim() !== "") ? item.category : "General Videos";
+        const titleMatch = !searchQuery || (item && item.title && item.title.toLowerCase().includes(searchQuery.toLowerCase()));
 
-        if (titleMatch) {
+        if (titleMatch && item) {
           if (!groupedVideos[category]) groupedVideos[category] = [];
           groupedVideos[category].push({ key, data: item });
         }
@@ -347,7 +355,7 @@
       });
 
       if (totalRendered === 0) {
-        mainContainer.innerHTML = "<p style='color:#888; font-size:12px; text-align:center; padding:40px;'>কোনো ভিডিও খুঁজে পাওয়া যায়নি!</p>";
+        mainContainer.innerHTML = "<p style='color:#888; font-size:12px; text-align:center; padding:40px;'>কোনো ভিডিও লোড হয়নি বা ভিডিও নেই!</p>";
       }
     }
 
@@ -361,10 +369,10 @@
       card.onclick = () => openVideoPlayer(item.videoUrl, item.title);
 
       card.innerHTML = `
-        <img src="${coverImage}" class="poster-img" alt="${item.title}">
+        <img src="${coverImage}" class="poster-img" alt="${item.title || ''}">
         <div class="play-overlay"><i class="fa-solid fa-play"></i></div>
         <div class="poster-title-overlay">
-          <span class="poster-title-text">${item.title}</span>
+          <span class="poster-title-text">${item.title || 'Untitled'}</span>
         </div>
       `;
       return card;
@@ -372,7 +380,7 @@
 
     window.toggleSearch = () => {
       const searchBox = document.getElementById('searchBox');
-      searchBox.style.display = searchBox.style.display === 'block' ? 'none' : 'block';
+      if (searchBox) searchBox.style.display = searchBox.style.display === 'block' ? 'none' : 'block';
     };
 
     window.handleSearch = (e) => {
@@ -381,6 +389,7 @@
     };
 
     window.openVideoPlayer = (url, title) => {
+      if (!url) return;
       const modal = document.getElementById('playerModal');
       const videoContainer = document.getElementById('videoPlayerContainer');
       document.getElementById('modalTitle').innerText = title || '';
