@@ -4,26 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- Google Search SEO Meta Tags -->
   <title>Secret Video - Free HD Trending Videos</title>
   <meta name="description" content="Watch and stream the latest secret trending videos, viral clips, and HD entertainment on Secret Video Portal for free.">
   <meta name="robots" content="index, follow">
 
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="https://i.ibb.co/zWvmyGPT/1000109018.png">
   <link rel="apple-touch-icon" href="https://i.ibb.co/zWvmyGPT/1000109018.png">
 
-  <!-- Open Graph -->
   <meta property="og:site_name" content="Secret Video">
   <meta property="og:title" content="Secret Video - Watch & Download Free HD Trending Videos">
   <meta property="og:description" content="Watch and stream the latest secret trending videos, viral clips, and HD entertainment on Secret Video Portal for free.">
   <meta property="og:image" content="https://i.ibb.co/zWvmyGPT/1000109018.png">
   
-  <meta name="google-site-verification" content="zuwpdVo1tFbmHfLy9DUCvqP6mQVRmZUrPxFAonnnTyU" />
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* Content Copy & Selection Protection */
     * { 
       box-sizing: border-box; 
       margin: 0; 
@@ -42,7 +36,6 @@
 
     body { background-color: #f4f5f8; color: #1a1a1a; padding-bottom: 110px; overflow-x: hidden; }
 
-    /* Preloader CSS */
     #preloader {
       position: fixed;
       top: 0;
@@ -95,14 +88,12 @@
       visibility: hidden;
     }
 
-    /* Header */
     header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #ffffff; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #eaedf1; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
     .logo { font-size: 17px; font-weight: 800; color: #e50914; display: flex; align-items: center; gap: 6px; text-decoration: none; }
     .logo span { color: #fff; background: #e50914; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
     .header-icons { display: flex; gap: 14px; font-size: 16px; color: #555; align-items: center; }
     .header-icons i { cursor: pointer; }
 
-    /* Search Bar Layout */
     .search-box {
       display: none;
       width: 100%;
@@ -132,11 +123,9 @@
       color: #1a1a1a;
     }
 
-    /* Top & Bottom Ad Box */
     .ad-container { width: 100%; display: flex; justify-content: center; align-items: center; background: #eef1f6; min-height: 45px; overflow: hidden; }
     .native-ad-container { grid-column: 1 / -1; width: 100%; margin: 10px 0; display: flex; justify-content: center; align-items: center; background: #fff; padding: 8px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
 
-    /* Dynamic Banner Slider */
     .hero-slider-wrapper { 
       overflow-x: auto; 
       display: flex; 
@@ -166,24 +155,19 @@
     .hero-content { position: relative; z-index: 2; color: #fff; }
     .hero-badge { background: #e50914; color: #fff; font-size: 9px; padding: 2px 6px; border-radius: 3px; font-weight: bold; margin-bottom: 4px; display: inline-block; }
     .hero-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-    .hero-desc { font-size: 11px; color: #ddd; margin-bottom: 8px; }
     .btn-play { background: #e50914; color: #fff; border: none; padding: 5px 12px; border-radius: 15px; font-weight: 600; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
 
-    /* Category Filter Bar */
     .cat-bar { display: flex; gap: 8px; overflow-x: auto; padding: 8px 12px; scrollbar-width: none; background: #ffffff; border-bottom: 1px solid #eaedf1; }
     .cat-bar::-webkit-scrollbar { display: none; }
     .cat-btn { background: #f0f2f5; color: #555; border: 1px solid #e1e4e8; padding: 6px 14px; border-radius: 20px; font-size: 11px; white-space: nowrap; cursor: pointer; font-weight: 600; }
     .cat-btn.active { background: #e50914; color: #fff; border-color: #e50914; font-weight: bold; }
 
-    /* Category Section Block */
     .category-section { margin-bottom: 15px; }
     .section-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 12px 8px 12px; }
     .section-title { font-size: 14px; font-weight: 700; color: #1a1a1a; border-left: 3px solid #e50914; padding-left: 6px; }
 
-    /* Small Video Cards Grid */
     .mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 12px; }
     
-    /* Poster Card Frame */
     .poster-card { 
       background: #1e1e1e; 
       border-radius: 8px; 
@@ -258,7 +242,6 @@
       width: 100%;
     }
 
-    /* Fixed Bottom Navigation */
     .bottom-nav { 
       position: fixed; 
       bottom: 0; 
@@ -290,7 +273,6 @@
     .nav-link img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; }
     .nav-link.active { color: #e50914; font-weight: bold; }
 
-    /* Bottom Ad Box */
     #bottomAdBox {
       position: fixed; 
       bottom: 60px; 
@@ -299,7 +281,6 @@
       z-index: 999;
     }
 
-    /* Modals & Player Styling (YouTube Responsive Style) */
     .player-modal { 
       display: none; 
       position: fixed; 
@@ -315,7 +296,6 @@
       backdrop-filter: blur(5px); 
     }
 
-    /* YouTube Like Video Box Wrapper */
     .video-box-wrapper {
       position: relative;
       width: 100%;
@@ -364,7 +344,6 @@
       width: 100%;
     }
 
-    /* Episodes Container inside Player */
     .episodes-selector-bar {
       display: flex;
       gap: 8px;
@@ -399,7 +378,6 @@
     .lock-box p { font-size: 12px; color: #666; margin-bottom: 16px; line-height: 1.4; }
     .lock-btn { background: #e50914; color: #fff; border: none; padding: 9px 18px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; width: 100%; }
 
-    /* Custom Rewarded Timer Box Overlay */
     .timer-overlay-card {
       background: #1e1e1e; color: #fff; padding: 25px 20px; border-radius: 12px; text-align: center; width: 88%; max-width: 330px; border: 1px solid #333; box-shadow: 0 10px 25px rgba(0,0,0,0.6);
     }
@@ -461,7 +439,6 @@
       onAuthStateChanged 
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    // এডমিন প্যানেলের সাথে সামঞ্জস্যপূর্ণ Firebase কনফিগ
     const firebaseConfig = {
       apiKey: "AIzaSyC3tgTH-Cp16LrJzAjgisfgvBTibRF0T4g",
       authDomain: "studio-ar1ak.firebaseapp.com",
@@ -472,7 +449,7 @@
       appId: "1:77389723660:web:2e35437b147041db02d629"
     };
 
-    const IMGBB_API_KEY = ""; // প্রয়োজনে আপনার ImgBB API Key দিতে পারেন
+    const IMGBB_API_KEY = "";
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
@@ -507,7 +484,6 @@
     }
 
     let adUrlData = "";
-    let adInterval = 0;
     let nativeAdCodeData = "";
     let allVideos = {};
     let premiumVideos = {};
@@ -518,12 +494,10 @@
     let currentTab = "home"; 
     let pinnedVideos = JSON.parse(localStorage.getItem('pinnedVideos') || '[]');
 
-    // Read Admin Ad Configuration
     onValue(ref(db, 'settings/adConfig'), (snapshot) => {
       const config = snapshot.val();
       if (config) {
         adUrlData = config.adUrl || "";
-        adInterval = config.adInterval !== undefined ? parseInt(config.adInterval) : 0;
         nativeAdCodeData = config.nativeAdCode || "";
 
         if (config.topBannerCode) renderAnyAd('topAdBox', config.topBannerCode);
@@ -533,7 +507,6 @@
       }
     });
 
-    // Universal Screen Click Handler (Popunder Trigger)
     document.addEventListener('click', function(e) {
       if (!adUrlData) return;
       if (e.target.closest('.close-modal, input, textarea, button')) return;
@@ -595,7 +568,6 @@
       }
     }
 
-    // Read Admin Categories
     onValue(ref(db, 'categories'), (snapshot) => {
       categoriesList = [];
       const data = snapshot.val();
@@ -607,7 +579,6 @@
       renderCategoryBar();
     });
 
-    // Read Admin Normal Videos
     const videosRefQuery = query(ref(db, 'videos'), limitToLast(1000));
     onValue(videosRefQuery, (snapshot) => {
       allVideos = snapshot.val() || {};
@@ -615,7 +586,6 @@
       renderVideos();
     });
 
-    // Read Admin Premium Videos
     const premiumRefQuery = query(ref(db, 'premiumVideos'), limitToLast(1000));
     onValue(premiumRefQuery, (snapshot) => {
       premiumVideos = snapshot.val() || {};
@@ -649,7 +619,6 @@
       renderVideos();
     };
 
-    // Read Admin Hero Banners
     onValue(ref(db, 'heroBanners'), (snapshot) => {
       const heroSlider = document.getElementById('heroSlider');
       heroSlider.innerHTML = "";
@@ -1227,10 +1196,8 @@
       renderVideos();
     };
 
-    // Video Player with Multi-Episode Support
     window.openVideoPlayer = (item) => {
       const modal = document.getElementById('playerModal');
-      const videoContainer = document.getElementById('videoPlayerContainer');
       const episodesBar = document.getElementById('episodesSelectorBar');
       document.getElementById('modalTitle').innerText = item.title;
       
@@ -1287,7 +1254,6 @@
 </head>
 <body oncontextmenu="return false;">
 
-  <!-- Preloader Screen -->
   <div id="preloader">
     <img src="https://i.ibb.co/Gf5TySRg/1000109014.png" alt="Website Logo" class="preloader-logo">
     <div class="preloader-title">
@@ -1295,11 +1261,9 @@
     </div>
   </div>
 
-  <!-- Dynamic Ad Scripts Container -->
   <div id="popunderAdContainer"></div>
   <div id="socialBarAdContainer"></div>
 
-  <!-- Header -->
   <header>
     <a href="#" class="logo">
       <i class="fa-solid fa-circle-play"></i> SECRET<span>VIDEO</span>
@@ -1310,7 +1274,6 @@
     </div>
   </header>
 
-  <!-- Search Bar -->
   <div class="search-box" id="searchBox">
     <div class="search-input-wrapper">
       <i class="fa-solid fa-magnifying-glass"></i>
@@ -1318,19 +1281,11 @@
     </div>
   </div>
 
-  <!-- Top Ad -->
   <div id="topAdBox" class="ad-container"></div>
-
-  <!-- Banner Slider -->
   <div class="hero-slider-wrapper" id="heroSlider"></div>
-
-  <!-- Category Bar -->
   <div class="cat-bar" id="catBar"></div>
-
-  <!-- Main Content Area -->
   <div id="mainContentContainer"></div>
 
-  <!-- Player Modal -->
   <div class="player-modal" id="playerModal">
     <span class="close-modal" onclick="closePlayer()">&times;</span>
     <div class="video-box-wrapper" id="videoPlayerContainer"></div>
@@ -1338,16 +1293,13 @@
     <div class="episodes-selector-bar" id="episodesSelectorBar"></div>
   </div>
 
-  <!-- Lock Modal -->
   <div class="player-modal" id="lockModal">
     <span class="close-modal" onclick="closeLockModal()">&times;</span>
     <div class="lock-box"></div>
   </div>
 
-  <!-- Bottom Ad -->
   <div id="bottomAdBox" class="ad-container"></div>
 
-  <!-- Bottom Navigation Bar -->
   <nav class="bottom-nav">
     <a onclick="switchTab('home', this)" class="nav-link active">
       <i class="fa-solid fa-house"></i>
