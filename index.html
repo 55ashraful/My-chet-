@@ -2,15 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   
+  <!-- Google Search SEO Meta Tags -->
   <title>Secret Video - Free HD Trending Videos</title>
   <meta name="description" content="Watch and stream the latest secret trending videos, viral clips, and HD entertainment on Secret Video Portal for free.">
   <meta name="robots" content="index, follow">
 
+  <!-- Favicon -->
   <link rel="icon" type="image/png" href="https://i.ibb.co/zWvmyGPT/1000109018.png">
   <link rel="apple-touch-icon" href="https://i.ibb.co/zWvmyGPT/1000109018.png">
 
+  <!-- Open Graph -->
   <meta property="og:site_name" content="Secret Video">
   <meta property="og:title" content="Secret Video - Watch & Download Free HD Trending Videos">
   <meta property="og:description" content="Watch and stream the latest secret trending videos, viral clips, and HD entertainment on Secret Video Portal for free.">
@@ -20,6 +23,7 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    /* Content Copy & Selection Protection */
     * { 
       box-sizing: border-box; 
       margin: 0; 
@@ -36,37 +40,142 @@
       user-select: auto;
     }
 
-    body { background-color: #f4f5f8; color: #1a1a1a; padding-bottom: 110px; overflow-x: hidden; }
+    body { background-color: #f4f5f8; color: #1a1a1a; padding-bottom: 110px; overflow-x: hidden; touch-action: pan-x pan-y; }
 
+    /* Preloader CSS */
     #preloader {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-      background-color: #ffffff; display: flex; flex-direction: column;
-      justify-content: center; align-items: center; gap: 12px;
-      z-index: 999999; transition: opacity 0.5s ease, visibility 0.5s ease;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      z-index: 999999;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
     }
-    .preloader-logo { max-width: 160px; width: 100%; height: auto; border-radius: 12px; animation: pulse 1.5s infinite alternate; }
-    .preloader-title { font-size: 22px; font-weight: 800; color: #e50914; display: flex; align-items: center; gap: 6px; letter-spacing: 0.5px; }
-    .preloader-title span { color: #fff; background: #e50914; padding: 2px 8px; border-radius: 4px; font-size: 16px; }
-    @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.8; } 100% { transform: scale(1.05); opacity: 1; } }
-    .preloader-hidden { opacity: 0; visibility: hidden; }
 
+    .preloader-logo {
+      max-width: 160px;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      animation: pulse 1.5s infinite alternate;
+    }
+
+    .preloader-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #e50914;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .preloader-title span {
+      color: #fff;
+      background: #e50914;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      100% { transform: scale(1.05); opacity: 1; }
+    }
+
+    .preloader-hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    /* Header */
     header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #ffffff; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #eaedf1; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
     .logo { font-size: 17px; font-weight: 800; color: #e50914; display: flex; align-items: center; gap: 6px; text-decoration: none; }
     .logo span { color: #fff; background: #e50914; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
     .header-icons { display: flex; gap: 14px; font-size: 16px; color: #555; align-items: center; }
     .header-icons i { cursor: pointer; }
 
-    .search-box { display: none; width: 100%; padding: 8px 14px; background: #ffffff; border-bottom: 1px solid #eaedf1; position: sticky; top: 48px; z-index: 99; box-shadow: 0 4px 6px rgba(0,0,0,0.03); }
-    .search-input-wrapper { display: flex; align-items: center; background: #f0f2f5; border: 1px solid #e1e4e8; border-radius: 20px; padding: 4px 12px; }
+    /* Search Bar Layout */
+    .search-box {
+      display: none;
+      width: 100%;
+      padding: 8px 14px;
+      background: #ffffff;
+      border-bottom: 1px solid #eaedf1;
+      position: sticky;
+      top: 48px;
+      z-index: 99;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+    }
+    .search-input-wrapper {
+      display: flex;
+      align-items: center;
+      background: #f0f2f5;
+      border: 1px solid #e1e4e8;
+      border-radius: 20px;
+      padding: 4px 12px;
+    }
     .search-input-wrapper i { color: #777; font-size: 13px; margin-right: 8px; }
-    .search-input-wrapper input { border: none; background: transparent; outline: none; width: 100%; font-size: 12px; color: #1a1a1a; }
+    .search-input-wrapper input {
+      border: none;
+      background: transparent;
+      outline: none;
+      width: 100%;
+      font-size: 12px;
+      color: #1a1a1a;
+    }
 
+    /* Top & Bottom Ad Box */
     .ad-container { width: 100%; display: flex; justify-content: center; align-items: center; background: #eef1f6; min-height: 45px; overflow: hidden; }
     .native-ad-container { grid-column: 1 / -1; width: 100%; margin: 10px 0; display: flex; justify-content: center; align-items: center; background: #fff; padding: 8px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
 
-    .hero-slider-wrapper { overflow-x: auto; display: flex; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 10px 12px; gap: 10px; scroll-behavior: smooth; }
+    /* ✅ Load More Button */
+    .load-more-wrap { display: flex; justify-content: center; padding: 15px 0 5px 0; }
+    .load-more-btn {
+      background: #ffffff; color: #e50914; border: 2px solid #e50914;
+      padding: 10px 28px; border-radius: 25px; font-weight: bold; font-size: 13px; cursor: pointer;
+    }
+    .load-more-btn:active { transform: scale(0.95); }
+
+    /* ✅ Database Error Warning Box */
+    .db-error-box {
+      margin: 10px 12px; padding: 12px; background: #fff3f3; border: 1px solid #ff4757;
+      border-radius: 8px; color: #c0392b; font-size: 12px; line-height: 1.5;
+    }
+
+    /* Dynamic Banner Slider */
+    .hero-slider-wrapper { 
+      overflow-x: auto; 
+      display: flex; 
+      scroll-snap-type: x mandatory; 
+      scrollbar-width: none; 
+      padding: 10px 12px; 
+      gap: 10px; 
+      scroll-behavior: smooth;
+    }
     .hero-slider-wrapper::-webkit-scrollbar { display: none; }
-    .hero-banner { flex: 0 0 100%; height: 160px; scroll-snap-align: start; position: relative; border-radius: 12px; overflow: hidden; display: flex; align-items: flex-end; padding: 12px; background-size: cover; background-position: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.08); background-color: #1e1e1e; }
+    .hero-banner { 
+      flex: 0 0 100%; 
+      height: 160px; 
+      scroll-snap-align: start; 
+      position: relative; 
+      border-radius: 12px; 
+      overflow: hidden; 
+      display: flex; 
+      align-items: flex-end; 
+      padding: 12px; 
+      background-size: cover; 
+      background-position: center; 
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
     .hero-banner::before { content:''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85), transparent); }
     .hero-content { position: relative; z-index: 2; color: #fff; }
     .hero-badge { background: #e50914; color: #fff; font-size: 9px; padding: 2px 6px; border-radius: 3px; font-weight: bold; margin-bottom: 4px; display: inline-block; }
@@ -74,48 +183,200 @@
     .hero-desc { font-size: 11px; color: #ddd; margin-bottom: 8px; }
     .btn-play { background: #e50914; color: #fff; border: none; padding: 5px 12px; border-radius: 15px; font-weight: 600; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
 
+    /* Category Filter Bar */
     .cat-bar { display: flex; gap: 8px; overflow-x: auto; padding: 8px 12px; scrollbar-width: none; background: #ffffff; border-bottom: 1px solid #eaedf1; }
     .cat-bar::-webkit-scrollbar { display: none; }
     .cat-btn { background: #f0f2f5; color: #555; border: 1px solid #e1e4e8; padding: 6px 14px; border-radius: 20px; font-size: 11px; white-space: nowrap; cursor: pointer; font-weight: 600; }
     .cat-btn.active { background: #e50914; color: #fff; border-color: #e50914; font-weight: bold; }
 
+    /* Category Section Block */
     .category-section { margin-bottom: 15px; }
     .section-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 12px 8px 12px; }
     .section-title { font-size: 14px; font-weight: 700; color: #1a1a1a; border-left: 3px solid #e50914; padding-left: 6px; }
 
+    /* Small Video Cards Grid */
     .mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 12px; }
     
-    .poster-card { background: #1e1e1e; border-radius: 8px; overflow: hidden; cursor: pointer; position: relative; height: 135px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+    /* Poster Card Frame */
+    .poster-card { 
+      background: #1e1e1e; 
+      border-radius: 8px; 
+      overflow: hidden; 
+      cursor: pointer; 
+      position: relative; 
+      height: 135px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08); 
+    }
     .poster-card:active { transform: scale(0.96); }
     .poster-img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .poster-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%); z-index: 1; }
     
-    .play-overlay { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); width: 28px; height: 28px; background: rgba(229, 9, 20, 0.9); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #fff; font-size: 11px; box-shadow: 0 2px 8px rgba(0,0,0,0.5); z-index: 2; }
+    .play-overlay { 
+      position: absolute; 
+      top: 40%; 
+      left: 50%; 
+      transform: translate(-50%, -50%); 
+      width: 28px; 
+      height: 28px; 
+      background: rgba(229, 9, 20, 0.9); 
+      border-radius: 50%; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      color: #fff; 
+      font-size: 11px; 
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5); 
+      z-index: 2;
+    }
     
     .premium-lock-badge { position: absolute; top: 6px; left: 6px; background: rgba(255, 193, 7, 0.95); color: #000; width: 22px; height: 22px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 10px; z-index: 10; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
 
-    .pin-btn { position: absolute; top: 6px; right: 6px; background: rgba(0, 0, 0, 0.5); color: #fff; width: 22px; height: 22px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 10px; z-index: 10; transition: all 0.2s; }
+    .pin-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 10px;
+      z-index: 10;
+      transition: all 0.2s;
+    }
     .pin-btn.pinned { background: #e50914; color: #fff; }
 
-    .poster-title-overlay { position: absolute; bottom: 6px; left: 0; width: 100%; text-align: center; padding: 0 4px; z-index: 3; }
-    .poster-title-text { color: #ffffff; font-size: 11px; font-weight: 600; text-align: center; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; width: 100%; }
+    .poster-title-overlay { 
+      position: absolute; 
+      bottom: 6px; 
+      left: 0; 
+      width: 100%; 
+      text-align: center;
+      padding: 0 4px;
+      z-index: 3;
+    }
+    
+    .poster-title-text {
+      color: #ffffff; 
+      font-size: 11px; 
+      font-weight: 600; 
+      text-align: center;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis;
+      display: block;
+      width: 100%;
+    }
 
-    .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; background: #ffffff; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #eaedf1; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.06); }
-    .nav-link { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #777; text-decoration: none; font-size: 11px; font-weight: 500; cursor: pointer; width: 25%; gap: 3px; }
+    /* Fixed Bottom Navigation */
+    .bottom-nav { 
+      position: fixed; 
+      bottom: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 60px;
+      background: #ffffff; 
+      display: flex; 
+      justify-content: space-around; 
+      align-items: center; 
+      border-top: 1px solid #eaedf1; 
+      z-index: 1000; 
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.06); 
+    }
+    .nav-link { 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center;
+      color: #777; 
+      text-decoration: none; 
+      font-size: 11px; 
+      font-weight: 500;
+      cursor: pointer; 
+      width: 25%;
+      gap: 3px;
+    }
     .nav-link i { font-size: 18px; display: block; }
     .nav-link img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; }
     .nav-link.active { color: #e50914; font-weight: bold; }
 
-    #bottomAdBox { position: fixed; bottom: 60px; left: 0; width: 100%; z-index: 999; }
+    /* Bottom Ad Box */
+    #bottomAdBox {
+      position: fixed; 
+      bottom: 60px; 
+      left: 0; 
+      width: 100%;
+      z-index: 999;
+    }
 
-    .player-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+    /* Modals & Player Styling (YouTube Responsive Style) */
+    .player-modal { 
+      display: none; 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      background: rgba(0,0,0,0.95); 
+      z-index: 2000; 
+      flex-direction: column; 
+      justify-content: center; 
+      align-items: center; 
+      backdrop-filter: blur(5px); 
+    }
 
-    .video-box-wrapper { position: relative; width: 100%; max-width: 900px; background: #000; aspect-ratio: 16 / 9; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.8); }
-    .video-box-wrapper video, .video-box-wrapper iframe { width: 100%; height: 100%; border: none; object-fit: contain; }
+    /* YouTube Like Video Box Wrapper */
+    .video-box-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      background: #000;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+    }
 
-    .close-modal { position: absolute; top: 15px; right: 20px; color: #fff; font-size: 28px; cursor: pointer; z-index: 2001; background: rgba(0,0,0,0.5); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .video-box-wrapper video, 
+    .video-box-wrapper iframe { 
+      width: 100%; 
+      height: 100%; 
+      border: none; 
+      object-fit: contain;
+    }
 
-    .modal-title { margin-top: 14px; font-size: 15px; font-weight: 600; padding: 0 15px; text-align: center; color: #fff; max-width: 900px; width: 100%; }
+    .close-modal { 
+      position: absolute; 
+      top: 15px; 
+      right: 20px; 
+      color: #fff; 
+      font-size: 28px; 
+      cursor: pointer; 
+      z-index: 2001; 
+      background: rgba(0,0,0,0.5);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-title { 
+      margin-top: 14px; 
+      font-size: 15px; 
+      font-weight: 600; 
+      padding: 0 15px; 
+      text-align: center; 
+      color: #fff; 
+      max-width: 900px;
+      width: 100%;
+    }
 
     .lock-box { background: #ffffff; border-radius: 12px; width: 85%; max-width: 320px; padding: 20px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
     .lock-box i { font-size: 40px; color: #e50914; margin-bottom: 12px; }
@@ -123,7 +384,10 @@
     .lock-box p { font-size: 12px; color: #666; margin-bottom: 16px; line-height: 1.4; }
     .lock-btn { background: #e50914; color: #fff; border: none; padding: 9px 18px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; width: 100%; }
 
-    .timer-overlay-card { background: #1e1e1e; color: #fff; padding: 25px 20px; border-radius: 12px; text-align: center; width: 88%; max-width: 330px; border: 1px solid #333; box-shadow: 0 10px 25px rgba(0,0,0,0.6); }
+    /* Custom Rewarded Timer Box Overlay */
+    .timer-overlay-card {
+      background: #1e1e1e; color: #fff; padding: 25px 20px; border-radius: 12px; text-align: center; width: 88%; max-width: 330px; border: 1px solid #333; box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    }
     .timer-badge { font-size: 15px; color: #ffc107; font-weight: bold; margin: 15px 0; background: #2a2a2a; padding: 12px; border-radius: 8px; border: 1px dashed #ffc107; }
     .ad-x-close-btn { background: #2ed573; color: #000; font-weight: bold; padding: 12px 18px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; width: 100%; margin-top: 10px; }
 
@@ -157,10 +421,24 @@
       if (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) { return false; }
     };
 
+    // জুম সম্পূর্ণ ব্লক (Ctrl+স্ক্রল, পিঞ্চ জুম, ডাবল ট্যাপ জুম)
+    document.addEventListener('wheel', function(e){ if (e.ctrlKey) e.preventDefault(); }, { passive: false });
+    document.addEventListener('gesturestart', function(e){ e.preventDefault(); });
+    document.addEventListener('gesturechange', function(e){ e.preventDefault(); });
+    document.addEventListener('touchmove', function(e){ if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+    var __lastTouchEnd = 0;
+    document.addEventListener('touchend', function(e){
+      var now = Date.now();
+      if (now - __lastTouchEnd <= 300) e.preventDefault();
+      __lastTouchEnd = now;
+    }, false);
+
     window.addEventListener('load', function() {
       setTimeout(function() {
         var preloader = document.getElementById('preloader');
-        if (preloader) preloader.classList.add('preloader-hidden');
+        if (preloader) {
+          preloader.classList.add('preloader-hidden');
+        }
       }, 2500); 
     });
   </script>
@@ -169,9 +447,15 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
     import { 
-      getAuth, GoogleAuthProvider, signInWithPopup, signOut, 
-      createUserWithEmailAndPassword, signInWithEmailAndPassword, 
-      sendEmailVerification, updateProfile, onAuthStateChanged 
+      getAuth, 
+      GoogleAuthProvider, 
+      signInWithPopup, 
+      signOut, 
+      createUserWithEmailAndPassword, 
+      signInWithEmailAndPassword, 
+      sendEmailVerification, 
+      updateProfile,
+      onAuthStateChanged 
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
     import { firebaseConfig, IMGBB_API_KEY } from './config.js';
@@ -180,21 +464,11 @@
     const db = getDatabase(app);
     const auth = getAuth(app);
 
-    const FALLBACK_POSTER = "data:image/svg+xml;utf8," + encodeURIComponent(
-      "<svg xmlns='http://www.w3.org/2000/svg' width='300' height='450'><rect width='100%' height='100%' fill='#1e1e1e'/><text x='50%' y='47%' fill='#e50914' font-family='Arial' font-size='28' font-weight='bold' text-anchor='middle'>SECRET</text><text x='50%' y='57%' fill='#ffffff' font-family='Arial' font-size='28' font-weight='bold' text-anchor='middle'>VIDEO</text></svg>"
-    ).replace(/'/g, '%27');
-
-    function escapeHtml(str) {
-      return String(str == null ? '' : str)
-        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-    }
-
     let currentUser = null;
-    let videoAdProgress = {};       // প্রিমিয়াম ভিডিওর এড প্রোগ্রেস (লগইন সেশনে মনে থাকে)
+    let videoAdProgress = {};
     let adTimerInterval = null;
     let userAccessStatus = 'none';
-    let pendingVideo = null;        // লক মডালে অপেক্ষমাণ ভিডিও { key, item, requiredAds, isPremium }
+    let pendingVideo = null;
 
     onAuthStateChanged(auth, (user) => {
       currentUser = user;
@@ -210,7 +484,11 @@
     function checkUserAccessStatus() {
       if (!currentUser) return;
       onValue(ref(db, `accessRequests/${currentUser.uid}`), (snapshot) => {
-        userAccessStatus = snapshot.exists() ? (snapshot.val().status || 'pending') : 'none';
+        if (snapshot.exists()) {
+          userAccessStatus = snapshot.val().status || 'pending';
+        } else {
+          userAccessStatus = 'none';
+        }
         renderVideos();
       });
     }
@@ -224,65 +502,44 @@
     let selectedCat = "All";
     let searchQuery = "";
     let autoSlideTimer = null;
-    let currentTab = "home";
+    let currentTab = "home"; 
     let pinnedVideos = JSON.parse(localStorage.getItem('pinnedVideos') || '[]');
-    const injectedScriptAds = {};
 
+    // ✅ ৫০০/২০০ ভিডিও স্মুথলি চালানোর জন্য Load More সিস্টেম
+    let homeRenderLimit = 30;
+    let premRenderLimit = 30;
+
+    // ✅ ডেটাবেস এরর দেখানোর জন্য (Rules সমস্যা হলে স্ক্রিনে দেখা যাবে)
+    let videosReadError = "";
+    let premiumReadError = "";
+
+    // Read Admin Ad Configuration
     onValue(ref(db, 'settings/adConfig'), (snapshot) => {
-      const config = snapshot.val() || {};
+      const config = snapshot.val();
+      if (config) {
+        adUrlData = config.adUrl || "";
+        // এডমিন প্যানেলে সংখ্যা দিয়ে কন্ট্রোল: 0 দিলে স্ক্রিন ক্লিক এড বন্ধ; 10/15/20 হলে তত মিনিট পর পর
+        adInterval = config.adInterval !== undefined ? parseInt(config.adInterval) : 0;
+        nativeAdCodeData = config.nativeAdCode || "";
 
-      adUrlData = config.adUrl || "";
-      adInterval = config.adInterval !== undefined ? (parseInt(config.adInterval) || 0) : 0;
-      nativeAdCodeData = config.nativeAdCode || "";
-
-      renderOptionalAd('topAdBox', config.topBannerCode);
-      renderOptionalAd('bottomAdBox', config.bottomBannerCode);
-      handleScriptAd(config.popupAdCode, 'popunderAdContainer');
-      handleScriptAd(config.socialBarAdCode, 'socialBarAdContainer');
-
-      renderVideos();
+        if (config.topBannerCode) renderAnyAd('topAdBox', config.topBannerCode);
+        if (config.bottomBannerCode) renderAnyAd('bottomAdBox', config.bottomBannerCode);
+        if (config.popupAdCode) injectAdsterraScript(config.popupAdCode, 'popunderAdContainer');
+        if (config.socialBarAdCode) injectAdsterraScript(config.socialBarAdCode, 'socialBarAdContainer');
+      }
     });
 
-    function renderOptionalAd(containerId, rawCode) {
-      const container = document.getElementById(containerId);
-      if (!container) return;
-      if (!rawCode || !String(rawCode).trim()) {
-        container.innerHTML = "";
-        container.style.display = 'none';
-        return;
-      }
-      container.style.display = 'flex';
-      renderAnyAd(containerId, rawCode);
-    }
-
-    function handleScriptAd(scriptCode, containerId) {
-      let container = document.getElementById(containerId);
-      if (!container) {
-        container = document.createElement('div');
-        container.id = containerId;
-        document.body.appendChild(container);
-      }
-      if (!scriptCode || !String(scriptCode).trim()) {
-        container.innerHTML = "";
-        injectedScriptAds[containerId] = "";
-        return;
-      }
-      if (injectedScriptAds[containerId] === scriptCode) return;
-      container.innerHTML = "";
-      injectedScriptAds[containerId] = scriptCode;
-      const range = document.createRange();
-      range.selectNode(container);
-      container.appendChild(range.createContextualFragment(scriptCode));
-    }
-
+    // Universal Screen Click Handler (Admin Set Interval Popunder Trigger)
     document.addEventListener('click', function(e) {
-      if (!adUrlData) return;
+      // এডমিন 0 দিলে বা Direct Link খালি থাকলে স্ক্রিন ক্লিক এড সম্পূর্ণ বন্ধ
+      if (!adUrlData || adInterval <= 0) return;
+      
       if (e.target.closest('.close-modal, input, textarea, select, button, a')) return;
 
-      const intervalMs = adInterval > 0 ? adInterval * 60 * 1000 : 0;
-      const lastClickAdTime = parseInt(localStorage.getItem('lastClickAdTime') || '0');
+      const lastClickAdTime = localStorage.getItem('lastClickAdTime') || 0;
       const now = Date.now();
 
+      const intervalMs = adInterval * 60 * 1000;
       if (now - lastClickAdTime >= intervalMs) {
         let targetUrl = adUrlData.trim();
         if (targetUrl.includes("src=")) {
@@ -295,6 +552,22 @@
         }
       }
     }, true);
+
+    function injectAdsterraScript(scriptCode, containerId) {
+      if (!scriptCode) return;
+      let container = document.getElementById(containerId);
+      if (!container) {
+        container = document.createElement('div');
+        container.id = containerId;
+        document.body.appendChild(container);
+      }
+      container.innerHTML = "";
+      
+      const range = document.createRange();
+      range.selectNode(container);
+      const documentFragment = range.createContextualFragment(scriptCode);
+      container.appendChild(documentFragment);
+    }
 
     function renderAnyAd(containerId, rawCode) {
       const container = document.getElementById(containerId);
@@ -314,6 +587,7 @@
         iframe.style.height = '60px';
         iframe.style.overflow = 'hidden';
         container.appendChild(iframe);
+
         const doc = iframe.contentWindow.document;
         doc.open();
         doc.write(`<body style="margin:0; padding:0; display:flex; justify-content:center; align-items:center; background:transparent;">${rawCode}</body>`);
@@ -327,25 +601,32 @@
       const data = snapshot.val();
       if (data) {
         Object.keys(data).forEach(key => {
-          if (data[key] && data[key].name) categoriesList.push(data[key].name);
+          categoriesList.push(data[key].name);
         });
-      }
-      if (selectedCat !== 'All' && !categoriesList.includes(selectedCat)) {
-        selectedCat = 'All';
       }
       renderCategoryBar();
     });
 
-    // Read Admin Normal Videos
+    // ✅ Read Admin Normal Videos — এরর হলে স্ক্রিনে দেখাবে
     onValue(ref(db, 'videos'), (snapshot) => {
+      videosReadError = "";
       allVideos = snapshot.val() || {};
       renderCategoryBar();
       renderVideos();
+    }, (error) => {
+      videosReadError = error.message;
+      console.error("videos read error:", error);
+      renderVideos();
     });
 
-    // Read Admin Premium Videos
+    // ✅ Read Admin Premium Videos — এরর হলে স্ক্রিনে দেখাবে
     onValue(ref(db, 'premiumVideos'), (snapshot) => {
+      premiumReadError = "";
       premiumVideos = snapshot.val() || {};
+      if (currentTab === 'trending') renderVideos();
+    }, (error) => {
+      premiumReadError = error.message;
+      console.error("premiumVideos read error:", error);
       if (currentTab === 'trending') renderVideos();
     });
 
@@ -371,6 +652,7 @@
 
     window.filterCat = (catName, btnElement) => {
       selectedCat = catName;
+      homeRenderLimit = 30;
       document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
       btnElement.classList.add('active');
       renderVideos();
@@ -379,22 +661,18 @@
     // Read Admin Hero Banners
     onValue(ref(db, 'heroBanners'), (snapshot) => {
       const heroSlider = document.getElementById('heroSlider');
-      if (!heroSlider) return;
       heroSlider.innerHTML = "";
       const data = snapshot.val();
       if (data) {
-        const banners = Object.values(data).filter(b => b && b.imgUrl);
-        if (banners.length === 0) { heroSlider.style.display = 'none'; return; }
-        heroSlider.style.display = 'flex';
-
+        const banners = Object.values(data);
         banners.forEach(b => {
           const div = document.createElement('div');
           div.className = 'hero-banner';
-          div.style.backgroundImage = `url('${String(b.imgUrl).replace(/'/g, "%27")}')`;
+          div.style.backgroundImage = `url('${b.imgUrl}')`;
           
           div.onclick = () => {
             if (b.videoUrl) {
-              openVideoPlayer(b.videoUrl, b.title || 'Banner Video');
+              handleNormalVideoClick(b.videoUrl, b.title || 'Banner Video');
             } else if (b.linkUrl) {
               window.open(b.linkUrl, '_blank');
             }
@@ -403,8 +681,8 @@
           div.innerHTML = `
             <div class="hero-content">
               <span class="hero-badge">FEATURED</span>
-              <h2 class="hero-title">${escapeHtml(b.title || '')}</h2>
-              <div class="hero-desc">${escapeHtml(b.desc || '')}</div>
+              <h2 class="hero-title">${b.title || ''}</h2>
+              <div class="hero-desc">${b.desc || ''}</div>
               <button class="btn-play"><i class="fa-solid fa-play"></i> Watch Now</button>
             </div>
           `;
@@ -420,26 +698,39 @@
     function startAutoSlider(slider, total) {
       if (autoSlideTimer) clearInterval(autoSlideTimer);
       if (total <= 1) return;
+
       let currentIndex = 0;
       autoSlideTimer = setInterval(() => {
         currentIndex = (currentIndex + 1) % total;
-        slider.scrollTo({ left: slider.clientWidth * currentIndex, behavior: 'smooth' });
+        const bannerWidth = slider.clientWidth;
+        slider.scrollTo({
+          left: bannerWidth * currentIndex,
+          behavior: 'smooth'
+        });
       }, 3500);
     }
 
     window.togglePin = (e, videoId) => {
       e.stopPropagation();
       const index = pinnedVideos.indexOf(videoId);
-      if (index > -1) pinnedVideos.splice(index, 1);
-      else pinnedVideos.push(videoId);
+      if (index > -1) {
+        pinnedVideos.splice(index, 1);
+      } else {
+        pinnedVideos.push(videoId);
+      }
       localStorage.setItem('pinnedVideos', JSON.stringify(pinnedVideos));
       renderVideos();
     };
 
-    // ===== মূল রেন্ডার ফাংশন =====
+    function createErrorBox(msg) {
+      const box = document.createElement('div');
+      box.className = 'db-error-box';
+      box.innerHTML = `<b>⚠️ ডেটাবেস সমস্যা:</b> ${msg}<br>Firebase Console → Realtime Database → Rules চেক করুন (read: true আছে কিনা)।`;
+      return box;
+    }
+
     function renderVideos() {
       const mainContainer = document.getElementById('mainContentContainer');
-      if (!mainContainer) return;
       mainContainer.innerHTML = "";
 
       try {
@@ -449,6 +740,10 @@
         }
 
         if (currentTab === "trending") {
+          if (premiumReadError) {
+            mainContainer.appendChild(createErrorBox(premiumReadError));
+          }
+
           const headerDiv = document.createElement('div');
           headerDiv.className = 'section-header';
           headerDiv.innerHTML = `<span class="section-title">Premium Content</span>`;
@@ -458,29 +753,33 @@
           premGrid.className = 'mini-grid';
           const keys = Object.keys(premiumVideos).reverse();
           let count = 0;
-          let nativeAdCount = 0;
+          let totalMatch = 0;
 
           keys.forEach((key) => {
             const item = premiumVideos[key];
             if (!item || typeof item !== 'object') return;
-            const t = item.title || 'Untitled';
-            if (t.toLowerCase().includes(searchQuery.toLowerCase())) {
-              count++;
-              premGrid.appendChild(createCard(key, item, false, true));
-              if (nativeAdCodeData && nativeAdCount < 4 && count % 6 === 0) {
-                nativeAdCount++;
-                const nativeBox = document.createElement('div');
-                nativeBox.className = 'native-ad-container';
-                premGrid.appendChild(nativeBox);
-                renderAnyAdByElement(nativeBox, nativeAdCodeData);
+            if ((item.title || '').toLowerCase().includes(searchQuery.toLowerCase())) {
+              totalMatch++;
+              // ✅ Load More: লিমিট পর্যন্তই রেন্ডার হবে
+              if (count < premRenderLimit) {
+                count++;
+                premGrid.appendChild(createCard(key, item, false, true));
               }
             }
           });
 
-          if (count === 0) {
+          if (totalMatch === 0) {
             mainContainer.innerHTML += "<p style='color:#888; font-size:11px; text-align:center; padding:30px;'>কোনো প্রিমিয়াম ভিডিও উপলব্ধ নেই!</p>";
           } else {
             mainContainer.appendChild(premGrid);
+
+            // ✅ আরো ভিডিও থাকলে Load More বাটন
+            if (totalMatch > premRenderLimit) {
+              const wrap = document.createElement('div');
+              wrap.className = 'load-more-wrap';
+              wrap.innerHTML = `<button class="load-more-btn" onclick="loadMorePremium()">আরো দেখুন (${premRenderLimit}/${totalMatch}) <i class="fa-solid fa-chevron-down"></i></button>`;
+              mainContainer.appendChild(wrap);
+            }
           }
           return;
         }
@@ -493,9 +792,10 @@
           Object.keys(allVideos).reverse().forEach(key => {
             const item = allVideos[key];
             if (!item || typeof item !== 'object') return;
-            const t = item.title || 'Untitled';
             const isPinned = pinnedVideos.includes(key);
-            if (isPinned && t.toLowerCase().includes(searchQuery.toLowerCase())) {
+            const titleMatch = item.title && item.title.toLowerCase().includes(searchQuery.toLowerCase());
+
+            if (isPinned && titleMatch) {
               pinnedCount++;
               myGrid.appendChild(createCard(key, item, isPinned, false));
             }
@@ -515,44 +815,56 @@
         }
 
         // ===== HOME =====
+        if (videosReadError) {
+          mainContainer.appendChild(createErrorBox(videosReadError));
+        }
+
         const keys = Object.keys(allVideos).reverse();
         const groupedVideos = {};
-
+        
         keys.forEach(key => {
           const item = allVideos[key];
           if (!item || typeof item !== 'object') return;
           const category = item.category || "Featured Videos";
-          const title = item.title || 'Untitled';
-          if (title.toLowerCase().includes(searchQuery.toLowerCase())) {
-            if (!groupedVideos[category]) groupedVideos[category] = [];
+          const titleMatch = item.title && item.title.toLowerCase().includes(searchQuery.toLowerCase());
+
+          if (titleMatch) {
+            if (!groupedVideos[category]) {
+              groupedVideos[category] = [];
+            }
             groupedVideos[category].push({ key, data: item });
           }
         });
 
         let totalRendered = 0;
-        let nativeAdCount = 0;
+        let totalAvailable = 0;
         const categoriesToDisplay = selectedCat === "All" ? Object.keys(groupedVideos) : [selectedCat];
 
         categoriesToDisplay.forEach(catName => {
-          const videoList = groupedVideos[catName];
-          if (videoList && videoList.length > 0) {
-            totalRendered += videoList.length;
+          totalAvailable += (groupedVideos[catName] || []).length;
+        });
 
+        categoriesToDisplay.forEach(catName => {
+          const videoList = groupedVideos[catName];
+
+          if (videoList && videoList.length > 0 && totalRendered < homeRenderLimit) {
             const section = document.createElement('div');
             section.className = 'category-section';
 
             const secHeader = document.createElement('div');
             secHeader.className = 'section-header';
-            secHeader.innerHTML = `<span class="section-title">${escapeHtml(catName)}</span>`;
+            secHeader.innerHTML = `<span class="section-title">${catName}</span>`;
 
             const grid = document.createElement('div');
             grid.className = 'mini-grid';
 
             videoList.forEach((obj, idx) => {
+              if (totalRendered >= homeRenderLimit) return;
               const isPinned = pinnedVideos.includes(obj.key);
               grid.appendChild(createCard(obj.key, obj.data, isPinned, false));
-              if (nativeAdCodeData && nativeAdCount < 4 && (idx + 1) % 6 === 0) {
-                nativeAdCount++;
+              totalRendered++;
+
+              if (nativeAdCodeData && (idx + 1) % 6 === 0) {
                 const nativeBox = document.createElement('div');
                 nativeBox.className = 'native-ad-container';
                 grid.appendChild(nativeBox);
@@ -566,15 +878,32 @@
           }
         });
 
-        if (totalRendered === 0) {
-          mainContainer.innerHTML = "<p style='color:#888; font-size:11px; text-align:center; padding:20px;'>" + 
-            (searchQuery ? "No videos found matching your request." : "এখনো কোনো ভিডিও যুক্ত হয়নি!") + "</p>";
+        // ✅ আরো ভিডিও থাকলে Load More বাটন
+        if (totalAvailable > homeRenderLimit) {
+          const wrap = document.createElement('div');
+          wrap.className = 'load-more-wrap';
+          wrap.innerHTML = `<button class="load-more-btn" onclick="loadMoreVideos()">আরো দেখুন (${homeRenderLimit}/${totalAvailable}) <i class="fa-solid fa-chevron-down"></i></button>`;
+          mainContainer.appendChild(wrap);
+        }
+
+        if (totalAvailable === 0) {
+          mainContainer.innerHTML = "<p style='color:#888; font-size:11px; text-align:center; padding:20px;'>No videos found matching your request.</p>";
         }
       } catch (err) {
         console.error("Render error:", err);
         mainContainer.innerHTML = "<p style='color:#888; font-size:12px; text-align:center; padding:20px;'>কিছু একটার সমস্যা হচ্ছে, পেজটি রিফ্রেশ করুন।</p>";
       }
     }
+
+    // ✅ Load More বাটনের কাজ
+    window.loadMoreVideos = () => {
+      homeRenderLimit += 30;
+      renderVideos();
+    };
+    window.loadMorePremium = () => {
+      premRenderLimit += 30;
+      renderVideos();
+    };
 
     function renderAnyAdByElement(container, rawCode) {
       if (!container || !rawCode) return;
@@ -585,6 +914,7 @@
       iframe.style.height = '80px';
       iframe.style.overflow = 'hidden';
       container.appendChild(iframe);
+
       const doc = iframe.contentWindow.document;
       doc.open();
       doc.write(`<body style="margin:0; padding:0; display:flex; justify-content:center; align-items:center; background:transparent;">${rawCode}</body>`);
@@ -595,13 +925,13 @@
       const card = document.createElement('div');
       card.className = 'poster-card';
       
-      const safeTitle = item.title || 'Untitled';
-      const requiredAds = (item.adLimit !== undefined && parseInt(item.adLimit) > 0) ? parseInt(item.adLimit) : 5;
+      const requiredAds = item.adLimit !== undefined ? parseInt(item.adLimit) : 5;
       const currentCount = videoAdProgress[key] || 0;
+      
       const isUnlocked = isPremium ? (userAccessStatus === 'approved' || currentCount >= requiredAds) : true;
 
-      const rawCover = item.imgUrl || item.posterUrl || item.thumbnailUrl || '';
-      const coverImage = (rawCover && String(rawCover).trim() !== '') ? rawCover : FALLBACK_POSTER;
+      const rawCover = item.imgUrl || item.posterUrl || item.thumbnailUrl || (item.episodes && item.episodes[0] ? item.episodes[0].thumbnailUrl : '');
+      const coverImage = (rawCover && rawCover.trim() !== '') ? rawCover : 'https://via.placeholder.com/300x450/1e1e1e/ffffff?text=Secret+Video';
 
       card.onclick = () => {
         if (isPremium) {
@@ -619,98 +949,118 @@
         ` : ''}
         ${!isPremium ? `<div class="pin-btn ${isPinned ? 'pinned' : ''}" onclick="togglePin(event, '${key}')" title="Pin Video"><i class="fa-solid fa-bookmark"></i></div>` : ''}
         
-        <img src="${escapeHtml(coverImage)}" class="poster-img" alt="${escapeHtml(safeTitle)}" onerror="this.onerror=null; this.src='${FALLBACK_POSTER}';" oncontextmenu="return false;">
+        <img src="${coverImage}" class="poster-img" alt="${item.title}" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x450/1e1e1e/ffffff?text=Poster';" oncontextmenu="return false;">
         
         <div class="play-overlay"><i class="fa-solid ${isPremium && !isUnlocked ? 'fa-lock' : 'fa-play'}"></i></div>
         <div class="poster-title-overlay">
-          <span class="poster-title-text">${escapeHtml(safeTitle)}</span>
+          <span class="poster-title-text">${item.title}</span>
         </div>
       `;
       return card;
     }
 
-    // ===== ✅ ফ্রি ভিডিও: প্রতিবার ক্লিকে আগে এড → তারপর ভিডিও =====
-    window.handleNormalVideoClick = (key, item) => {
-      if (!item) { alert("ভিডিও ডেটা পাওয়া যায়নি!"); return; }
+    // ফ্রি ভিডিও — প্রতিবার ক্লিকে আগে এড দেখাবে, তারপর ভিডিও প্লে হবে
+    window.handleNormalVideoClick = (firstArg, secondArg, thirdArg) => {
+      let key, item, videoUrl, title, specificAdUrl;
 
-      // এড লিংক: ভিডিওর নিজের লিংক, না থাকলে গ্লোবাল Direct Link
-      const adSource = (item.adUrl && String(item.adUrl).trim()) || (adUrlData ? adUrlData.trim() : "");
+      if (secondArg && typeof secondArg === 'object') {
+        key = firstArg;
+        item = secondArg;
+        videoUrl = item.videoUrl;
+        title = item.title || 'Untitled';
+        specificAdUrl = item.adUrl;
+      } else {
+        videoUrl = firstArg;
+        title = secondArg || 'Untitled';
+        specificAdUrl = thirdArg;
+        key = null;
+        item = { videoUrl: videoUrl, title: title, adUrl: specificAdUrl };
+      }
 
-      // কোনো এড লিংকই না থাকলে সরাসরি প্লে
+      if (!videoUrl) { alert("ভিডিও লিংক পাওয়া যায়নি!"); return; }
+
+      const adSource = (specificAdUrl && String(specificAdUrl).trim()) || (adUrlData ? adUrlData.trim() : "");
+
       if (!adSource) {
-        openVideoPlayer(item.videoUrl, item.title || 'Untitled');
+        openVideoPlayer(videoUrl, title);
         return;
       }
 
-      // এডমিন যতটি সেট করেছে (সেট না করলে ডিফল্ট ১টি)
+      if (!key) {
+        openVideoPlayer(videoUrl, title);
+        return;
+      }
+
       const requiredAds = (item.adLimit !== undefined && parseInt(item.adLimit) > 0) ? parseInt(item.adLimit) : 1;
 
-      // ✅ প্রতিবার ক্লিকে এড নতুন করে শুরু হবে — বের হয়ে আবার ক্লিক করলেও আবার এড আসবে
       videoAdProgress[key] = 0;
       openLockModal(key, item, 0, requiredAds, false);
     };
 
-    // ===== ✅ প্রিমিয়াম ভিডিও: লগইন ছাড়া রেজিস্ট্রেশন মেসেজ, লগইন থাকলে এডমিনের সেট করা এড সংখ্যা =====
+    window.startNormalVideoAfterAd = (videoUrl, title) => {
+      closeLockModal();
+      openVideoPlayer(videoUrl, title);
+    };
+
+    // প্রিমিয়াম ভিডিও — লগইন ছাড়া ক্লিক করলে রেজিস্ট্রেশন মেসেজ বক্স আসবে
     function handlePremiumVideoClick(key, item) {
-      // লগইন না থাকলে → রেজিস্ট্রেশন মেসেজ
       if (!currentUser) {
         showRegisterRequiredModal();
         return;
       }
 
-      // এডমিন এপ্রুভ করলে সরাসরি প্লে
       if (userAccessStatus === 'approved') {
-        openVideoPlayer(item.videoUrl, item.title || 'Untitled');
+        openVideoPlayer(item.videoUrl, item.title);
         return;
       }
 
-      // এডমিন প্যানেলে সেট করা এড সংখ্যা (৫টা / ১০টা — যা সেট করবেন)
-      const requiredAds = (item.adLimit !== undefined && parseInt(item.adLimit) > 0) ? parseInt(item.adLimit) : 5;
+      const requiredAds = item.adLimit !== undefined ? parseInt(item.adLimit) : 5;
       if (!videoAdProgress[key]) videoAdProgress[key] = 0;
 
       if (videoAdProgress[key] < requiredAds) {
         openLockModal(key, item, videoAdProgress[key], requiredAds, true);
       } else {
-        openVideoPlayer(item.videoUrl, item.title || 'Untitled');
+        openVideoPlayer(item.videoUrl, item.title);
       }
     }
 
-    // ✅ রেজিস্ট্রেশন প্রয়োজন মেসেজ মডাল
+    // রেজিস্ট্রেশন প্রয়োজন মেসেজ বক্স
     window.showRegisterRequiredModal = () => {
       const modal = document.getElementById('lockModal');
       const lockBox = modal.querySelector('.lock-box, .timer-overlay-card');
       
       lockBox.className = "lock-box";
       lockBox.innerHTML = `
-        <i class="fa-solid fa-user-lock" style="color:#e50914;"></i>
-        <h3>🔒 Premium Video</h3>
-        <p>এটি একটি <b>প্রিমিয়াম ভিডিও</b>। দেখতে হলে আপনাকে প্রথমে <b>রেজিস্ট্রেশন / লগইন</b> করতে হবে।</p>
-        <button class="lock-btn" onclick="goToProfileForLogin()">Register / Login করুন</button>
+        <i class="fa-solid fa-user-lock" style="color:#e50914; font-size:45px;"></i>
+        <h3 style="font-size:17px;">রেজিস্ট্রেশন প্রয়োজন!</h3>
+        <p style="font-size:13px;">এটি একটি <b style="color:#e50914;">প্রিমিয়াম ভিডিও</b>।<br>
+        দেখতে হলে আপনাকে প্রথমে <b>ফ্রি রেজিস্ট্রেশন / লগইন</b> করতে হবে।</p>
+        <button class="lock-btn" style="font-size:14px; padding:12px;" onclick="goToProfileForLogin()">
+          এখনই রেজিস্ট্রেশন / লগইন করুন
+        </button>
       `;
       modal.style.display = 'flex';
     };
 
     window.goToProfileForLogin = () => {
       closeLockModal();
-      const navBtns = document.querySelectorAll('.nav-link');
-      switchTab('profile', navBtns[3]);
+      switchTab('profile', document.querySelectorAll('.nav-link')[3]);
     };
 
-    // ✅ লক মডাল — ফ্রি ও প্রিমিয়াম দুই ধরনের জন্যই
     window.openLockModal = (key, item, currentCount, requiredAds, isPremium) => {
-      pendingVideo = { key, item, requiredAds, isPremium };
+      pendingVideo = { key: key, item: item, requiredAds: requiredAds, isPremium: isPremium !== undefined ? isPremium : true };
       const modal = document.getElementById('lockModal');
       const lockBox = modal.querySelector('.lock-box, .timer-overlay-card');
       
       lockBox.className = "lock-box";
       lockBox.innerHTML = `
         <i class="fa-solid fa-lock" style="color:#e50914;"></i>
-        <h3>${isPremium ? 'Locked Premium Content' : 'Watch Ad To Play'}</h3>
-        <p>${isPremium 
+        <h3>${pendingVideo.isPremium ? 'Locked Premium Content' : 'Watch Ad To Play'}</h3>
+        <p>${pendingVideo.isPremium 
           ? `ভিডিওটি আনলক করতে আরও <b>${requiredAds - currentCount}</b> টি এড দেখুন অথবা এডমিন এক্সেস রিকোয়েস্ট পাঠান।`
           : `ভিডিওটি দেখতে আগে <b>${requiredAds - currentCount}</b> টি এড দেখুন।`}</p>
         <button class="lock-btn" style="margin-bottom:8px;" onclick="watchAdForVideo()">Watch Ad (${currentCount}/${requiredAds})</button>
-        ${isPremium ? `<button class="lock-btn" style="background:#28a745;" onclick="sendAccessRequest()">Request Admin Access</button>` : ''}
+        ${pendingVideo.isPremium ? `<button class="lock-btn" style="background:#28a745;" onclick="sendAccessRequest()">Request Admin Access</button>` : ''}
       `;
       modal.style.display = 'flex';
     };
@@ -730,16 +1080,16 @@
       }
     };
 
-    // ✅ এড দেখানো — ভিডিওর নিজের এড লিংক থাকলে সেটাই খুলবে, নাহলে গ্লোবাল Direct Link
     window.watchAdForVideo = () => {
       if (!pendingVideo) return;
-      const { item } = pendingVideo;
+      const item = pendingVideo.item;
 
-      let targetUrl = (item.adUrl && String(item.adUrl).trim()) || (adUrlData ? adUrlData.trim() : "") || "https://google.com";
+      let targetUrl = (item.adUrl && String(item.adUrl).trim()) || adUrlData.trim() || "https://google.com";
       if (targetUrl.includes("src=")) {
         const match = targetUrl.match(/src=["']([^"']+)["']/);
         if (match && match[1]) targetUrl = match[1];
       }
+      
       window.open(targetUrl, '_blank');
 
       const modal = document.getElementById('lockModal');
@@ -748,11 +1098,13 @@
       lockBox.className = "timer-overlay-card";
       lockBox.innerHTML = `
         <i class="fa-solid fa-clock" style="font-size:35px; color:#ffc107; margin-bottom:8px;"></i>
-        <h3 style="font-size:15px; margin-bottom:5px;">বিজ্ঞাপনটি দেখা শেষ হওয়া পর্যন্ত অপেক্ষা করুন</h3>
+        <h3 style="font-size:15px; margin-bottom:5px;">বিজ্ঞাপনটি দেখা শেষ হওয়া পর্যন্ত অপেক্ষা করুন</h3>
         <p style="font-size:11px; color:#aaa;">নতুন ট্যাবে অ্যাড প্লে হচ্ছে। 10 সেকেন্ড পর বন্ধ করুন বাটনটি দৃশ্যমান হবে।</p>
+        
         <div id="adTimerBox" class="timer-badge">
           অ্যাড দেখা শেষ হতে বাকি: <span id="adSecondsLeft">10</span> সেকেন্ড
         </div>
+
         <button id="adCloseXBtn" class="ad-x-close-btn" style="display:none;" onclick="finishAdCount()">
           ✕ বন্ধ করুন ও পয়েন্ট নিন
         </button>
@@ -765,6 +1117,7 @@
         timeLeft--;
         const timerElem = document.getElementById('adSecondsLeft');
         if (timerElem) timerElem.innerText = timeLeft;
+
         if (timeLeft <= 0) {
           clearInterval(adTimerInterval);
           const timerBox = document.getElementById('adTimerBox');
@@ -777,15 +1130,17 @@
 
     window.finishAdCount = () => {
       if (!pendingVideo) return;
-      const { key, item, requiredAds, isPremium } = pendingVideo;
+      const key = pendingVideo.key;
+      const item = pendingVideo.item;
+      const requiredAds = pendingVideo.requiredAds;
+      const isPremium = pendingVideo.isPremium;
+
       videoAdProgress[key] = (videoAdProgress[key] || 0) + 1;
 
       if (videoAdProgress[key] >= requiredAds) {
-        const url = item.videoUrl;
-        const t = item.title || 'Untitled';
         closeLockModal();
-        if (isPremium) renderVideos(); // প্রিমিয়ামে লক ব্যাজ আপডেট হবে
-        openVideoPlayer(url, t);
+        renderVideos();
+        openVideoPlayer(item.videoUrl, item.title);
       } else {
         openLockModal(key, item, videoAdProgress[key], requiredAds, isPremium);
       }
@@ -795,13 +1150,23 @@
       if (adTimerInterval) clearInterval(adTimerInterval);
       const modal = document.getElementById('lockModal');
       const lockBox = modal.querySelector('.lock-box, .timer-overlay-card');
-      if (lockBox) lockBox.className = "lock-box";
+      if(lockBox) lockBox.className = "lock-box";
       modal.style.display = 'none';
       pendingVideo = null;
     };
 
     window.switchTab = (tabName, navElement) => {
       currentTab = tabName;
+
+      // ✅ ট্যাব বদলালে সার্চ ক্লিয়ার — নাহলে পুরনো সার্চে আটকে সব খালি দেখায়
+      searchQuery = "";
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) searchInput.value = "";
+      const searchBox = document.getElementById('searchBox');
+      if (searchBox) searchBox.style.display = 'none';
+      homeRenderLimit = 30;
+      premRenderLimit = 30;
+
       document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
       navElement.classList.add('active');
 
@@ -841,18 +1206,18 @@
           </div>
         `;
       } else {
-        const photo = currentUser.photoURL || FALLBACK_POSTER;
+        const photo = currentUser.photoURL || 'https://via.placeholder.com/90';
         container.innerHTML = `
           <div class="profile-card">
             <div class="profile-img-container">
-              <img src="${escapeHtml(photo)}" id="userAvatar" class="profile-img" oncontextmenu="return false;">
+              <img src="${photo}" id="userAvatar" class="profile-img" oncontextmenu="return false;">
               <label for="imgUpload" class="upload-btn"><i class="fa-solid fa-camera"></i></label>
               <input type="file" id="imgUpload" accept="image/*" style="display:none;" onchange="handleImageUpload(event)">
             </div>
-            <div class="profile-name">${escapeHtml(currentUser.displayName || 'User')}</div>
-            <div class="profile-email">${escapeHtml(currentUser.email || '')}</div>
+            <div class="profile-name">${currentUser.displayName || 'User'}</div>
+            <div class="profile-email">${currentUser.email}</div>
             <p style="font-size:12px; margin-bottom:12px; color: ${userAccessStatus === 'approved' ? '#28a745' : '#e50914'};">
-              Status: <b>${(userAccessStatus || 'none').toUpperCase()}</b>
+              Status: <b>${userAccessStatus.toUpperCase()}</b>
             </p>
             <button class="auth-btn btn-danger" onclick="logoutUser()">
               <i class="fa-solid fa-right-from-bracket"></i> Sign Out
@@ -902,8 +1267,11 @@
 
     window.toggleAuthForm = (type) => {
       const formArea = document.getElementById('authFormArea');
-      if (!formArea) return;
-      formArea.innerHTML = (type === 'register') ? renderRegisterForm() : renderLoginForm();
+      if (type === 'register') {
+        formArea.innerHTML = renderRegisterForm();
+      } else {
+        formArea.innerHTML = renderLoginForm();
+      }
     };
 
     window.loginWithGoogle = () => {
@@ -960,6 +1328,7 @@
 
       const formData = new FormData();
       formData.append("image", file);
+
       alert("ছবি আপলোড হচ্ছে...");
 
       fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
@@ -969,7 +1338,8 @@
       .then(res => res.json())
       .then(data => {
         if (data && data.data && data.data.url) {
-          updateProfile(auth.currentUser, { photoURL: data.data.url }).then(() => {
+          const newPhotoUrl = data.data.url;
+          updateProfile(auth.currentUser, { photoURL: newPhotoUrl }).then(() => {
             alert("প্রোফাইল পিকচার আপডেট হয়েছে!");
             renderVideos();
           });
@@ -981,7 +1351,7 @@
       const profileNavBtn = document.getElementById('navProfileIcon');
       if (profileNavBtn) {
         if (currentUser && currentUser.photoURL) {
-          profileNavBtn.outerHTML = `<img src="${escapeHtml(currentUser.photoURL)}" id="navProfileIcon">`;
+          profileNavBtn.outerHTML = `<img src="${currentUser.photoURL}" id="navProfileIcon">`;
         } else {
           profileNavBtn.outerHTML = `<i class="fa-solid fa-user" id="navProfileIcon"></i>`;
         }
@@ -995,6 +1365,7 @@
         searchBox.style.display = 'none';
         searchQuery = "";
         searchInput.value = "";
+        homeRenderLimit = 30;
         renderVideos();
       } else {
         searchBox.style.display = 'block';
@@ -1004,28 +1375,31 @@
 
     window.handleSearch = (e) => {
       searchQuery = e.target.value.trim();
+      homeRenderLimit = 30;
+      premRenderLimit = 30;
       renderVideos();
     };
 
     // YouTube Responsive Player
     window.openVideoPlayer = (url, title) => {
-      if (!url) { alert("ভিডিও লিংক পাওয়া যায়নি! এডমিন প্যানেলে লিংক চেক করুন।"); return; }
       const modal = document.getElementById('playerModal');
       const videoContainer = document.getElementById('videoPlayerContainer');
-      document.getElementById('modalTitle').innerText = title || '';
+      document.getElementById('modalTitle').innerText = title;
       
-      if (url.includes('<iframe')) {
-        videoContainer.innerHTML = url;
-        const iframe = videoContainer.querySelector('iframe');
-        if (iframe) {
-          iframe.setAttribute('allowfullscreen', 'true');
-          iframe.style.width = '100%';
-          iframe.style.height = '100%';
+      if (url.includes('<iframe') || url.includes('http')) {
+        if (url.includes('<iframe')) {
+          videoContainer.innerHTML = url;
+          const iframe = videoContainer.querySelector('iframe');
+          if (iframe) {
+            iframe.setAttribute('allowfullscreen', 'true');
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+          }
+        } else if (url.endsWith('.mp4') || url.endsWith('.webm') || url.includes('cloudinary')) {
+          videoContainer.innerHTML = `<video src="${url}" controls autoplay controlsList="nodownload" allowfullscreen oncontextmenu="return false;"></video>`;
+        } else {
+          videoContainer.innerHTML = `<iframe src="${url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:100%;"></iframe>`;
         }
-      } else if (url.endsWith('.mp4') || url.endsWith('.webm') || url.includes('cloudinary')) {
-        videoContainer.innerHTML = `<video src="${escapeHtml(url)}" controls autoplay controlsList="nodownload" allowfullscreen oncontextmenu="return false;"></video>`;
-      } else {
-        videoContainer.innerHTML = `<iframe src="${escapeHtml(url)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:100%;"></iframe>`;
       }
 
       modal.style.display = 'flex';
@@ -1041,6 +1415,7 @@
 </head>
 <body oncontextmenu="return false;">
 
+  <!-- Preloader Screen -->
   <div id="preloader">
     <img src="https://i.ibb.co/Gf5TySRg/1000109014.png" alt="Website Logo" class="preloader-logo">
     <div class="preloader-title">
@@ -1048,9 +1423,11 @@
     </div>
   </div>
 
+  <!-- Dynamic Ad Scripts Container -->
   <div id="popunderAdContainer"></div>
   <div id="socialBarAdContainer"></div>
 
+  <!-- Header -->
   <header>
     <a href="#" class="logo">
       <i class="fa-solid fa-circle-play"></i> SECRET<span>VIDEO</span>
@@ -1061,6 +1438,7 @@
     </div>
   </header>
 
+  <!-- Search Bar -->
   <div class="search-box" id="searchBox">
     <div class="search-input-wrapper">
       <i class="fa-solid fa-magnifying-glass"></i>
@@ -1068,24 +1446,35 @@
     </div>
   </div>
 
+  <!-- Top Ad -->
   <div id="topAdBox" class="ad-container"></div>
+
+  <!-- Banner Slider -->
   <div class="hero-slider-wrapper" id="heroSlider"></div>
+
+  <!-- Category Bar -->
   <div class="cat-bar" id="catBar"></div>
+
+  <!-- Main Content Area -->
   <div id="mainContentContainer"></div>
 
+  <!-- Player Modal -->
   <div class="player-modal" id="playerModal">
     <span class="close-modal" onclick="closePlayer()">&times;</span>
     <div class="video-box-wrapper" id="videoPlayerContainer"></div>
     <div class="modal-title" id="modalTitle"></div>
   </div>
 
+  <!-- Lock Modal -->
   <div class="player-modal" id="lockModal">
     <span class="close-modal" onclick="closeLockModal()">&times;</span>
     <div class="lock-box"></div>
   </div>
 
+  <!-- Bottom Ad -->
   <div id="bottomAdBox" class="ad-container"></div>
 
+  <!-- Bottom Navigation Bar -->
   <nav class="bottom-nav">
     <a onclick="switchTab('home', this)" class="nav-link active">
       <i class="fa-solid fa-house"></i>
