@@ -4,16 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- Google Search SEO Meta Tags -->
   <title>Secret Video - Free HD Trending Videos</title>
   <meta name="description" content="Watch and stream the latest secret trending videos, viral clips, and HD entertainment on Secret Video Portal for free.">
   <meta name="robots" content="index, follow">
 
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="https://i.ibb.co/zWvmyGPT/1000109018.png">
   <link rel="apple-touch-icon" href="https://i.ibb.co/zWvmyGPT/1000109018.png">
 
-  <!-- Open Graph -->
   <meta property="og:site_name" content="Secret Video">
   <meta property="og:title" content="Secret Video - Watch & Download Free HD Trending Videos">
   <meta property="og:description" content="Watch and stream the latest secret trending videos, viral clips, and HD entertainment on Secret Video Portal for free.">
@@ -183,12 +180,10 @@
     const db = getDatabase(app);
     const auth = getAuth(app);
 
-    // ===== ✅ FIX: সবসময় কাজ করা ফলব্যাক পোস্টার (via.placeholder.com মরে গেছে) =====
     const FALLBACK_POSTER = "data:image/svg+xml;utf8," + encodeURIComponent(
       "<svg xmlns='http://www.w3.org/2000/svg' width='300' height='450'><rect width='100%' height='100%' fill='#1e1e1e'/><text x='50%' y='47%' fill='#e50914' font-family='Arial' font-size='28' font-weight='bold' text-anchor='middle'>SECRET</text><text x='50%' y='57%' fill='#ffffff' font-family='Arial' font-size='28' font-weight='bold' text-anchor='middle'>VIDEO</text></svg>"
     ).replace(/'/g, '%27');
 
-    // ✅ FIX: টাইটেলে কোট/স্পেশাল ক্যারেক্টার থাকলেও HTML ভাঙবে না
     function escapeHtml(str) {
       return String(str == null ? '' : str)
         .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -196,10 +191,10 @@
     }
 
     let currentUser = null;
-    let videoAdProgress = {};
+    let videoAdProgress = {};       // প্রিমিয়াম ভিডিওর এড প্রোগ্রেস (লগইন সেশনে মনে থাকে)
     let adTimerInterval = null;
     let userAccessStatus = 'none';
-    let pendingPremiumVideo = null;
+    let pendingVideo = null;        // লক মডালে অপেক্ষমাণ ভিডিও { key, item, requiredAds, isPremium }
 
     onAuthStateChanged(auth, (user) => {
       currentUser = user;
@@ -233,7 +228,6 @@
     let pinnedVideos = JSON.parse(localStorage.getItem('pinnedVideos') || '[]');
     const injectedScriptAds = {};
 
-    // ===== ✅ FIX: এড কনফিগ — এডমিন কোড খালি করলে সাথে সাথে এড বন্ধ হবে =====
     onValue(ref(db, 'settings/adConfig'), (snapshot) => {
       const config = snapshot.val() || {};
 
@@ -249,7 +243,6 @@
       renderVideos();
     });
 
-    // ✅ FIX: খালি কোড = এড বক্স লুকিয়ে যাবে
     function renderOptionalAd(containerId, rawCode) {
       const container = document.getElementById(containerId);
       if (!container) return;
@@ -262,7 +255,6 @@
       renderAnyAd(containerId, rawCode);
     }
 
-    // ✅ FIX: একই স্ক্রিপ্ট বারবার ইনজেক্ট হবে না; খালি করলে কন্টেইনার ক্লিয়ার হবে
     function handleScriptAd(scriptCode, containerId) {
       let container = document.getElementById(containerId);
       if (!container) {
@@ -283,7 +275,6 @@
       container.appendChild(range.createContextualFragment(scriptCode));
     }
 
-    // ===== ✅ FIX: এডমিনের সেট করা মিনিট ইন্টারভাল এখন সত্যিই কাজ করবে =====
     document.addEventListener('click', function(e) {
       if (!adUrlData) return;
       if (e.target.closest('.close-modal, input, textarea, select, button, a')) return;
@@ -339,7 +330,6 @@
           if (data[key] && data[key].name) categoriesList.push(data[key].name);
         });
       }
-      // ✅ FIX: এডমিন ক্যাটাগরি রিনেম/ডিলিট করলে অটো "All" এ ফেরত — খালি পেজ আর দেখাবে না
       if (selectedCat !== 'All' && !categoriesList.includes(selectedCat)) {
         selectedCat = 'All';
       }
@@ -404,7 +394,7 @@
           
           div.onclick = () => {
             if (b.videoUrl) {
-              handleNormalVideoClick(b.videoUrl, b.title || 'Banner Video');
+              openVideoPlayer(b.videoUrl, b.title || 'Banner Video');
             } else if (b.linkUrl) {
               window.open(b.linkUrl, '_blank');
             }
@@ -446,7 +436,7 @@
       renderVideos();
     };
 
-    // ===== ✅ FIX: মূল রেন্ডার ফাংশন — ভাঙা ডেটা থাকলেও পুরো পেজ আর ফাঁকা হবে না =====
+    // ===== মূল রেন্ডার ফাংশন =====
     function renderVideos() {
       const mainContainer = document.getElementById('mainContentContainer');
       if (!mainContainer) return;
@@ -472,7 +462,7 @@
 
           keys.forEach((key) => {
             const item = premiumVideos[key];
-            if (!item || typeof item !== 'object') return; // ভাঙা এন্ট্রি স্কিপ
+            if (!item || typeof item !== 'object') return;
             const t = item.title || 'Untitled';
             if (t.toLowerCase().includes(searchQuery.toLowerCase())) {
               count++;
@@ -530,7 +520,7 @@
 
         keys.forEach(key => {
           const item = allVideos[key];
-          if (!item || typeof item !== 'object') return; // ✅ ভাঙা ডেটা থাকলে স্কিপ — ক্র্যাশ হবে না
+          if (!item || typeof item !== 'object') return;
           const category = item.category || "Featured Videos";
           const title = item.title || 'Untitled';
           if (title.toLowerCase().includes(searchQuery.toLowerCase())) {
@@ -606,7 +596,7 @@
       card.className = 'poster-card';
       
       const safeTitle = item.title || 'Untitled';
-      const requiredAds = item.adLimit !== undefined ? (parseInt(item.adLimit) || 0) : 5;
+      const requiredAds = (item.adLimit !== undefined && parseInt(item.adLimit) > 0) ? parseInt(item.adLimit) : 5;
       const currentCount = videoAdProgress[key] || 0;
       const isUnlocked = isPremium ? (userAccessStatus === 'approved' || currentCount >= requiredAds) : true;
 
@@ -617,14 +607,20 @@
         if (isPremium) {
           handlePremiumVideoClick(key, item);
         } else {
-          handleNormalVideoClick(item.videoUrl, safeTitle, item.adUrl);
+          handleNormalVideoClick(key, item);
         }
       };
 
       card.innerHTML = `
-        ${isPremium ? `<div class="premium-lock-badge"><i class="fa-solid ${isUnlocked ? 'fa-unlock' : 'fa-lock'}"></i></div>` : ''}
+        ${isPremium ? `
+          <div class="premium-lock-badge">
+            <i class="fa-solid ${isUnlocked ? 'fa-unlock' : 'fa-lock'}"></i>
+          </div>
+        ` : ''}
         ${!isPremium ? `<div class="pin-btn ${isPinned ? 'pinned' : ''}" onclick="togglePin(event, '${key}')" title="Pin Video"><i class="fa-solid fa-bookmark"></i></div>` : ''}
+        
         <img src="${escapeHtml(coverImage)}" class="poster-img" alt="${escapeHtml(safeTitle)}" onerror="this.onerror=null; this.src='${FALLBACK_POSTER}';" oncontextmenu="return false;">
+        
         <div class="play-overlay"><i class="fa-solid ${isPremium && !isUnlocked ? 'fa-lock' : 'fa-play'}"></i></div>
         <div class="poster-title-overlay">
           <span class="poster-title-text">${escapeHtml(safeTitle)}</span>
@@ -633,46 +629,88 @@
       return card;
     }
 
-    window.handleNormalVideoClick = (videoUrl, title, specificAdUrl) => {
-      openVideoPlayer(videoUrl, title);
-    };
+    // ===== ✅ ফ্রি ভিডিও: প্রতিবার ক্লিকে আগে এড → তারপর ভিডিও =====
+    window.handleNormalVideoClick = (key, item) => {
+      if (!item) { alert("ভিডিও ডেটা পাওয়া যায়নি!"); return; }
 
-    function handlePremiumVideoClick(key, item) {
-      if (!currentUser) {
-        alert("প্রিমিয়াম ভিডিও দেখতে হলে আপনাকে প্রথমে লগইন করতে হবে।");
-        const navBtns = document.querySelectorAll('.nav-link');
-        switchTab('profile', navBtns[3]);
+      // এড লিংক: ভিডিওর নিজের লিংক, না থাকলে গ্লোবাল Direct Link
+      const adSource = (item.adUrl && String(item.adUrl).trim()) || (adUrlData ? adUrlData.trim() : "");
+
+      // কোনো এড লিংকই না থাকলে সরাসরি প্লে
+      if (!adSource) {
+        openVideoPlayer(item.videoUrl, item.title || 'Untitled');
         return;
       }
 
+      // এডমিন যতটি সেট করেছে (সেট না করলে ডিফল্ট ১টি)
+      const requiredAds = (item.adLimit !== undefined && parseInt(item.adLimit) > 0) ? parseInt(item.adLimit) : 1;
+
+      // ✅ প্রতিবার ক্লিকে এড নতুন করে শুরু হবে — বের হয়ে আবার ক্লিক করলেও আবার এড আসবে
+      videoAdProgress[key] = 0;
+      openLockModal(key, item, 0, requiredAds, false);
+    };
+
+    // ===== ✅ প্রিমিয়াম ভিডিও: লগইন ছাড়া রেজিস্ট্রেশন মেসেজ, লগইন থাকলে এডমিনের সেট করা এড সংখ্যা =====
+    function handlePremiumVideoClick(key, item) {
+      // লগইন না থাকলে → রেজিস্ট্রেশন মেসেজ
+      if (!currentUser) {
+        showRegisterRequiredModal();
+        return;
+      }
+
+      // এডমিন এপ্রুভ করলে সরাসরি প্লে
       if (userAccessStatus === 'approved') {
         openVideoPlayer(item.videoUrl, item.title || 'Untitled');
         return;
       }
 
-      const requiredAds = item.adLimit !== undefined ? (parseInt(item.adLimit) || 0) : 5;
+      // এডমিন প্যানেলে সেট করা এড সংখ্যা (৫টা / ১০টা — যা সেট করবেন)
+      const requiredAds = (item.adLimit !== undefined && parseInt(item.adLimit) > 0) ? parseInt(item.adLimit) : 5;
       if (!videoAdProgress[key]) videoAdProgress[key] = 0;
 
       if (videoAdProgress[key] < requiredAds) {
-        openLockModal(key, item, videoAdProgress[key], requiredAds);
+        openLockModal(key, item, videoAdProgress[key], requiredAds, true);
       } else {
         openVideoPlayer(item.videoUrl, item.title || 'Untitled');
       }
     }
 
-    // ✅ FIX: টাইটেল/URL এখন inline onclick-এ পাঠানো হয় না — কোট থাকলেও কিছু ভাঙবে না
-    window.openLockModal = (key, item, currentCount, requiredAds) => {
-      pendingPremiumVideo = { key, item, requiredAds };
+    // ✅ রেজিস্ট্রেশন প্রয়োজন মেসেজ মডাল
+    window.showRegisterRequiredModal = () => {
+      const modal = document.getElementById('lockModal');
+      const lockBox = modal.querySelector('.lock-box, .timer-overlay-card');
+      
+      lockBox.className = "lock-box";
+      lockBox.innerHTML = `
+        <i class="fa-solid fa-user-lock" style="color:#e50914;"></i>
+        <h3>🔒 Premium Video</h3>
+        <p>এটি একটি <b>প্রিমিয়াম ভিডিও</b>। দেখতে হলে আপনাকে প্রথমে <b>রেজিস্ট্রেশন / লগইন</b> করতে হবে।</p>
+        <button class="lock-btn" onclick="goToProfileForLogin()">Register / Login করুন</button>
+      `;
+      modal.style.display = 'flex';
+    };
+
+    window.goToProfileForLogin = () => {
+      closeLockModal();
+      const navBtns = document.querySelectorAll('.nav-link');
+      switchTab('profile', navBtns[3]);
+    };
+
+    // ✅ লক মডাল — ফ্রি ও প্রিমিয়াম দুই ধরনের জন্যই
+    window.openLockModal = (key, item, currentCount, requiredAds, isPremium) => {
+      pendingVideo = { key, item, requiredAds, isPremium };
       const modal = document.getElementById('lockModal');
       const lockBox = modal.querySelector('.lock-box, .timer-overlay-card');
       
       lockBox.className = "lock-box";
       lockBox.innerHTML = `
         <i class="fa-solid fa-lock" style="color:#e50914;"></i>
-        <h3>Locked Premium Content</h3>
-        <p>ভিডিওটি আনলক করতে আরও <b>${requiredAds - currentCount}</b> টি এড দেখুন অথবা এডমিন এক্সেস রিকোয়েস্ট পাঠান।</p>
+        <h3>${isPremium ? 'Locked Premium Content' : 'Watch Ad To Play'}</h3>
+        <p>${isPremium 
+          ? `ভিডিওটি আনলক করতে আরও <b>${requiredAds - currentCount}</b> টি এড দেখুন অথবা এডমিন এক্সেস রিকোয়েস্ট পাঠান।`
+          : `ভিডিওটি দেখতে আগে <b>${requiredAds - currentCount}</b> টি এড দেখুন।`}</p>
         <button class="lock-btn" style="margin-bottom:8px;" onclick="watchAdForVideo()">Watch Ad (${currentCount}/${requiredAds})</button>
-        <button class="lock-btn" style="background:#28a745;" onclick="sendAccessRequest()">Request Admin Access</button>
+        ${isPremium ? `<button class="lock-btn" style="background:#28a745;" onclick="sendAccessRequest()">Request Admin Access</button>` : ''}
       `;
       modal.style.display = 'flex';
     };
@@ -692,11 +730,12 @@
       }
     };
 
+    // ✅ এড দেখানো — ভিডিওর নিজের এড লিংক থাকলে সেটাই খুলবে, নাহলে গ্লোবাল Direct Link
     window.watchAdForVideo = () => {
-      if (!pendingPremiumVideo) return;
-      const { item } = pendingPremiumVideo;
+      if (!pendingVideo) return;
+      const { item } = pendingVideo;
 
-      let targetUrl = (item.adUrl && String(item.adUrl).trim()) || adUrlData.trim() || "https://google.com";
+      let targetUrl = (item.adUrl && String(item.adUrl).trim()) || (adUrlData ? adUrlData.trim() : "") || "https://google.com";
       if (targetUrl.includes("src=")) {
         const match = targetUrl.match(/src=["']([^"']+)["']/);
         if (match && match[1]) targetUrl = match[1];
@@ -737,18 +776,18 @@
     };
 
     window.finishAdCount = () => {
-      if (!pendingPremiumVideo) return;
-      const { key, item, requiredAds } = pendingPremiumVideo;
+      if (!pendingVideo) return;
+      const { key, item, requiredAds, isPremium } = pendingVideo;
       videoAdProgress[key] = (videoAdProgress[key] || 0) + 1;
 
       if (videoAdProgress[key] >= requiredAds) {
         const url = item.videoUrl;
         const t = item.title || 'Untitled';
         closeLockModal();
-        renderVideos();
+        if (isPremium) renderVideos(); // প্রিমিয়ামে লক ব্যাজ আপডেট হবে
         openVideoPlayer(url, t);
       } else {
-        openLockModal(key, item, videoAdProgress[key], requiredAds);
+        openLockModal(key, item, videoAdProgress[key], requiredAds, isPremium);
       }
     };
 
@@ -758,7 +797,7 @@
       const lockBox = modal.querySelector('.lock-box, .timer-overlay-card');
       if (lockBox) lockBox.className = "lock-box";
       modal.style.display = 'none';
-      pendingPremiumVideo = null;
+      pendingVideo = null;
     };
 
     window.switchTab = (tabName, navElement) => {
