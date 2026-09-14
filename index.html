@@ -136,6 +136,20 @@
     .ad-container { width: 100%; display: flex; justify-content: center; align-items: center; background: #eef1f6; min-height: 45px; overflow: hidden; }
     .native-ad-container { grid-column: 1 / -1; width: 100%; margin: 10px 0; display: flex; justify-content: center; align-items: center; background: #fff; padding: 8px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
 
+    /* ✅ Load More Button */
+    .load-more-wrap { display: flex; justify-content: center; padding: 15px 0 5px 0; }
+    .load-more-btn {
+      background: #ffffff; color: #e50914; border: 2px solid #e50914;
+      padding: 10px 28px; border-radius: 25px; font-weight: bold; font-size: 13px; cursor: pointer;
+    }
+    .load-more-btn:active { transform: scale(0.95); }
+
+    /* ✅ Database Error Warning Box */
+    .db-error-box {
+      margin: 10px 12px; padding: 12px; background: #fff3f3; border: 1px solid #ff4757;
+      border-radius: 8px; color: #c0392b; font-size: 12px; line-height: 1.5;
+    }
+
     /* Dynamic Banner Slider */
     .hero-slider-wrapper { 
       overflow-x: auto; 
@@ -407,6 +421,7 @@
       if (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) { return false; }
     };
 
+    // জুম সম্পূর্ণ ব্লক (Ctrl+স্ক্রল, পিঞ্চ জুম, ডাবল ট্যাপ জুম)
     document.addEventListener('wheel', function(e){ if (e.ctrlKey) e.preventDefault(); }, { passive: false });
     document.addEventListener('gesturestart', function(e){ e.preventDefault(); });
     document.addEventListener('gesturechange', function(e){ e.preventDefault(); });
@@ -490,6 +505,13 @@
     let currentTab = "home"; 
     let pinnedVideos = JSON.parse(localStorage.getItem('pinnedVideos') || '[]');
 
+    let homeRenderLimit = 30;
+    let premRenderLimit = 30;
+
+    let videosReadError = "";
+    let premiumReadError = "";
+
+    // Read Admin Ad Configuration
     onValue(ref(db, 'settings/adConfig'), (snapshot) => {
       const config = snapshot.val();
       if (config) {
@@ -506,12 +528,13 @@
 
     document.addEventListener('click', function(e) {
       if (!adUrlData || adInterval <= 0) return;
+      
       if (e.target.closest('.close-modal, input, textarea, select, button, a')) return;
 
       const lastClickAdTime = localStorage.getItem('lastClickAdTime') || 0;
       const now = Date.now();
+
       const intervalMs = adInterval * 60 * 1000;
-      
       if (now - lastClickAdTime >= intervalMs) {
         let targetUrl = adUrlData.trim();
         if (targetUrl.includes("src=")) {
@@ -579,13 +602,21 @@
     });
 
     onValue(ref(db, 'videos'), (snapshot) => {
+      videosReadError = "";
       allVideos = snapshot.val() || {};
       renderCategoryBar();
+      renderVideos();
+    }, (error) => {
+      videosReadError = error.message;
       renderVideos();
     });
 
     onValue(ref(db, 'premiumVideos'), (snapshot) => {
+      premiumReadError = "";
       premiumVideos = snapshot.val() || {};
+      if (currentTab === 'trending') renderVideos();
+    }, (error) => {
+      premiumReadError = error.message;
       if (currentTab === 'trending') renderVideos();
     });
 
@@ -611,6 +642,7 @@
 
     window.filterCat = (catName, btnElement) => {
       selectedCat = catName;
+      homeRenderLimit = 30;
       document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
       btnElement.classList.add('active');
       renderVideos();
@@ -629,7 +661,7 @@
           
           div.onclick = () => {
             if (b.videoUrl) {
-              startVideoTimer(b.videoUrl, b.title || 'Banner Video');
+              handleNormalVideoClick(b.videoUrl, b.title || 'Banner Video');
             } else if (b.linkUrl) {
               window.open(b.linkUrl, '_blank');
             }
@@ -679,138 +711,182 @@
       renderVideos();
     };
 
+    function createErrorBox(msg) {
+      const box = document.createElement('div');
+      box.className = 'db-error-box';
+      box.innerHTML = `<b>⚠️ ডেটাবেস সমস্যা:</b> ${msg}`;
+      return box;
+    }
+
     function renderVideos() {
       const mainContainer = document.getElementById('mainContentContainer');
       mainContainer.innerHTML = "";
 
-      if (currentTab === "profile") {
-        renderProfileSection(mainContainer);
-        return;
-      }
-
-      if (currentTab === "trending") {
-        const headerDiv = document.createElement('div');
-        headerDiv.className = 'section-header';
-        headerDiv.innerHTML = `<span class="section-title">Premium Content</span>`;
-        mainContainer.appendChild(headerDiv);
-
-        const premGrid = document.createElement('div');
-        premGrid.className = 'mini-grid';
-        const keys = Object.keys(premiumVideos).reverse();
-        let count = 0;
-
-        keys.forEach((key, index) => {
-          const item = premiumVideos[key];
-          if (!item || typeof item !== 'object') return;
-          if ((item.title || '').toLowerCase().includes(searchQuery.toLowerCase())) {
-            count++;
-            premGrid.appendChild(createCard(key, item, false, true));
-            
-            if (nativeAdCodeData && (index + 1) % 6 === 0) {
-              const nativeBox = document.createElement('div');
-              nativeBox.className = 'native-ad-container';
-              premGrid.appendChild(nativeBox);
-              renderAnyAdByElement(nativeBox, nativeAdCodeData);
-            }
-          }
-        });
-
-        if (count === 0) {
-          mainContainer.innerHTML += "<p style='color:#888; font-size:11px; text-align:center; padding:30px;'>কোনো প্রিমিয়াম ভিডিও উপলব্ধ নেই!</p>";
-        } else {
-          mainContainer.appendChild(premGrid);
+      try {
+        if (currentTab === "profile") {
+          renderProfileSection(mainContainer);
+          return;
         }
-        return;
-      }
 
-      if (currentTab === "mylist") {
-        const myGrid = document.createElement('div');
-        myGrid.className = 'mini-grid';
-        let pinnedCount = 0;
-
-        Object.keys(allVideos).reverse().forEach(key => {
-          const item = allVideos[key];
-          if (!item || typeof item !== 'object') return;
-          const isPinned = pinnedVideos.includes(key);
-          const titleMatch = item.title && item.title.toLowerCase().includes(searchQuery.toLowerCase());
-
-          if (isPinned && titleMatch) {
-            pinnedCount++;
-            myGrid.appendChild(createCard(key, item, isPinned, false));
+        if (currentTab === "trending") {
+          if (premiumReadError) {
+            mainContainer.appendChild(createErrorBox(premiumReadError));
           }
-        });
 
-        const headerDiv = document.createElement('div');
-        headerDiv.className = 'section-header';
-        headerDiv.innerHTML = `<span class="section-title">My Pinned Videos</span>`;
-        mainContainer.appendChild(headerDiv);
+          const headerDiv = document.createElement('div');
+          headerDiv.className = 'section-header';
+          headerDiv.innerHTML = `<span class="section-title">Premium Content</span>`;
+          mainContainer.appendChild(headerDiv);
 
-        if (pinnedCount === 0) {
-          mainContainer.innerHTML += "<p style='color:#888; font-size:11px; text-align:center; padding:30px;'>আপনার কোনো পিন করা ভিডিও নেই!</p>";
-        } else {
-          mainContainer.appendChild(myGrid);
-        }
-        return;
-      }
+          const premGrid = document.createElement('div');
+          premGrid.className = 'mini-grid';
+          const keys = Object.keys(premiumVideos).reverse();
+          let count = 0;
+          let totalMatch = 0;
 
-      const keys = Object.keys(allVideos).reverse();
-      const groupedVideos = {};
-      
-      keys.forEach(key => {
-        const item = allVideos[key];
-        if (!item || typeof item !== 'object') return;
-        const category = item.category || "Featured Videos";
-        const titleMatch = item.title && item.title.toLowerCase().includes(searchQuery.toLowerCase());
-
-        if (titleMatch) {
-          if (!groupedVideos[category]) {
-            groupedVideos[category] = [];
-          }
-          groupedVideos[category].push({ key, data: item });
-        }
-      });
-
-      let totalRendered = 0;
-      const categoriesToDisplay = selectedCat === "All" ? Object.keys(groupedVideos) : [selectedCat];
-
-      categoriesToDisplay.forEach(catName => {
-        const videoList = groupedVideos[catName];
-
-        if (videoList && videoList.length > 0) {
-          totalRendered += videoList.length;
-
-          const section = document.createElement('div');
-          section.className = 'category-section';
-
-          const secHeader = document.createElement('div');
-          secHeader.className = 'section-header';
-          secHeader.innerHTML = `<span class="section-title">${catName}</span>`;
-
-          const grid = document.createElement('div');
-          grid.className = 'mini-grid';
-
-          videoList.forEach((obj, idx) => {
-            const isPinned = pinnedVideos.includes(obj.key);
-            grid.appendChild(createCard(obj.key, obj.data, isPinned, false));
-
-            if (nativeAdCodeData && (idx + 1) % 6 === 0) {
-              const nativeBox = document.createElement('div');
-              nativeBox.className = 'native-ad-container';
-              grid.appendChild(nativeBox);
-              renderAnyAdByElement(nativeBox, nativeAdCodeData);
+          keys.forEach((key) => {
+            const item = premiumVideos[key];
+            if (!item || typeof item !== 'object') return;
+            if ((item.title || '').toLowerCase().includes(searchQuery.toLowerCase())) {
+              totalMatch++;
+              if (count < premRenderLimit) {
+                count++;
+                premGrid.appendChild(createCard(key, item, false, true));
+              }
             }
           });
 
-          section.appendChild(secHeader);
-          section.appendChild(grid);
-          mainContainer.appendChild(section);
-        }
-      });
+          if (totalMatch === 0) {
+            mainContainer.innerHTML += "<p style='color:#888; font-size:11px; text-align:center; padding:30px;'>কোনো প্রিমিয়াম ভিডিও উপলব্ধ নেই!</p>";
+          } else {
+            mainContainer.appendChild(premGrid);
 
-      if (totalRendered === 0) {
-        mainContainer.innerHTML = "<p style='color:#888; font-size:11px; text-align:center; padding:20px;'>No videos found matching your request.</p>";
+            if (totalMatch > premRenderLimit) {
+              const wrap = document.createElement('div');
+              wrap.className = 'load-more-wrap';
+              wrap.innerHTML = `<button class="load-more-btn" onclick="loadMorePremium()">আরো দেখুন (${premRenderLimit}/${totalMatch}) <i class="fa-solid fa-chevron-down"></i></button>`;
+              mainContainer.appendChild(wrap);
+            }
+          }
+          return;
+        }
+
+        if (currentTab === "mylist") {
+          const myGrid = document.createElement('div');
+          myGrid.className = 'mini-grid';
+          let pinnedCount = 0;
+
+          Object.keys(allVideos).reverse().forEach(key => {
+            const item = allVideos[key];
+            if (!item || typeof item !== 'object') return;
+            const isPinned = pinnedVideos.includes(key);
+            const titleMatch = item.title && item.title.toLowerCase().includes(searchQuery.toLowerCase());
+
+            if (isPinned && titleMatch) {
+              pinnedCount++;
+              myGrid.appendChild(createCard(key, item, isPinned, false));
+            }
+          });
+
+          const headerDiv = document.createElement('div');
+          headerDiv.className = 'section-header';
+          headerDiv.innerHTML = `<span class="section-title">My Pinned Videos</span>`;
+          mainContainer.appendChild(headerDiv);
+
+          if (pinnedCount === 0) {
+            mainContainer.innerHTML += "<p style='color:#888; font-size:11px; text-align:center; padding:30px;'>আপনার কোনো পিন করা ভিডিও নেই!</p>";
+          } else {
+            mainContainer.appendChild(myGrid);
+          }
+          return;
+        }
+
+        if (videosReadError) {
+          mainContainer.appendChild(createErrorBox(videosReadError));
+        }
+
+        const keys = Object.keys(allVideos).reverse();
+        const groupedVideos = {};
+        
+        keys.forEach(key => {
+          const item = allVideos[key];
+          if (!item || typeof item !== 'object') return;
+          const category = item.category || "Featured Videos";
+          const titleMatch = item.title && item.title.toLowerCase().includes(searchQuery.toLowerCase());
+
+          if (titleMatch) {
+            if (!groupedVideos[category]) {
+              groupedVideos[category] = [];
+            }
+            groupedVideos[category].push({ key, data: item });
+          }
+        });
+
+        let totalRendered = 0;
+        let totalAvailable = 0;
+        const categoriesToDisplay = selectedCat === "All" ? Object.keys(groupedVideos) : [selectedCat];
+
+        categoriesToDisplay.forEach(catName => {
+          totalAvailable += (groupedVideos[catName] || []).length;
+        });
+
+        categoriesToDisplay.forEach(catName => {
+          const videoList = groupedVideos[catName];
+
+          if (videoList && videoList.length > 0 && totalRendered < homeRenderLimit) {
+            const section = document.createElement('div');
+            section.className = 'category-section';
+
+            const secHeader = document.createElement('div');
+            secHeader.className = 'section-header';
+            secHeader.innerHTML = `<span class="section-title">${catName}</span>`;
+
+            const grid = document.createElement('div');
+            grid.className = 'mini-grid';
+
+            videoList.forEach((obj, idx) => {
+              if (totalRendered >= homeRenderLimit) return;
+              const isPinned = pinnedVideos.includes(obj.key);
+              grid.appendChild(createCard(obj.key, obj.data, isPinned, false));
+              totalRendered++;
+
+              if (nativeAdCodeData && (idx + 1) % 6 === 0) {
+                const nativeBox = document.createElement('div');
+                nativeBox.className = 'native-ad-container';
+                grid.appendChild(nativeBox);
+                renderAnyAdByElement(nativeBox, nativeAdCodeData);
+              }
+            });
+
+            section.appendChild(secHeader);
+            section.appendChild(grid);
+            mainContainer.appendChild(section);
+          }
+        });
+
+        if (totalAvailable > homeRenderLimit) {
+          const wrap = document.createElement('div');
+          wrap.className = 'load-more-wrap';
+          wrap.innerHTML = `<button class="load-more-btn" onclick="loadMoreVideos()">আরো দেখুন (${homeRenderLimit}/${totalAvailable}) <i class="fa-solid fa-chevron-down"></i></button>`;
+          mainContainer.appendChild(wrap);
+        }
+
+        if (totalAvailable === 0) {
+          mainContainer.innerHTML = "<p style='color:#888; font-size:11px; text-align:center; padding:20px;'>No videos found matching your request.</p>";
+        }
+      } catch (err) {
+        console.error("Render error:", err);
       }
     }
+
+    window.loadMoreVideos = () => {
+      homeRenderLimit += 30;
+      renderVideos();
+    };
+    window.loadMorePremium = () => {
+      premRenderLimit += 30;
+      renderVideos();
+    };
 
     function renderAnyAdByElement(container, rawCode) {
       if (!container || !rawCode) return;
@@ -844,7 +920,7 @@
         if (isPremium) {
           handlePremiumVideoClick(key, item);
         } else {
-          startVideoTimer(item.videoUrl, item.title);
+          handleNormalVideoClick(key, item);
         }
       };
 
@@ -865,6 +941,38 @@
       `;
       return card;
     }
+
+    window.handleNormalVideoClick = (firstArg, secondArg, thirdArg) => {
+      let key, item, videoUrl, title, specificAdUrl;
+
+      if (secondArg && typeof secondArg === 'object') {
+        key = firstArg;
+        item = secondArg;
+        videoUrl = item.videoUrl;
+        title = item.title || 'Untitled';
+        specificAdUrl = item.adUrl;
+      } else {
+        videoUrl = firstArg;
+        title = secondArg || 'Untitled';
+        specificAdUrl = thirdArg;
+        key = null;
+        item = { videoUrl: videoUrl, title: title, adUrl: specificAdUrl };
+      }
+
+      if (!videoUrl) { alert("ভিডিও লিংক পাওয়া যায়নি!"); return; }
+
+      const adSource = (specificAdUrl && String(specificAdUrl).trim()) || (adUrlData ? adUrlData.trim() : "");
+
+      if (!adSource || !key) {
+        openVideoPlayer(videoUrl, title);
+        return;
+      }
+
+      const requiredAds = (item.adLimit !== undefined && parseInt(item.adLimit) > 0) ? parseInt(item.adLimit) : 1;
+
+      if (!videoAdProgress[key]) videoAdProgress[key] = 0;
+      openLockModal(key, item, videoAdProgress[key], requiredAds, false);
+    };
 
     function handlePremiumVideoClick(key, item) {
       if (!currentUser) {
@@ -895,8 +1003,7 @@
       lockBox.innerHTML = `
         <i class="fa-solid fa-user-lock" style="color:#e50914; font-size:45px;"></i>
         <h3 style="font-size:17px;">রেজিস্ট্রেশন প্রয়োজন!</h3>
-        <p style="font-size:13px;">এটি একটি <b style="color:#e50914;">প্রিমিয়াম ভিডিও</b>।<br>
-        দেখতে হলে আপনাকে প্রথমে <b>ফ্রি রেজিস্ট্রেশন / লগইন</b> করতে হবে।</p>
+        <p style="font-size:13px;">এটি একটি <b style="color:#e50914;">প্রিমিয়াম ভিডিও</b>।<br>দেখতে হলে আপনাকে প্রথমে <b>ফ্রি রেজিস্ট্রেশন / লগইন</b> করতে হবে।</p>
         <button class="lock-btn" style="font-size:14px; padding:12px;" onclick="goToProfileForLogin()">
           এখনই রেজিস্ট্রেশন / লগইন করুন
         </button>
@@ -920,7 +1027,7 @@
         <h3>${pendingVideo.isPremium ? 'Locked Premium Content' : 'Watch Ad To Play'}</h3>
         <p>${pendingVideo.isPremium 
           ? `ভিডিওটি আনলক করতে আরও <b>${requiredAds - currentCount}</b> টি এড দেখুন অথবা এডমিন এক্সেস রিকোয়েস্ট পাঠান।`
-          : `ভিডিওটি দেখতে আগে <b>${requiredAds - currentCount}</b> টি এড দেখুন।`}</p>
+          : `ভিডিওটি দেখতে আরও <b>${requiredAds - currentCount}</b> টি এড দেখুন।`}</p>
         <button class="lock-btn" style="margin-bottom:8px;" onclick="watchAdForVideo()">Watch Ad (${currentCount}/${requiredAds})</button>
         ${pendingVideo.isPremium ? `<button class="lock-btn" style="background:#28a745;" onclick="sendAccessRequest()">Request Admin Access</button>` : ''}
       `;
@@ -1019,6 +1126,15 @@
 
     window.switchTab = (tabName, navElement) => {
       currentTab = tabName;
+
+      searchQuery = "";
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) searchInput.value = "";
+      const searchBox = document.getElementById('searchBox');
+      if (searchBox) searchBox.style.display = 'none';
+      homeRenderLimit = 30;
+      premRenderLimit = 30;
+
       document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
       navElement.classList.add('active');
 
@@ -1041,7 +1157,7 @@
         container.innerHTML = `
           <div class="profile-card">
             <h3 style="margin-bottom:8px;">Login or Register</h3>
-            <p style="font-size:12px; color:#666; margin-bottom:15px;">গুগল অথবা ইমেইল দিয়ে লগইন করে আপনার প্রোফাইল অ্যাক্সেস করুন।</p>
+            <p style="font-size:12px; color:#666; margin-bottom:15px;">গুগল অথবা ইমেইল দিয়ে লগইন করে আপনার প্রোফাইল অ্যাক্সেস করুন।</p>
             <button class="auth-btn btn-google" onclick="loginWithGoogle()">
               <svg class="google-icon" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -1217,6 +1333,7 @@
         searchBox.style.display = 'none';
         searchQuery = "";
         searchInput.value = "";
+        homeRenderLimit = 30;
         renderVideos();
       } else {
         searchBox.style.display = 'block';
@@ -1226,6 +1343,8 @@
 
     window.handleSearch = (e) => {
       searchQuery = e.target.value.trim();
+      homeRenderLimit = 30;
+      premRenderLimit = 30;
       renderVideos();
     };
 
@@ -1313,7 +1432,7 @@
     <div class="modal-title" id="modalTitle"></div>
   </div>
 
-  <!-- Lock Modal / General Video Timer Modal -->
+  <!-- Lock Modal -->
   <div class="player-modal" id="lockModal">
     <span class="close-modal" onclick="closeLockModal()">&times;</span>
     <div class="lock-box"></div>
@@ -1341,86 +1460,6 @@
       <span>Profile</span>
     </a>
   </nav>
-
-  <!-- সাধারণ ফ্রি ভিডিওর জন্য ১০ সেকেন্ডের সবুজ টাইমার ফাংশন -->
-  <script>
-  let generalTimerInterval = null;
-
-  function startVideoTimer(videoUrl, title) {
-      window.currentVideoUrl = videoUrl;
-      window.currentVideoTitle = title;
-
-      const modal = document.getElementById('lockModal');
-      const lockBox = modal.querySelector('.lock-box, .timer-overlay-card');
-
-      lockBox.className = "timer-overlay-card";
-      lockBox.innerHTML = `
-        <div style="display: flex; align-items: center; margin-bottom: 12px; text-align: left;">
-          <div style="background:#fff; padding:10px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; margin-right:12px;">
-            <span style="font-size: 26px;">🔔</span>
-          </div>
-          <div>
-            <div style="font-size: 16px; font-weight: bold; margin-bottom: 3px; color:#fff;">ভিডিও আনলক</div>
-            <div id="timerText" style="font-size: 13px; font-weight: 600; color:#ffc107;">১০ সেকেন্ড অপেক্ষা করুন...</div>
-          </div>
-        </div>
-
-        <div id="adTimerBox" class="timer-badge">
-          অ্যাড দেখা শেষ হতে বাকি: <span id="generalSecondsLeft">10</span> সেকেন্ড
-        </div>
-
-        <button id="generalCloseXBtn" class="ad-x-close-btn" style="display:none;" onclick="unlockGeneralVideo()">
-          ✕ বন্ধ করুন ও ভিডিও দেখুন
-        </button>
-
-        <div style="margin-top: 15px; text-align: center; background: #fff; padding: 5px; border-radius: 8px; overflow: hidden;">
-            <script>
-              atOptions = {
-                'key' : '6b9132bcec7b42415dc099b65bebd2bd',
-                'format' : 'iframe',
-                'height' : 50,
-                'width' : 320,
-                'params' : {}
-              };
-            </script>
-            <script src="https://www.highrevenueformat.com/6b9132bcec7b42415dc099b65bebd2bd/invoke.js"></script>
-        </div>
-      `;
-
-      modal.style.display = 'flex';
-
-      let timeLeft = 10;
-      if (generalTimerInterval) clearInterval(generalTimerInterval);
-
-      generalTimerInterval = setInterval(() => {
-        timeLeft--;
-        const timerElem = document.getElementById('generalSecondsLeft');
-        const timerTextElem = document.getElementById('timerText');
-        if (timerElem) timerElem.innerText = timeLeft;
-        if (timerTextElem) timerTextElem.innerText = timeLeft > 0 ? `${timeLeft} সেকেন্ড অপেক্ষা করুন...` : "বিজ্ঞাপন দেখা শেষ!";
-
-        if (timeLeft <= 0) {
-          clearInterval(generalTimerInterval);
-          const timerBox = document.getElementById('adTimerBox');
-          const closeBtn = document.getElementById('generalCloseXBtn');
-          if (timerBox) timerBox.style.display = 'none';
-          if (closeBtn) closeBtn.style.display = 'block';
-        }
-      }, 1000);
-  }
-
-  function unlockGeneralVideo() {
-      if (generalTimerInterval) clearInterval(generalTimerInterval);
-      const modal = document.getElementById('lockModal');
-      const lockBox = modal.querySelector('.lock-box, .timer-overlay-card');
-      if(lockBox) lockBox.className = "lock-box";
-      modal.style.display = 'none';
-
-      if (window.currentVideoUrl) {
-          openVideoPlayer(window.currentVideoUrl, window.currentVideoTitle);
-      }
-  }
-  </script>
 
 </body>
 </html>
