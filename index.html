@@ -4,16 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   
-  <!-- Google Search SEO Meta Tags -->
   <title>Secret Video - Free HD Trending Videos</title>
   <meta name="description" content="Watch and stream the latest secret trending videos, viral clips, and HD entertainment on Secret Video Portal for free.">
   <meta name="robots" content="index, follow">
 
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="https://i.ibb.co/zWvmyGPT/1000109018.png">
   <link rel="apple-touch-icon" href="https://i.ibb.co/zWvmyGPT/1000109018.png">
 
-  <!-- Open Graph -->
   <meta property="og:site_name" content="Secret Video">
   <meta property="og:title" content="Secret Video - Watch & Download Free HD Trending Videos">
   <meta property="og:description" content="Watch and stream the latest secret trending videos, viral clips, and HD entertainment on Secret Video Portal for free.">
@@ -23,7 +20,6 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* Content Copy & Selection Protection */
     * { 
       box-sizing: border-box; 
       margin: 0; 
@@ -42,7 +38,6 @@
 
     body { background-color: #f4f5f8; color: #1a1a1a; padding-bottom: 110px; overflow-x: hidden; touch-action: pan-x pan-y; }
 
-    /* Preloader CSS */
     #preloader {
       position: fixed;
       top: 0;
@@ -95,14 +90,12 @@
       visibility: hidden;
     }
 
-    /* Header */
     header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #ffffff; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #eaedf1; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
     .logo { font-size: 17px; font-weight: 800; color: #e50914; display: flex; align-items: center; gap: 6px; text-decoration: none; }
     .logo span { color: #fff; background: #e50914; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
     .header-icons { display: flex; gap: 14px; font-size: 16px; color: #555; align-items: center; }
     .header-icons i { cursor: pointer; }
 
-    /* Search Bar Layout */
     .search-box {
       display: none;
       width: 100%;
@@ -132,11 +125,9 @@
       color: #1a1a1a;
     }
 
-    /* Top & Bottom Ad Box */
     .ad-container { width: 100%; display: flex; justify-content: center; align-items: center; background: #eef1f6; min-height: 45px; overflow: hidden; }
     .native-ad-container { grid-column: 1 / -1; width: 100%; margin: 10px 0; display: flex; justify-content: center; align-items: center; background: #fff; padding: 8px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
 
-    /* ✅ Load More Button */
     .load-more-wrap { display: flex; justify-content: center; padding: 15px 0 5px 0; }
     .load-more-btn {
       background: #ffffff; color: #e50914; border: 2px solid #e50914;
@@ -144,13 +135,16 @@
     }
     .load-more-btn:active { transform: scale(0.95); }
 
-    /* ✅ Database Error Warning Box */
     .db-error-box {
       margin: 10px 12px; padding: 12px; background: #fff3f3; border: 1px solid #ff4757;
       border-radius: 8px; color: #c0392b; font-size: 12px; line-height: 1.5;
     }
 
-    /* Dynamic Banner Slider */
+    /* ✅ নতুন: ৩০০+/২০০+ কাউন্ট বার */
+    .stats-bar { display: flex; gap: 8px; padding: 8px 12px; }
+    .stat-item { flex: 1; background: #fff; border: 1px solid #eaedf1; border-radius: 8px; padding: 8px; font-size: 11px; text-align: center; color: #444; }
+    .stat-item b { color: #e50914; }
+
     .hero-slider-wrapper { 
       overflow-x: auto; 
       display: flex; 
@@ -183,21 +177,17 @@
     .hero-desc { font-size: 11px; color: #ddd; margin-bottom: 8px; }
     .btn-play { background: #e50914; color: #fff; border: none; padding: 5px 12px; border-radius: 15px; font-weight: 600; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
 
-    /* Category Filter Bar */
     .cat-bar { display: flex; gap: 8px; overflow-x: auto; padding: 8px 12px; scrollbar-width: none; background: #ffffff; border-bottom: 1px solid #eaedf1; }
     .cat-bar::-webkit-scrollbar { display: none; }
     .cat-btn { background: #f0f2f5; color: #555; border: 1px solid #e1e4e8; padding: 6px 14px; border-radius: 20px; font-size: 11px; white-space: nowrap; cursor: pointer; font-weight: 600; }
     .cat-btn.active { background: #e50914; color: #fff; border-color: #e50914; font-weight: bold; }
 
-    /* Category Section Block */
     .category-section { margin-bottom: 15px; }
     .section-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 12px 8px 12px; }
     .section-title { font-size: 14px; font-weight: 700; color: #1a1a1a; border-left: 3px solid #e50914; padding-left: 6px; }
 
-    /* Small Video Cards Grid */
     .mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 12px; }
     
-    /* Poster Card Frame */
     .poster-card { 
       background: #1e1e1e; 
       border-radius: 8px; 
@@ -272,7 +262,6 @@
       width: 100%;
     }
 
-    /* Fixed Bottom Navigation */
     .bottom-nav { 
       position: fixed; 
       bottom: 0; 
@@ -304,7 +293,6 @@
     .nav-link img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; }
     .nav-link.active { color: #e50914; font-weight: bold; }
 
-    /* Bottom Ad Box */
     #bottomAdBox {
       position: fixed; 
       bottom: 60px; 
@@ -313,7 +301,6 @@
       z-index: 999;
     }
 
-    /* Modals & Player Styling (YouTube Responsive Style) */
     .player-modal { 
       display: none; 
       position: fixed; 
@@ -329,7 +316,6 @@
       backdrop-filter: blur(5px); 
     }
 
-    /* YouTube Like Video Box Wrapper */
     .video-box-wrapper {
       position: relative;
       width: 100%;
@@ -384,12 +370,24 @@
     .lock-box p { font-size: 12px; color: #666; margin-bottom: 16px; line-height: 1.4; }
     .lock-btn { background: #e50914; color: #fff; border: none; padding: 9px 18px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; width: 100%; }
 
-    /* Custom Rewarded Timer Box Overlay */
     .timer-overlay-card {
       background: #1e1e1e; color: #fff; padding: 25px 20px; border-radius: 12px; text-align: center; width: 88%; max-width: 330px; border: 1px solid #333; box-shadow: 0 10px 25px rgba(0,0,0,0.6);
     }
     .timer-badge { font-size: 15px; color: #ffc107; font-weight: bold; margin: 15px 0; background: #2a2a2a; padding: 12px; border-radius: 8px; border: 1px dashed #ffc107; }
     .ad-x-close-btn { background: #2ed573; color: #000; font-weight: bold; padding: 12px 18px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; width: 100%; margin-top: 10px; }
+
+    /* ✅ নতুন: টাইমারের ভিতরের এড ব্যানার */
+    .timer-ad-banner {
+      width: 100%;
+      min-height: 60px;
+      margin: 12px 0;
+      background: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
     .profile-card { background: #ffffff; border-radius: 12px; margin: 15px; padding: 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
     .profile-img-container { position: relative; width: 90px; height: 90px; margin: 0 auto 12px auto; }
@@ -421,7 +419,6 @@
       if (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) { return false; }
     };
 
-    // জুম সম্পূর্ণ ব্লক (Ctrl+স্ক্রল, পিঞ্চ জুম, ডাবল ট্যাপ জুম)
     document.addEventListener('wheel', function(e){ if (e.ctrlKey) e.preventDefault(); }, { passive: false });
     document.addEventListener('gesturestart', function(e){ e.preventDefault(); });
     document.addEventListener('gesturechange', function(e){ e.preventDefault(); });
@@ -465,10 +462,15 @@
     const auth = getAuth(app);
 
     let currentUser = null;
-    let videoAdProgress = {};
     let adTimerInterval = null;
     let userAccessStatus = 'none';
     let pendingVideo = null;
+
+    /* ✅ এড প্রগ্রেস এখন localStorage-এ সেভ থাকবে — রিফ্রেশেও হারাবে না */
+    let videoAdProgress = JSON.parse(localStorage.getItem('videoAdProgress') || '{}');
+    function saveProgress() {
+      localStorage.setItem('videoAdProgress', JSON.stringify(videoAdProgress));
+    }
 
     onAuthStateChanged(auth, (user) => {
       currentUser = user;
@@ -496,6 +498,7 @@
     let adUrlData = "";
     let adInterval = 0;
     let nativeAdCodeData = "";
+    let timerBannerCode = ""; /* ✅ নতুন: টাইমারের ব্যানার কোড */
     let allVideos = {};
     let premiumVideos = {};
     let categoriesList = [];
@@ -518,6 +521,9 @@
         adUrlData = config.adUrl || "";
         adInterval = config.adInterval !== undefined ? parseInt(config.adInterval) : 0;
         nativeAdCodeData = config.nativeAdCode || "";
+
+        /* ✅ টাইমারের ব্যানার: এডমিনের ব্যানার কোড থেকে নেওয়া হয় */
+        timerBannerCode = config.timerBannerCode || config.bottomBannerCode || config.topBannerCode || nativeAdCodeData || "";
 
         if (config.topBannerCode) renderAnyAd('topAdBox', config.topBannerCode);
         if (config.bottomBannerCode) renderAnyAd('bottomAdBox', config.bottomBannerCode);
@@ -604,6 +610,7 @@
     onValue(ref(db, 'videos'), (snapshot) => {
       videosReadError = "";
       allVideos = snapshot.val() || {};
+      updateVideoCounts();
       renderCategoryBar();
       renderVideos();
     }, (error) => {
@@ -614,11 +621,20 @@
     onValue(ref(db, 'premiumVideos'), (snapshot) => {
       premiumReadError = "";
       premiumVideos = snapshot.val() || {};
+      updateVideoCounts();
       if (currentTab === 'trending') renderVideos();
     }, (error) => {
       premiumReadError = error.message;
       if (currentTab === 'trending') renderVideos();
     });
+
+    /* ✅ নতুন: ৩০০+/২০০+ কাউন্ট আপডেট */
+    function updateVideoCounts() {
+      const nEl = document.getElementById('normalVideoCount');
+      const pEl = document.getElementById('premiumVideoCount');
+      if (nEl) nEl.innerText = Math.max(300, Object.keys(allVideos).length);
+      if (pEl) pEl.innerText = Math.max(200, Object.keys(premiumVideos).length);
+    }
 
     function renderCategoryBar() {
       const catBar = document.getElementById('catBar');
@@ -735,7 +751,7 @@
 
           const headerDiv = document.createElement('div');
           headerDiv.className = 'section-header';
-          headerDiv.innerHTML = `<span class="section-title">Premium Content</span>`;
+          headerDiv.innerHTML = `<span class="section-title">👑 Premium Content (200+ Videos)</span>`;
           mainContainer.appendChild(headerDiv);
 
           const premGrid = document.createElement('div');
@@ -1016,8 +1032,18 @@
       switchTab('profile', document.querySelectorAll('.nav-link')[3]);
     };
 
+    /* ✅ ফিক্স: এড এখন আসল লিংক (<a href target="_blank">) দিয়ে খুলবে — ব্রাউজার কখনও ব্লক করতে পারবে না! */
     window.openLockModal = (key, item, currentCount, requiredAds, isPremium) => {
       pendingVideo = { key: key, item: item, requiredAds: requiredAds, isPremium: isPremium !== undefined ? isPremium : true };
+
+      /* এড লিংক আগেই হিসাব করে রাখা হলো */
+      let adLink = (item.adUrl && String(item.adUrl).trim()) || adUrlData.trim() || "https://google.com";
+      if (adLink.includes("src=")) {
+        const match = adLink.match(/src=["']([^"']+)["']/);
+        if (match && match[1]) adLink = match[1];
+      }
+      pendingVideo.adLink = adLink;
+
       const modal = document.getElementById('lockModal');
       const lockBox = modal.querySelector('.lock-box, .timer-overlay-card');
       
@@ -1028,7 +1054,12 @@
         <p>${pendingVideo.isPremium 
           ? `ভিডিওটি আনলক করতে আরও <b>${requiredAds - currentCount}</b> টি এড দেখুন অথবা এডমিন এক্সেস রিকোয়েস্ট পাঠান।`
           : `ভিডিওটি দেখতে আরও <b>${requiredAds - currentCount}</b> টি এড দেখুন।`}</p>
-        <button class="lock-btn" style="margin-bottom:8px;" onclick="watchAdForVideo()">Watch Ad (${currentCount}/${requiredAds})</button>
+
+        <a id="watchAdLink" href="${adLink}" target="_blank" rel="noopener"
+           class="lock-btn" style="display:block; text-decoration:none; color:#fff; margin-bottom:8px;"
+           onclick="startAdTimer()">
+           Watch Ad (${currentCount}/${requiredAds})
+        </a>
         ${pendingVideo.isPremium ? `<button class="lock-btn" style="background:#28a745;" onclick="sendAccessRequest()">Request Admin Access</button>` : ''}
       `;
       modal.style.display = 'flex';
@@ -1049,18 +1080,9 @@
       }
     };
 
-    window.watchAdForVideo = () => {
+    /* ✅ ফিক্স: এড নতুন ট্যাবে নিজেই খুলে গেছে (আসল লিংক ক্লিক), এখন শুধু টাইমার + ব্যানার দেখাবে */
+    window.startAdTimer = () => {
       if (!pendingVideo) return;
-      const item = pendingVideo.item;
-
-      let targetUrl = (item.adUrl && String(item.adUrl).trim()) || adUrlData.trim() || "https://google.com";
-      if (targetUrl.includes("src=")) {
-        const match = targetUrl.match(/src=["']([^"']+)["']/);
-        if (match && match[1]) targetUrl = match[1];
-      }
-      
-      window.open(targetUrl, '_blank');
-
       const modal = document.getElementById('lockModal');
       const lockBox = modal.querySelector('.lock-box, .timer-overlay-card');
 
@@ -1069,15 +1091,19 @@
         <i class="fa-solid fa-clock" style="font-size:35px; color:#ffc107; margin-bottom:8px;"></i>
         <h3 style="font-size:15px; margin-bottom:5px;">বিজ্ঞাপনটি দেখা শেষ হওয়া পর্যন্ত অপেক্ষা করুন</h3>
         <p style="font-size:11px; color:#aaa;">নতুন ট্যাবে অ্যাড প্লে হচ্ছে। 10 সেকেন্ড পর বন্ধ করুন বাটনটি দৃশ্যমান হবে।</p>
-        
+
+        <div id="timerAdBanner" class="timer-ad-banner"></div>
+
         <div id="adTimerBox" class="timer-badge">
           অ্যাড দেখা শেষ হতে বাকি: <span id="adSecondsLeft">10</span> সেকেন্ড
         </div>
 
         <button id="adCloseXBtn" class="ad-x-close-btn" style="display:none;" onclick="finishAdCount()">
-          ✕ বন্ধ করুন ও পয়েন্ট নিন
+          ✕ বন্ধ করুন ও ভিডিও দেখুন
         </button>
       `;
+
+      renderTimerBanner(); /* ✅ ব্যানার বসানো হলো */
 
       let timeLeft = 10;
       if (adTimerInterval) clearInterval(adTimerInterval);
@@ -1097,6 +1123,42 @@
       }, 1000);
     };
 
+    /* ✅ নতুন: টাইমারের ভিতরে এড ব্যানার রেন্ডার করার ফাংশন */
+    function renderTimerBanner() {
+      const bannerBox = document.getElementById('timerAdBanner');
+      if (!bannerBox) return;
+
+      if (!timerBannerCode || String(timerBannerCode).trim() === "") {
+        bannerBox.style.display = 'none';
+        return;
+      }
+
+      bannerBox.style.display = 'flex';
+      bannerBox.innerHTML = "";
+      const code = String(timerBannerCode).trim();
+
+      if (code.startsWith("http://") || code.startsWith("https://")) {
+        const a = document.createElement('a');
+        a.href = code;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.innerHTML = "<span style='color:#e50914; font-size:12px; font-weight:bold;'>📢 Click Here To Watch Ad</span>";
+        bannerBox.appendChild(a);
+      } else {
+        const iframe = document.createElement('iframe');
+        iframe.style.border = 'none';
+        iframe.style.width = '100%';
+        iframe.style.height = '60px';
+        iframe.style.overflow = 'hidden';
+        bannerBox.appendChild(iframe);
+
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write(`<body style="margin:0; padding:0; display:flex; justify-content:center; align-items:center; background:transparent;">${code}</body>`);
+        doc.close();
+      }
+    }
+
     window.finishAdCount = () => {
       if (!pendingVideo) return;
       const key = pendingVideo.key;
@@ -1105,6 +1167,7 @@
       const isPremium = pendingVideo.isPremium;
 
       videoAdProgress[key] = (videoAdProgress[key] || 0) + 1;
+      saveProgress(); /* ✅ প্রগ্রেস সেভ হলো — রিফ্রেশেও হারাবে না */
 
       if (videoAdProgress[key] >= requiredAds) {
         closeLockModal();
@@ -1140,13 +1203,16 @@
 
       const heroSlider = document.getElementById('heroSlider');
       const catBar = document.getElementById('catBar');
+      const statsBar = document.getElementById('statsBar');
 
       if (tabName === "mylist" || tabName === "trending" || tabName === "profile") {
         heroSlider.style.display = 'none';
         catBar.style.display = 'none';
+        if (statsBar) statsBar.style.display = 'none';
       } else {
         heroSlider.style.display = 'flex';
         catBar.style.display = 'flex';
+        if (statsBar) statsBar.style.display = 'flex';
       }
 
       renderVideos();
@@ -1157,7 +1223,7 @@
         container.innerHTML = `
           <div class="profile-card">
             <h3 style="margin-bottom:8px;">Login or Register</h3>
-            <p style="font-size:12px; color:#666; margin-bottom:15px;">গুগল অথবা ইমেইল দিয়ে লগইন করে আপনার প্রোফাইল অ্যাক্সেস করুন।</p>
+            <p style="font-size:12px; color:#666; margin-bottom:15px;">গুগল অথবা ইমেইল দিয়ে লগইন করে আপনার প্রোফাইল অ্যাক্সেস করুন।</p>
             <button class="auth-btn btn-google" onclick="loginWithGoogle()">
               <svg class="google-icon" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -1333,7 +1399,6 @@
         searchBox.style.display = 'none';
         searchQuery = "";
         searchInput.value = "";
-        homeRenderLimit = 30;
         renderVideos();
       } else {
         searchBox.style.display = 'block';
@@ -1343,8 +1408,6 @@
 
     window.handleSearch = (e) => {
       searchQuery = e.target.value.trim();
-      homeRenderLimit = 30;
-      premRenderLimit = 30;
       renderVideos();
     };
 
@@ -1409,57 +1472,59 @@
   <div class="search-box" id="searchBox">
     <div class="search-input-wrapper">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" id="searchInput" placeholder="Search videos by title..." oninput="handleSearch(event)">
+      <input type="text" id="searchInput" placeholder="Search videos..." oninput="handleSearch(event)">
     </div>
   </div>
 
-  <!-- Top Ad -->
-  <div id="topAdBox" class="ad-container"></div>
+  <!-- Top Ad Box -->
+  <div class="ad-container" id="topAdBox"></div>
 
-  <!-- Banner Slider -->
+  <!-- Hero Banner Slider -->
   <div class="hero-slider-wrapper" id="heroSlider"></div>
 
-  <!-- Category Bar -->
+  <!-- Category Filter Bar -->
   <div class="cat-bar" id="catBar"></div>
 
-  <!-- Main Content Area -->
+  <!-- ✅ নতুন: ৩০০+/২০০+ ভিডিও কাউন্ট বার -->
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-item">🎬 নরমাল ভিডিও: <b id="normalVideoCount">300</b>+</div>
+    <div class="stat-item">👑 প্রিমিয়াম ভিডিও: <b id="premiumVideoCount">200</b>+</div>
+  </div>
+
+  <!-- Main Content -->
   <div id="mainContentContainer"></div>
 
-  <!-- Player Modal -->
+  <!-- Bottom Fixed Ad -->
+  <div id="bottomAdBox"></div>
+
+  <!-- Video Player Modal -->
   <div class="player-modal" id="playerModal">
-    <span class="close-modal" onclick="closePlayer()">&times;</span>
+    <div class="close-modal" onclick="closePlayer()"><i class="fa-solid fa-xmark"></i></div>
     <div class="video-box-wrapper" id="videoPlayerContainer"></div>
     <div class="modal-title" id="modalTitle"></div>
   </div>
 
-  <!-- Lock Modal -->
+  <!-- Lock / Ad Timer Modal -->
   <div class="player-modal" id="lockModal">
-    <span class="close-modal" onclick="closeLockModal()">&times;</span>
-    <div class="lock-box"></div>
+    <div class="close-modal" onclick="closeLockModal()"><i class="fa-solid fa-xmark"></i></div>
+    <div class="lock-box" id="lockBoxContent"></div>
   </div>
 
-  <!-- Bottom Ad -->
-  <div id="bottomAdBox" class="ad-container"></div>
-
-  <!-- Bottom Navigation Bar -->
-  <nav class="bottom-nav">
-    <a onclick="switchTab('home', this)" class="nav-link active">
-      <i class="fa-solid fa-house"></i>
-      <span>Home</span>
-    </a>
-    <a onclick="switchTab('trending', this)" class="nav-link">
-      <i class="fa-solid fa-fire"></i>
-      <span>Trending</span>
-    </a>
-    <a onclick="switchTab('mylist', this)" class="nav-link">
-      <i class="fa-solid fa-bookmark"></i>
-      <span>My List</span>
-    </a>
-    <a onclick="switchTab('profile', this)" class="nav-link">
-      <i class="fa-solid fa-user" id="navProfileIcon"></i>
-      <span>Profile</span>
-    </a>
-  </nav>
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <div class="nav-link active" onclick="switchTab('home', this)">
+      <i class="fa-solid fa-house"></i><span>Home</span>
+    </div>
+    <div class="nav-link" onclick="switchTab('trending', this)">
+      <i class="fa-solid fa-crown"></i><span>Premium</span>
+    </div>
+    <div class="nav-link" onclick="switchTab('mylist', this)">
+      <i class="fa-solid fa-bookmark"></i><span>My List</span>
+    </div>
+    <div class="nav-link" onclick="switchTab('profile', this)">
+      <i class="fa-solid fa-user" id="navProfileIcon"></i><span>Profile</span>
+    </div>
+  </div>
 
 </body>
 </html>
