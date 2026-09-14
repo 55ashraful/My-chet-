@@ -140,7 +140,7 @@
       border-radius: 8px; color: #c0392b; font-size: 12px; line-height: 1.5;
     }
 
-    /* ✅ নতুন: ৩০০+/২০০+ কাউন্ট বার */
+    /* ✅ ৩০০+/২০০+ কাউন্ট বার */
     .stats-bar { display: flex; gap: 8px; padding: 8px 12px; }
     .stat-item { flex: 1; background: #fff; border: 1px solid #eaedf1; border-radius: 8px; padding: 8px; font-size: 11px; text-align: center; color: #444; }
     .stat-item b { color: #e50914; }
@@ -370,23 +370,80 @@
     .lock-box p { font-size: 12px; color: #666; margin-bottom: 16px; line-height: 1.4; }
     .lock-btn { background: #e50914; color: #fff; border: none; padding: 9px 18px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; width: 100%; }
 
+    /* ✅✅ সবুজ টাইমার পপআপ (স্ক্রিনশটের মতো ডিজাইন) */
     .timer-overlay-card {
-      background: #1e1e1e; color: #fff; padding: 25px 20px; border-radius: 12px; text-align: center; width: 88%; max-width: 330px; border: 1px solid #333; box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      background: #2ed573;
+      color: #fff;
+      padding: 20px;
+      border-radius: 18px;
+      text-align: left;
+      width: 88%;
+      max-width: 340px;
+      position: relative;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
     }
-    .timer-badge { font-size: 15px; color: #ffc107; font-weight: bold; margin: 15px 0; background: #2a2a2a; padding: 12px; border-radius: 8px; border: 1px dashed #ffc107; }
-    .ad-x-close-btn { background: #2ed573; color: #000; font-weight: bold; padding: 12px 18px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; width: 100%; margin-top: 10px; }
-
-    /* ✅ নতুন: টাইমারের ভিতরের এড ব্যানার */
-    .timer-ad-banner {
-      width: 100%;
-      min-height: 60px;
-      margin: 12px 0;
+    .timer-close-x {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 22px;
+      color: #fff;
+      cursor: pointer;
+      display: none;
+      line-height: 1;
+    }
+    .timer-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+    .timer-bell-icon {
+      width: 58px;
+      height: 58px;
       background: #ffffff;
-      border-radius: 8px;
-      overflow: hidden;
+      border-radius: 16px;
       display: flex;
       justify-content: center;
       align-items: center;
+      font-size: 30px;
+      flex-shrink: 0;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    }
+    .timer-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.3;
+    }
+    .timer-subtitle {
+      font-size: 15px;
+      color: #fff;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .timer-ad-banner-img {
+      width: 100%;
+      min-height: 70px;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    .timer-ad-banner-img img {
+      max-width: 100%;
+      max-height: 90px;
+      border-radius: 8px;
+      display: block;
+    }
+    .timer-ad-banner-img iframe {
+      border: none;
+      width: 100%;
+      height: 70px;
+      overflow: hidden;
     }
 
     .profile-card { background: #ffffff; border-radius: 12px; margin: 15px; padding: 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
@@ -466,10 +523,16 @@
     let userAccessStatus = 'none';
     let pendingVideo = null;
 
-    /* ✅ এড প্রগ্রেস এখন localStorage-এ সেভ থাকবে — রিফ্রেশেও হারাবে না */
+    /* ✅ এড প্রগ্রেস localStorage-এ সেভ থাকবে */
     let videoAdProgress = JSON.parse(localStorage.getItem('videoAdProgress') || '{}');
     function saveProgress() {
       localStorage.setItem('videoAdProgress', JSON.stringify(videoAdProgress));
+    }
+
+    /* ✅ বাংলা সংখ্যায় কনভার্ট (১০, ৯, ৮...) */
+    function toBn(num) {
+      const bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+      return String(num).split('').map(d => bn[+d] !== undefined ? bn[+d] : d).join('');
     }
 
     onAuthStateChanged(auth, (user) => {
@@ -498,7 +561,7 @@
     let adUrlData = "";
     let adInterval = 0;
     let nativeAdCodeData = "";
-    let timerBannerCode = ""; /* ✅ নতুন: টাইমারের ব্যানার কোড */
+    let timerBannerCode = ""; /* ✅ সবুজ পপআপের ব্যানার */
     let allVideos = {};
     let premiumVideos = {};
     let categoriesList = [];
@@ -522,8 +585,8 @@
         adInterval = config.adInterval !== undefined ? parseInt(config.adInterval) : 0;
         nativeAdCodeData = config.nativeAdCode || "";
 
-        /* ✅ টাইমারের ব্যানার: এডমিনের ব্যানার কোড থেকে নেওয়া হয় */
-        timerBannerCode = config.timerBannerCode || config.bottomBannerCode || config.topBannerCode || nativeAdCodeData || "";
+        /* ✅ পপআপ ব্যানার: timerBannerImg দিলে সেটাই, নাহলে bottom/topBannerCode */
+        timerBannerCode = config.timerBannerImg || config.timerBannerCode || config.bottomBannerCode || config.topBannerCode || nativeAdCodeData || "";
 
         if (config.topBannerCode) renderAnyAd('topAdBox', config.topBannerCode);
         if (config.bottomBannerCode) renderAnyAd('bottomAdBox', config.bottomBannerCode);
@@ -628,7 +691,7 @@
       if (currentTab === 'trending') renderVideos();
     });
 
-    /* ✅ নতুন: ৩০০+/২০০+ কাউন্ট আপডেট */
+    /* ✅ ৩০০+/২০০+ কাউন্ট */
     function updateVideoCounts() {
       const nEl = document.getElementById('normalVideoCount');
       const pEl = document.getElementById('premiumVideoCount');
@@ -920,6 +983,22 @@
       doc.close();
     }
 
+    /* ✅ নতুন: সোশ্যাল মিডিয়া লিংক থেকে অটো থাম্বনেইল আনার ফাংশন */
+    function autoGetThumbnail(item, videoUrl) {
+      const manual = item.imgUrl || item.posterUrl || item.thumbnailUrl || (item.episodes && item.episodes[0] ? item.episodes[0].thumbnailUrl : '');
+      if (manual && String(manual).trim() !== '') return String(manual).trim();
+
+      if (!videoUrl) return '';
+
+      let m = videoUrl.match(/(?:youtube\.com\/(?:watch\?.*v=|shorts\/|embed\/|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+      if (m) return 'https://img.youtube.com/vi/' + m[1] + '/hqdefault.jpg';
+
+      m = videoUrl.match(/dailymotion\.com\/video\/([a-zA-Z0-9]+)/);
+      if (m) return 'https://www.dailymotion.com/thumbnail/video/' + m[1];
+
+      return '';
+    }
+
     function createCard(key, item, isPinned, isPremium) {
       const card = document.createElement('div');
       card.className = 'poster-card';
@@ -929,8 +1008,8 @@
       
       const isUnlocked = isPremium ? (userAccessStatus === 'approved' || currentCount >= requiredAds) : true;
 
-      const rawCover = item.imgUrl || item.posterUrl || item.thumbnailUrl || (item.episodes && item.episodes[0] ? item.episodes[0].thumbnailUrl : '');
-      const coverImage = (rawCover && rawCover.trim() !== '') ? rawCover : 'https://via.placeholder.com/300x450/1e1e1e/ffffff?text=Secret+Video';
+      const rawCover = autoGetThumbnail(item, item.videoUrl);
+      const coverImage = (rawCover && rawCover.trim() !== '') ? rawCover : 'https://placehold.co/300x450/1e1e1e/ffffff?text=Secret+Video';
 
       card.onclick = () => {
         if (isPremium) {
@@ -948,7 +1027,7 @@
         ` : ''}
         ${!isPremium ? `<div class="pin-btn ${isPinned ? 'pinned' : ''}" onclick="togglePin(event, '${key}')" title="Pin Video"><i class="fa-solid fa-bookmark"></i></div>` : ''}
         
-        <img src="${coverImage}" class="poster-img" alt="${item.title}" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x450/1e1e1e/ffffff?text=Poster';" oncontextmenu="return false;">
+        <img src="${coverImage}" class="poster-img" alt="${item.title}" onerror="this.onerror=null; this.src='https://placehold.co/300x450/1e1e1e/ffffff?text=Video';" oncontextmenu="return false;">
         
         <div class="play-overlay"><i class="fa-solid ${isPremium && !isUnlocked ? 'fa-lock' : 'fa-play'}"></i></div>
         <div class="poster-title-overlay">
@@ -1032,11 +1111,10 @@
       switchTab('profile', document.querySelectorAll('.nav-link')[3]);
     };
 
-    /* ✅ ফিক্স: এড এখন আসল লিংক (<a href target="_blank">) দিয়ে খুলবে — ব্রাউজার কখনও ব্লক করতে পারবে না! */
+    /* ✅ এড আসল লিংক দিয়ে খুলবে — ব্লক হওয়া অসম্ভব */
     window.openLockModal = (key, item, currentCount, requiredAds, isPremium) => {
       pendingVideo = { key: key, item: item, requiredAds: requiredAds, isPremium: isPremium !== undefined ? isPremium : true };
 
-      /* এড লিংক আগেই হিসাব করে রাখা হলো */
       let adLink = (item.adUrl && String(item.adUrl).trim()) || adUrlData.trim() || "https://google.com";
       if (adLink.includes("src=")) {
         const match = adLink.match(/src=["']([^"']+)["']/);
@@ -1046,19 +1124,21 @@
 
       const modal = document.getElementById('lockModal');
       const lockBox = modal.querySelector('.lock-box, .timer-overlay-card');
+      const closeBtnOuter = document.getElementById('lockModalCloseBtn');
+      if (closeBtnOuter) closeBtnOuter.style.display = 'flex';
       
       lockBox.className = "lock-box";
       lockBox.innerHTML = `
         <i class="fa-solid fa-lock" style="color:#e50914;"></i>
         <h3>${pendingVideo.isPremium ? 'Locked Premium Content' : 'Watch Ad To Play'}</h3>
         <p>${pendingVideo.isPremium 
-          ? `ভিডিওটি আনলক করতে আরও <b>${requiredAds - currentCount}</b> টি এড দেখুন অথবা এডমিন এক্সেস রিকোয়েস্ট পাঠান।`
-          : `ভিডিওটি দেখতে আরও <b>${requiredAds - currentCount}</b> টি এড দেখুন।`}</p>
+          ? `ভিডিওটি আনলক করতে আরও <b>${toBn(requiredAds - currentCount)}</b> টি এড দেখুন অথবা এডমিন এক্সেস রিকোয়েস্ট পাঠান।`
+          : `ভিডিওটি দেখতে আরও <b>${toBn(requiredAds - currentCount)}</b> টি এড দেখুন।`}</p>
 
         <a id="watchAdLink" href="${adLink}" target="_blank" rel="noopener"
            class="lock-btn" style="display:block; text-decoration:none; color:#fff; margin-bottom:8px;"
            onclick="startAdTimer()">
-           Watch Ad (${currentCount}/${requiredAds})
+           Watch Ad (${toBn(currentCount)}/${toBn(requiredAds)})
         </a>
         ${pendingVideo.isPremium ? `<button class="lock-btn" style="background:#28a745;" onclick="sendAccessRequest()">Request Admin Access</button>` : ''}
       `;
@@ -1080,50 +1160,54 @@
       }
     };
 
-    /* ✅ ফিক্স: এড নতুন ট্যাবে নিজেই খুলে গেছে (আসল লিংক ক্লিক), এখন শুধু টাইমার + ব্যানার দেখাবে */
+    /* ✅✅ সবুজ টাইমার পপআপ — স্ক্রিনশটের হুবহু ডিজাইন */
     window.startAdTimer = () => {
       if (!pendingVideo) return;
       const modal = document.getElementById('lockModal');
       const lockBox = modal.querySelector('.lock-box, .timer-overlay-card');
 
+      /* কাউন্টডাউন চলাকালীন বাইরের X লুকিয়ে রাখা হলো */
+      const closeBtnOuter = document.getElementById('lockModalCloseBtn');
+      if (closeBtnOuter) closeBtnOuter.style.display = 'none';
+
       lockBox.className = "timer-overlay-card";
       lockBox.innerHTML = `
-        <i class="fa-solid fa-clock" style="font-size:35px; color:#ffc107; margin-bottom:8px;"></i>
-        <h3 style="font-size:15px; margin-bottom:5px;">বিজ্ঞাপনটি দেখা শেষ হওয়া পর্যন্ত অপেক্ষা করুন</h3>
-        <p style="font-size:11px; color:#aaa;">নতুন ট্যাবে অ্যাড প্লে হচ্ছে। 10 সেকেন্ড পর বন্ধ করুন বাটনটি দৃশ্যমান হবে।</p>
-
-        <div id="timerAdBanner" class="timer-ad-banner"></div>
-
-        <div id="adTimerBox" class="timer-badge">
-          অ্যাড দেখা শেষ হতে বাকি: <span id="adSecondsLeft">10</span> সেকেন্ড
+        <div class="timer-close-x" id="timerCloseX" onclick="finishAdCount()">
+          <i class="fa-solid fa-xmark"></i>
         </div>
 
-        <button id="adCloseXBtn" class="ad-x-close-btn" style="display:none;" onclick="finishAdCount()">
-          ✕ বন্ধ করুন ও ভিডিও দেখুন
-        </button>
+        <div class="timer-header">
+          <div class="timer-bell-icon">🔔</div>
+          <div>
+            <div class="timer-title">ভিডিও আনলক</div>
+            <div class="timer-subtitle" id="timerSubtitle">${toBn(10)} সেকেন্ড অপেক্ষা করুন...</div>
+          </div>
+        </div>
+
+        <div class="timer-ad-banner-img" id="timerAdBanner"></div>
       `;
 
-      renderTimerBanner(); /* ✅ ব্যানার বসানো হলো */
+      renderTimerBanner();
 
       let timeLeft = 10;
       if (adTimerInterval) clearInterval(adTimerInterval);
 
       adTimerInterval = setInterval(() => {
         timeLeft--;
-        const timerElem = document.getElementById('adSecondsLeft');
-        if (timerElem) timerElem.innerText = timeLeft;
+        const subtitle = document.getElementById('timerSubtitle');
 
-        if (timeLeft <= 0) {
+        if (timeLeft > 0) {
+          if (subtitle) subtitle.innerText = toBn(timeLeft) + " সেকেন্ড বাকি আছে...";
+        } else {
           clearInterval(adTimerInterval);
-          const timerBox = document.getElementById('adTimerBox');
-          const closeBtn = document.getElementById('adCloseXBtn');
-          if (timerBox) timerBox.style.display = 'none';
-          if (closeBtn) closeBtn.style.display = 'block';
+          if (subtitle) subtitle.innerText = "বিজ্ঞাপন দেখা শেষ!";
+          const xBtn = document.getElementById('timerCloseX');
+          if (xBtn) xBtn.style.display = 'block';
         }
       }, 1000);
     };
 
-    /* ✅ নতুন: টাইমারের ভিতরে এড ব্যানার রেন্ডার করার ফাংশন */
+    /* ✅ পপআপের ভিতরের সাদা ব্যানার (ছবি / লিংক / স্ক্রিপ্ট — সব সাপোর্ট করে) */
     function renderTimerBanner() {
       const bannerBox = document.getElementById('timerAdBanner');
       if (!bannerBox) return;
@@ -1137,6 +1221,15 @@
       bannerBox.innerHTML = "";
       const code = String(timerBannerCode).trim();
 
+      /* ছবির লিংক হলে সরাসরি ছবি দেখাবে (স্ক্রিনশটের মতো) */
+      if (/\.(jpg|jpeg|png|gif|webp)(\?.*)?$/i.test(code)) {
+        const img = document.createElement('img');
+        img.src = code;
+        img.alt = "Ad";
+        bannerBox.appendChild(img);
+        return;
+      }
+
       if (code.startsWith("http://") || code.startsWith("https://")) {
         const a = document.createElement('a');
         a.href = code;
@@ -1147,8 +1240,6 @@
       } else {
         const iframe = document.createElement('iframe');
         iframe.style.border = 'none';
-        iframe.style.width = '100%';
-        iframe.style.height = '60px';
         iframe.style.overflow = 'hidden';
         bannerBox.appendChild(iframe);
 
@@ -1167,7 +1258,7 @@
       const isPremium = pendingVideo.isPremium;
 
       videoAdProgress[key] = (videoAdProgress[key] || 0) + 1;
-      saveProgress(); /* ✅ প্রগ্রেস সেভ হলো — রিফ্রেশেও হারাবে না */
+      saveProgress();
 
       if (videoAdProgress[key] >= requiredAds) {
         closeLockModal();
@@ -1183,6 +1274,8 @@
       const modal = document.getElementById('lockModal');
       const lockBox = modal.querySelector('.lock-box, .timer-overlay-card');
       if(lockBox) lockBox.className = "lock-box";
+      const closeBtnOuter = document.getElementById('lockModalCloseBtn');
+      if (closeBtnOuter) closeBtnOuter.style.display = 'flex';
       modal.style.display = 'none';
       pendingVideo = null;
     };
@@ -1411,25 +1504,48 @@
       renderVideos();
     };
 
+    /* ✅ নতুন: সোশ্যাল মিডিয়া লিংককে প্লেয়ারের embed লিংকে অটো রূপান্তর */
+    function convertToEmbedUrl(rawUrl) {
+      let url = String(rawUrl).trim();
+
+      let m = url.match(/(?:youtube\.com\/(?:watch\?.*v=|shorts\/|embed\/|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+      if (m) return 'https://www.youtube.com/embed/' + m[1] + '?autoplay=1&rel=0';
+
+      if (url.includes('facebook.com') || url.includes('fb.watch')) {
+        return 'https://www.facebook.com/plugins/video.php?href=' + encodeURIComponent(url) + '&show_text=0&autoplay=1';
+      }
+
+      m = url.match(/dailymotion\.com\/video\/([a-zA-Z0-9]+)/);
+      if (m) return 'https://www.dailymotion.com/embed/video/' + m[1];
+      m = url.match(/dai\.ly\/([a-zA-Z0-9]+)/);
+      if (m) return 'https://www.dailymotion.com/embed/video/' + m[1];
+
+      m = url.match(/vimeo\.com\/(\d+)/);
+      if (m) return 'https://player.vimeo.com/video/' + m[1];
+
+      return url;
+    }
+
     window.openVideoPlayer = (url, title) => {
       const modal = document.getElementById('playerModal');
       const videoContainer = document.getElementById('videoPlayerContainer');
       document.getElementById('modalTitle').innerText = title;
-      
-      if (url.includes('<iframe') || url.includes('http')) {
-        if (url.includes('<iframe')) {
-          videoContainer.innerHTML = url;
-          const iframe = videoContainer.querySelector('iframe');
-          if (iframe) {
-            iframe.setAttribute('allowfullscreen', 'true');
-            iframe.style.width = '100%';
-            iframe.style.height = '100%';
-          }
-        } else if (url.endsWith('.mp4') || url.endsWith('.webm') || url.includes('cloudinary')) {
-          videoContainer.innerHTML = `<video src="${url}" controls autoplay controlsList="nodownload" allowfullscreen oncontextmenu="return false;"></video>`;
-        } else {
-          videoContainer.innerHTML = `<iframe src="${url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:100%;"></iframe>`;
+
+      url = String(url).trim();
+
+      if (url.includes('<iframe')) {
+        videoContainer.innerHTML = url;
+        const iframe = videoContainer.querySelector('iframe');
+        if (iframe) {
+          iframe.setAttribute('allowfullscreen', 'true');
+          iframe.style.width = '100%';
+          iframe.style.height = '100%';
         }
+      } else if (url.endsWith('.mp4') || url.endsWith('.webm') || url.includes('cloudinary')) {
+        videoContainer.innerHTML = `<video src="${url}" controls autoplay controlsList="nodownload" allowfullscreen oncontextmenu="return false;"></video>`;
+      } else {
+        const embedUrl = convertToEmbedUrl(url);
+        videoContainer.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:100%;"></iframe>`;
       }
 
       modal.style.display = 'flex';
@@ -1485,7 +1601,7 @@
   <!-- Category Filter Bar -->
   <div class="cat-bar" id="catBar"></div>
 
-  <!-- ✅ নতুন: ৩০০+/২০০+ ভিডিও কাউন্ট বার -->
+  <!-- ✅ ৩০০+/২০০+ ভিডিও কাউন্ট বার -->
   <div class="stats-bar" id="statsBar">
     <div class="stat-item">🎬 নরমাল ভিডিও: <b id="normalVideoCount">300</b>+</div>
     <div class="stat-item">👑 প্রিমিয়াম ভিডিও: <b id="premiumVideoCount">200</b>+</div>
@@ -1504,9 +1620,9 @@
     <div class="modal-title" id="modalTitle"></div>
   </div>
 
-  <!-- Lock / Ad Timer Modal -->
+  <!-- Lock / Green Timer Modal -->
   <div class="player-modal" id="lockModal">
-    <div class="close-modal" onclick="closeLockModal()"><i class="fa-solid fa-xmark"></i></div>
+    <div class="close-modal" id="lockModalCloseBtn" onclick="closeLockModal()"><i class="fa-solid fa-xmark"></i></div>
     <div class="lock-box" id="lockBoxContent"></div>
   </div>
 
