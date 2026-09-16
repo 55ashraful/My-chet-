@@ -4,9 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   
-  <title>Secret Video - Free HD Trending Videos</title>
-  <meta name="description" content="Watch and stream the latest secret trending videos, viral clips, and HD entertainment on Secret Video Portal for free.">
+  <title>Secret Video Smoky - Watch & Download Free HD Trending Videos</title>
+  <meta name="description" content="Watch and stream the latest secret trending videos, viral clips, and HD entertainment on Secret Video Smoky Portal. Free and premium video streaming.">
+  <meta name="keywords" content="Secret Video, secret video portal, secret video smoky, free hd videos, trending videos, viral clips">
   <meta name="robots" content="index, follow">
+  
 
   <link rel="icon" type="image/png" href="https://i.ibb.co/zWvmyGPT/1000109018.png">
   <link rel="apple-touch-icon" href="https://i.ibb.co/zWvmyGPT/1000109018.png">
@@ -140,7 +142,6 @@
       border-radius: 8px; color: #c0392b; font-size: 12px; line-height: 1.5;
     }
 
-    /* ✅ ৩০০+/২০০+ কাউন্ট বার */
     .stats-bar { display: flex; gap: 8px; padding: 8px 12px; }
     .stat-item { flex: 1; background: #fff; border: 1px solid #eaedf1; border-radius: 8px; padding: 8px; font-size: 11px; text-align: center; color: #444; }
     .stat-item b { color: #e50914; }
@@ -370,7 +371,6 @@
     .lock-box p { font-size: 12px; color: #666; margin-bottom: 16px; line-height: 1.4; }
     .lock-btn { background: #e50914; color: #fff; border: none; padding: 9px 18px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; width: 100%; }
 
-    /* ✅✅ সবুজ টাইমার পপআপ (স্ক্রিনশটের মতো ডিজাইন) */
     .timer-overlay-card {
       background: #2ed573;
       color: #fff;
@@ -535,6 +535,14 @@
       return String(num).split('').map(d => bn[+d] !== undefined ? bn[+d] : d).join('');
     }
 
+    /* ✅ নতুন: ভাঙা ডেটা থেকে ক্র্যাশ বন্ধ করার হেল্পার */
+    function safeText(v) {
+      if (v === null || v === undefined) return '';
+      if (typeof v === 'string') return v;
+      if (typeof v === 'number' || typeof v === 'boolean') return String(v);
+      return '';
+    }
+
     onAuthStateChanged(auth, (user) => {
       currentUser = user;
       updateProfileUI();
@@ -561,7 +569,7 @@
     let adUrlData = "";
     let adInterval = 0;
     let nativeAdCodeData = "";
-    let timerBannerCode = ""; /* ✅ সবুজ পপআপের ব্যানার */
+    let timerBannerCode = "";
     let allVideos = {};
     let premiumVideos = {};
     let categoriesList = [];
@@ -571,8 +579,9 @@
     let currentTab = "home"; 
     let pinnedVideos = JSON.parse(localStorage.getItem('pinnedVideos') || '[]');
 
-    let homeRenderLimit = 30;
-    let premRenderLimit = 30;
+    /* ✅ একসাথে ৬০টা ভিডিও দেখাবে — প্রতি ক্যাটাগরিতে ৫০+ ভিডিও পুরোপুরি দেখা যাবে */
+    let homeRenderLimit = 60;
+    let premRenderLimit = 60;
 
     let videosReadError = "";
     let premiumReadError = "";
@@ -585,7 +594,6 @@
         adInterval = config.adInterval !== undefined ? parseInt(config.adInterval) : 0;
         nativeAdCodeData = config.nativeAdCode || "";
 
-        /* ✅ পপআপ ব্যানার: timerBannerImg দিলে সেটাই, নাহলে bottom/topBannerCode */
         timerBannerCode = config.timerBannerImg || config.timerBannerCode || config.bottomBannerCode || config.topBannerCode || nativeAdCodeData || "";
 
         if (config.topBannerCode) renderAnyAd('topAdBox', config.topBannerCode);
@@ -619,18 +627,20 @@
 
     function injectAdsterraScript(scriptCode, containerId) {
       if (!scriptCode) return;
-      let container = document.getElementById(containerId);
-      if (!container) {
-        container = document.createElement('div');
-        container.id = containerId;
-        document.body.appendChild(container);
-      }
-      container.innerHTML = "";
-      
-      const range = document.createRange();
-      range.selectNode(container);
-      const documentFragment = range.createContextualFragment(scriptCode);
-      container.appendChild(documentFragment);
+      try {
+        let container = document.getElementById(containerId);
+        if (!container) {
+          container = document.createElement('div');
+          container.id = containerId;
+          document.body.appendChild(container);
+        }
+        container.innerHTML = "";
+        
+        const range = document.createRange();
+        range.selectNode(container);
+        const documentFragment = range.createContextualFragment(scriptCode);
+        container.appendChild(documentFragment);
+      } catch (e) { console.error("Ad script error:", e); }
     }
 
     function renderAnyAd(containerId, rawCode) {
@@ -650,12 +660,8 @@
         iframe.style.width = '100%';
         iframe.style.height = '60px';
         iframe.style.overflow = 'hidden';
+        iframe.srcdoc = `<body style="margin:0; padding:0; display:flex; justify-content:center; align-items:center; background:transparent;">${rawCode}</body>`;
         container.appendChild(iframe);
-
-        const doc = iframe.contentWindow.document;
-        doc.open();
-        doc.write(`<body style="margin:0; padding:0; display:flex; justify-content:center; align-items:center; background:transparent;">${rawCode}</body>`);
-        doc.close();
       }
     }
 
@@ -670,9 +676,24 @@
       renderCategoryBar();
     });
 
+    /* ✅✅ ফিক্স: ভাঙা ডেটা বাদ দিয়ে নিরাপদে ভিডিও লোড */
     onValue(ref(db, 'videos'), (snapshot) => {
       videosReadError = "";
-      allVideos = snapshot.val() || {};
+      const raw = snapshot.val() || {};
+      allVideos = {};
+      Object.keys(raw).forEach(k => {
+        const it = raw[k];
+        if (!it || typeof it !== 'object') return;
+        it.title = safeText(it.title) || "Untitled";
+        it.category = safeText(it.category);
+        it.videoUrl = safeText(it.videoUrl);
+        it.imgUrl = safeText(it.imgUrl);
+        it.posterUrl = safeText(it.posterUrl);
+        it.thumbnailUrl = safeText(it.thumbnailUrl);
+        it.adUrl = safeText(it.adUrl);
+        if (it.adLimit !== undefined) it.adLimit = parseInt(it.adLimit) || 0;
+        allVideos[k] = it;
+      });
       updateVideoCounts();
       renderCategoryBar();
       renderVideos();
@@ -683,7 +704,21 @@
 
     onValue(ref(db, 'premiumVideos'), (snapshot) => {
       premiumReadError = "";
-      premiumVideos = snapshot.val() || {};
+      const raw = snapshot.val() || {};
+      premiumVideos = {};
+      Object.keys(raw).forEach(k => {
+        const it = raw[k];
+        if (!it || typeof it !== 'object') return;
+        it.title = safeText(it.title) || "Untitled";
+        it.category = safeText(it.category);
+        it.videoUrl = safeText(it.videoUrl);
+        it.imgUrl = safeText(it.imgUrl);
+        it.posterUrl = safeText(it.posterUrl);
+        it.thumbnailUrl = safeText(it.thumbnailUrl);
+        it.adUrl = safeText(it.adUrl);
+        if (it.adLimit !== undefined) it.adLimit = parseInt(it.adLimit) || 0;
+        premiumVideos[k] = it;
+      });
       updateVideoCounts();
       if (currentTab === 'trending') renderVideos();
     }, (error) => {
@@ -721,7 +756,7 @@
 
     window.filterCat = (catName, btnElement) => {
       selectedCat = catName;
-      homeRenderLimit = 30;
+      homeRenderLimit = 60;
       document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
       btnElement.classList.add('active');
       renderVideos();
@@ -736,7 +771,7 @@
         banners.forEach(b => {
           const div = document.createElement('div');
           div.className = 'hero-banner';
-          div.style.backgroundImage = `url('${b.imgUrl}')`;
+          div.style.backgroundImage = `url('${safeText(b.imgUrl)}')`;
           
           div.onclick = () => {
             if (b.videoUrl) {
@@ -749,8 +784,8 @@
           div.innerHTML = `
             <div class="hero-content">
               <span class="hero-badge">FEATURED</span>
-              <h2 class="hero-title">${b.title || ''}</h2>
-              <div class="hero-desc">${b.desc || ''}</div>
+              <h2 class="hero-title">${safeText(b.title)}</h2>
+              <div class="hero-desc">${safeText(b.desc)}</div>
               <button class="btn-play"><i class="fa-solid fa-play"></i> Watch Now</button>
             </div>
           `;
@@ -797,16 +832,18 @@
       return box;
     }
 
-    /* ✅✅ নতুন: সোশ্যাল মিডিয়া লিংককে embed লিংকে অটো রূপান্তর
-       সাপোর্ট: YouTube, Facebook, TikTok, Dailymotion, Vimeo, Streamable, OK.ru, Google Drive, MP4, iframe */
+    /* ✅✅ সোশ্যাল মিডিয়া লিংককে embed লিংকে অটো রূপান্তর */
     function convertToEmbedUrl(rawUrl) {
       let url = String(rawUrl).trim();
 
-      // YouTube (watch, youtu.be, shorts, live, embed)
+     /* ✅ এডমিন প্যানেল থেকে আসা রেডি embed লিংক আর কনভার্ট হবে না (ফেসবুক "Video unavailable" ফিক্স) */
+      if (url.includes('facebook.com/plugins/') || url.includes('tiktok.com/embed/') || url.includes('dailymotion.com/embed/') || url.includes('ok.ru/videoembed/') || url.includes('player.vimeo.com/') || url.includes('streamable.com/e/') || url.includes('drive.google.com')) return url;
+
+      // YouTube
       let m = url.match(/(?:youtube\.com\/(?:watch\?.*v=|shorts\/|embed\/|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
       if (m) return 'https://www.youtube.com/embed/' + m[1] + '?autoplay=1&rel=0';
 
-      // Facebook (watch, videos, reel, photo.php, fb.watch)
+      // Facebook
       if (url.includes('facebook.com') || url.includes('fb.watch')) {
         let fm = url.match(/facebook\.com\/watch\/?\?v=(\d+)/);
         if (!fm) fm = url.match(/facebook\.com\/[^\/]+\/videos\/(?:[^\/]+\/)?(\d+)/);
@@ -819,7 +856,7 @@
         return 'https://www.facebook.com/plugins/video.php?href=' + encodeURIComponent(url) + '&show_text=false&autoplay=0&width=560';
       }
 
-      // TikTok (ফুল লিংক: tiktok.com/@user/video/ID)
+      // TikTok
       m = url.match(/tiktok\.com\/(?:@[^\/]+\/)?video\/(\d+)/);
       if (m) return 'https://www.tiktok.com/embed/v2/' + m[1];
 
@@ -845,10 +882,14 @@
       m = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
       if (m) return 'https://drive.google.com/file/d/' + m[1] + '/preview';
 
+      // XNXX
+      m = url.match(/xnxx\.com\/video-([^\/\?\#]+)/);
+      if (m) return 'https://www.xnxx.com/embedframe/' + m[1];
+
       return url;
     }
 
-    /* ✅✅ নতুন: অটো থাম্বনেইল (YouTube, Dailymotion থেকে ছবি নিজে থেকে আসবে) */
+    /* ✅ অটো থাম্বনেইল */
     function autoGetThumbnail(item, videoUrl) {
       const manual = item.imgUrl || item.posterUrl || item.thumbnailUrl || (item.episodes && item.episodes[0] ? item.episodes[0].thumbnailUrl : '');
       if (manual && String(manual).trim() !== '') return String(manual).trim();
@@ -892,15 +933,15 @@
         ` : ''}
         ${!isPremium ? `<div class="pin-btn ${isPinned ? 'pinned' : ''}" onclick="togglePin(event, '${key}')" title="Pin Video"><i class="fa-solid fa-bookmark"></i></div>` : ''}
         
-        <img src="${coverImage}" class="poster-img" alt="${item.title}" onerror="this.onerror=null; this.src='https://placehold.co/300x450/1e1e1e/ffffff?text=Video';" oncontextmenu="return false;">
+        <img src="${coverImage}" class="poster-img" alt="${safeText(item.title)}" onerror="this.onerror=null; this.src='https://placehold.co/300x450/1e1e1e/ffffff?text=Video';" oncontextmenu="return false;">
         
         <div class="play-overlay"><i class="fa-solid ${isPremium && !isUnlocked ? 'fa-lock' : 'fa-play'}"></i></div>
         <div class="poster-title-overlay">
-          <span class="poster-title-text">${item.title}</span>
+          <span class="poster-title-text">${safeText(item.title)}</span>
         </div>
       `;
 
-      /* ✅ TikTok ভিডিওর থাম্বনেইল অটো আনা হবে */
+      /* ✅ TikTok থাম্বনেইল অটো আনা */
       if ((!rawCover || rawCover.trim() === '') && item.videoUrl) {
         const tm = String(item.videoUrl).match(/tiktok\.com\/(?:@[^\/]+\/)?video\/(\d+)/);
         if (tm) {
@@ -917,9 +958,17 @@
       return card;
     }
 
+    /* ✅✅ ফিক্স: একটা ভিডিও/এডে সমস্যা থাকলে শুধু সেটার জায়গায় সতর্ক কার্ড — পুরো পেজ আর উধাও হবে না */
     function renderVideos() {
       const mainContainer = document.getElementById('mainContentContainer');
       mainContainer.innerHTML = "";
+
+      function brokenCard() {
+        const d = document.createElement('div');
+        d.className = 'poster-card';
+        d.innerHTML = `<div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;color:#ffb0b0;font-size:10px;z-index:3;text-align:center;padding:6px;"><i class="fa-solid fa-triangle-exclamation" style="font-size:20px;color:#ff4757;"></i>ভিডিও ডেটায় সমস্যা!</div>`;
+        return d;
+      }
 
       try {
         if (currentTab === "profile") {
@@ -944,15 +993,17 @@
           let totalMatch = 0;
 
           keys.forEach((key) => {
-            const item = premiumVideos[key];
-            if (!item || typeof item !== 'object') return;
-            if ((item.title || '').toLowerCase().includes(searchQuery.toLowerCase())) {
-              totalMatch++;
-              if (count < premRenderLimit) {
-                count++;
-                premGrid.appendChild(createCard(key, item, false, true));
+            try {
+              const item = premiumVideos[key];
+              if (!item || typeof item !== 'object') return;
+              if (safeText(item.title).toLowerCase().includes(searchQuery.toLowerCase())) {
+                totalMatch++;
+                if (count < premRenderLimit) {
+                  count++;
+                  premGrid.appendChild(createCard(key, item, false, true));
+                }
               }
-            }
+            } catch (e) { console.error("Premium card error:", key, e); premGrid.appendChild(brokenCard()); }
           });
 
           if (totalMatch === 0) {
@@ -976,15 +1027,17 @@
           let pinnedCount = 0;
 
           Object.keys(allVideos).reverse().forEach(key => {
-            const item = allVideos[key];
-            if (!item || typeof item !== 'object') return;
-            const isPinned = pinnedVideos.includes(key);
-            const titleMatch = item.title && item.title.toLowerCase().includes(searchQuery.toLowerCase());
+            try {
+              const item = allVideos[key];
+              if (!item || typeof item !== 'object') return;
+              const isPinned = pinnedVideos.includes(key);
+              const titleMatch = safeText(item.title).toLowerCase().includes(searchQuery.toLowerCase());
 
-            if (isPinned && titleMatch) {
-              pinnedCount++;
-              myGrid.appendChild(createCard(key, item, isPinned, false));
-            }
+              if (isPinned && titleMatch) {
+                pinnedCount++;
+                myGrid.appendChild(createCard(key, item, isPinned, false));
+              }
+            } catch (e) { console.error("Pinned card error:", key, e); }
           });
 
           const headerDiv = document.createElement('div');
@@ -1008,17 +1061,19 @@
         const groupedVideos = {};
         
         keys.forEach(key => {
-          const item = allVideos[key];
-          if (!item || typeof item !== 'object') return;
-          const category = item.category || "Featured Videos";
-          const titleMatch = item.title && item.title.toLowerCase().includes(searchQuery.toLowerCase());
+          try {
+            const item = allVideos[key];
+            if (!item || typeof item !== 'object') return;
+            const category = safeText(item.category) || "Featured Videos";
+            const titleMatch = safeText(item.title).toLowerCase().includes(searchQuery.toLowerCase());
 
-          if (titleMatch) {
-            if (!groupedVideos[category]) {
-              groupedVideos[category] = [];
+            if (titleMatch) {
+              if (!groupedVideos[category]) {
+                groupedVideos[category] = [];
+              }
+              groupedVideos[category].push({ key, data: item });
             }
-            groupedVideos[category].push({ key, data: item });
-          }
+          } catch (e) { console.error("Group error:", key, e); }
         });
 
         let totalRendered = 0;
@@ -1045,15 +1100,23 @@
 
             videoList.forEach((obj, idx) => {
               if (totalRendered >= homeRenderLimit) return;
-              const isPinned = pinnedVideos.includes(obj.key);
-              grid.appendChild(createCard(obj.key, obj.data, isPinned, false));
+              try {
+                const isPinned = pinnedVideos.includes(obj.key);
+                grid.appendChild(createCard(obj.key, obj.data, isPinned, false));
+              } catch (e) {
+                console.error("Card error:", obj.key, e);
+                grid.appendChild(brokenCard());
+              }
               totalRendered++;
 
-              if (nativeAdCodeData && (idx + 1) % 6 === 0) {
-                const nativeBox = document.createElement('div');
-                nativeBox.className = 'native-ad-container';
-                grid.appendChild(nativeBox);
-                renderAnyAdByElement(nativeBox, nativeAdCodeData);
+              /* ✅ নেটিভ এড বক্স — এখন নিরাপদ, ক্র্যাশ অসম্ভব */
+              if (nativeAdCodeData && (idx + 1) % 9 === 0) {
+                try {
+                  const nativeBox = document.createElement('div');
+                  nativeBox.className = 'native-ad-container';
+                  grid.appendChild(nativeBox);
+                  setTimeout(() => renderAnyAdByElement(nativeBox, nativeAdCodeData), 0);
+                } catch (e) { console.error("Ad insert error:", e); }
               }
             });
 
@@ -1070,37 +1133,42 @@
           mainContainer.appendChild(wrap);
         }
 
-        if (totalAvailable === 0) {
+        if (totalAvailable === 0 && !videosReadError) {
           mainContainer.innerHTML = "<p style='color:#888; font-size:11px; text-align:center; padding:20px;'>No videos found matching your request.</p>";
         }
       } catch (err) {
         console.error("Render error:", err);
+        const ebox = document.createElement('div');
+        ebox.className = 'db-error-box';
+        ebox.innerHTML = `<b>⚠️ ডিসপ্লে সমস্যা:</b> ${err.message}`;
+        mainContainer.appendChild(ebox);
       }
     }
 
     window.loadMoreVideos = () => {
-      homeRenderLimit += 30;
+      homeRenderLimit += 60;
       renderVideos();
     };
     window.loadMorePremium = () => {
-      premRenderLimit += 30;
+      premRenderLimit += 60;
       renderVideos();
     };
 
+    /* ✅✅ ফিক্স: srcdoc ব্যবহার — আগের doc.write পদ্ধতিতে ৬ষ্ঠ ভিডিওর পর ক্র্যাশ হতো */
     function renderAnyAdByElement(container, rawCode) {
       if (!container || !rawCode) return;
-      container.innerHTML = "";
-      const iframe = document.createElement('iframe');
-      iframe.style.border = 'none';
-      iframe.style.width = '100%';
-      iframe.style.height = '80px';
-      iframe.style.overflow = 'hidden';
-      container.appendChild(iframe);
-
-      const doc = iframe.contentWindow.document;
-      doc.open();
-      doc.write(`<body style="margin:0; padding:0; display:flex; justify-content:center; align-items:center; background:transparent;">${rawCode}</body>`);
-      doc.close();
+      try {
+        container.innerHTML = "";
+        const iframe = document.createElement('iframe');
+        iframe.style.border = 'none';
+        iframe.style.width = '100%';
+        iframe.style.height = '80px';
+        iframe.style.overflow = 'hidden';
+        iframe.srcdoc = `<body style="margin:0; padding:0; display:flex; justify-content:center; align-items:center; background:transparent;">${rawCode}</body>`;
+        container.appendChild(iframe);
+      } catch (e) {
+        console.error("Native ad error:", e);
+      }
     }
 
     window.handleNormalVideoClick = (firstArg, secondArg, thirdArg) => {
@@ -1226,13 +1294,12 @@
       }
     };
 
-    /* ✅✅ সবুজ টাইমার পপআপ — স্ক্রিনশটের হুবহু ডিজাইন */
+    /* ✅✅ সবুজ টাইমার পপআপ */
     window.startAdTimer = () => {
       if (!pendingVideo) return;
       const modal = document.getElementById('lockModal');
       const lockBox = modal.querySelector('.lock-box, .timer-overlay-card');
 
-      /* কাউন্টডাউন চলাকালীন বাইরের X লুকিয়ে রাখা হলো */
       const closeBtnOuter = document.getElementById('lockModalCloseBtn');
       if (closeBtnOuter) closeBtnOuter.style.display = 'none';
 
@@ -1273,7 +1340,7 @@
       }, 1000);
     };
 
-    /* ✅ পপআপের ভিতরের সাদা ব্যানার (ছবি / লিংক / স্ক্রিপ্ট — সব সাপোর্ট করে) */
+    /* ✅ পপআপের ভিতরের সাদা ব্যানার */
     function renderTimerBanner() {
       const bannerBox = document.getElementById('timerAdBanner');
       if (!bannerBox) return;
@@ -1287,7 +1354,6 @@
       bannerBox.innerHTML = "";
       const code = String(timerBannerCode).trim();
 
-      /* ছবির লিংক হলে সরাসরি ছবি দেখাবে (স্ক্রিনশটের মতো) */
       if (/\.(jpg|jpeg|png|gif|webp)(\?.*)?$/i.test(code)) {
         const img = document.createElement('img');
         img.src = code;
@@ -1307,12 +1373,8 @@
         const iframe = document.createElement('iframe');
         iframe.style.border = 'none';
         iframe.style.overflow = 'hidden';
+        iframe.srcdoc = `<body style="margin:0; padding:0; display:flex; justify-content:center; align-items:center; background:transparent;">${code}</body>`;
         bannerBox.appendChild(iframe);
-
-        const doc = iframe.contentWindow.document;
-        doc.open();
-        doc.write(`<body style="margin:0; padding:0; display:flex; justify-content:center; align-items:center; background:transparent;">${code}</body>`);
-        doc.close();
       }
     }
 
@@ -1354,8 +1416,8 @@
       if (searchInput) searchInput.value = "";
       const searchBox = document.getElementById('searchBox');
       if (searchBox) searchBox.style.display = 'none';
-      homeRenderLimit = 30;
-      premRenderLimit = 30;
+      homeRenderLimit = 60;
+      premRenderLimit = 60;
 
       document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
       navElement.classList.add('active');
@@ -1585,7 +1647,7 @@
           iframe.style.width = '100%';
           iframe.style.height = '100%';
         }
-      } else if (url.endsWith('.mp4') || url.endsWith('.webm') || url.includes('cloudinary')) {
+      } else if (url.endsWith('.mp4') || url.endsWith('.webm') || url.includes('cloudinary') || url.includes('firebasestorage')) {
         videoContainer.innerHTML = `<video src="${url}" controls autoplay controlsList="nodownload" allowfullscreen oncontextmenu="return false;"></video>`;
       } else {
         const embedUrl = convertToEmbedUrl(url);
@@ -1645,7 +1707,7 @@
   <!-- Category Filter Bar -->
   <div class="cat-bar" id="catBar"></div>
 
-  <!-- ✅ ৩০০+/২০০+ ভিডিও কাউন্ট বার -->
+  <!-- ৩০০+/২০০+ ভিডিও কাউন্ট বার -->
   <div class="stats-bar" id="statsBar">
     <div class="stat-item">🎬 নরমাল ভিডিও: <b id="normalVideoCount">300</b>+</div>
     <div class="stat-item">👑 প্রিমিয়াম ভিডিও: <b id="premiumVideoCount">200</b>+</div>
