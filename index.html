@@ -463,6 +463,17 @@
     .form-group label { font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px; }
     .form-group input { width: 100%; padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; }
     .auth-toggle { font-size: 12px; color: #007bff; cursor: pointer; text-align: center; margin-top: 12px; }
+     /* ===== ভাসমান কন্টাক্ট বাটন ===== */
+    .fab-container { position: fixed; bottom: 135px; right: 16px; z-index: 1500; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+    .fab-main { width: 54px; height: 54px; border-radius: 50%; background: #e50914; color: #fff; border: none; font-size: 21px; cursor: pointer; box-shadow: 0 4px 14px rgba(229,9,20,0.45); display: flex; align-items: center; justify-content: center; transition: transform 0.3s ease, background 0.3s ease; }
+    .fab-main.active { transform: rotate(135deg); background: #1a1a1a; }
+    .fab-options { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; opacity: 0; visibility: hidden; transform: translateY(15px) scale(0.9); transition: all 0.25s ease; }
+    .fab-options.show { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+    .fab-option { width: 46px; height: 46px; border-radius: 50%; color: #fff; font-size: 18px; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 3px 10px rgba(0,0,0,0.25); }
+    .fab-option:active { transform: scale(0.9); }
+    .fab-option.whatsapp { background: #25D366; }
+    .fab-option.phone { background: #007bff; }
+    .fab-option.email { background: #ff9800; }
   </style>
 
   <script>
@@ -1664,6 +1675,7 @@
       modal.style.display = 'none';
     };
   </script>
+  window.switchTab = switchTab;
 </head>
 <body oncontextmenu="return false;">
 
@@ -1747,6 +1759,95 @@
       <i class="fa-solid fa-user" id="navProfileIcon"></i><span>Profile</span>
     </div>
   </div>
+   <!-- ===== ভাসমান কন্টাক্ট বাটন শুরু ===== -->
+<div class="fab-container" id="fabContainer">
+  <div class="fab-options" id="fabOptions">
+    <a href="https://wa.me/8801749799622" target="_blank" class="fab-option whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+    <a href="tel:+8801749799622" class="fab-option phone"><i class="fa-solid fa-phone"></i></a>
+    <a href="mailto:mydreamd2424@gmail.com" class="fab-option email"><i class="fa-solid fa-envelope"></i></a>
+  </div>
+  <button class="fab-main" id="fabMain"><i class="fa-solid fa-headset"></i></button>
+</div>
+<script>
+  (function () {
+    var fabMain = document.getElementById('fabMain');
+    var fabOptions = document.getElementById('fabOptions');
+    fabMain.addEventListener('click', function (e) {
+      e.stopPropagation();
+      fabOptions.classList.toggle('show');
+      fabMain.classList.toggle('active');
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.fab-container')) {
+        fabOptions.classList.remove('show');
+        fabMain.classList.remove('active');
+      }
+    });
+  })();
+</script>
+<!-- ✅ ১৮+ অপশন বক্স (একটাই) -->
+<div id="ageAskModal">
+  <div class="age-ask-box">
+    <div class="age-ask-title">👑 Premium Content</div>
+    <div class="age-ask-sub">এই সেকশনে প্রবেশ করতে আপনার বয়স নিশ্চিত করুন</div>
+    <button type="button" class="age-opt age-opt-yes" onclick="ageGoAbove18()">
+      <span class="age-opt-txt">✅ আমি ১৮ বছরের উপরে</span><span class="age-opt-arrow">›</span>
+    </button>
+    <button type="button" class="age-opt age-opt-no" onclick="ageGoBelow18()">
+      <span class="age-opt-txt">❌ আমি ১৮ বছরের নিচে</span><span class="age-opt-arrow">›</span>
+    </button>
+  </div>
+</div>
 
+<!-- ১৮- মেসেজ -->
+<div id="ageDenyMsg">
+  <div class="ic">🔞</div>
+  <h2>Sorry!</h2>
+  <p>আপনার বয়স ১৮ বছরের নিচে হওয়ায়<br>এই কন্টেন্ট আপনার জন্য প্রযোজ্য নয়।<br><br>নিচের বাটনে ক্লিক করে সাধারণ প্রিমিয়াম দেখুন।</p>
+  <button type="button" onclick="ageShowNormalPremium()">👑 সাধারণ Premium দেখুন</button>
+</div>
+
+<script>
+/* ✅ Premium ক্লিকে ১৮+ যাচাই */
+function getPremiumNavLink() { return document.querySelectorAll('.nav-link')[1]; }
+
+let ageAllowPremiumOnce = false;
+
+document.addEventListener('click', (e) => {
+  if (ageAllowPremiumOnce) return;
+  const pLink = getPremiumNavLink();
+  if (!pLink || !pLink.contains(e.target)) return;
+  e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+  document.getElementById('ageAskModal').style.display = 'flex';
+}, true);
+
+/* ✅ ১৮+ → ভেরিফিকেশন পেজে */
+window.ageGoAbove18 = () => {
+  document.getElementById('ageAskModal').style.display = 'none';
+  window.location.href = 'adult-premium.html';
+};
+
+/* ✅ ১৮- → Sorry মেসেজ */
+window.ageGoBelow18 = () => {
+  document.getElementById('ageAskModal').style.display = 'none';
+  document.getElementById('ageDenyMsg').style.display = 'block';
+};
+
+/* ✅ মেসেজের বাটন → মূল সাইটের Premium ভিডিও */
+window.ageShowNormalPremium = () => {
+  document.getElementById('ageDenyMsg').style.display = 'none';
+  document.getElementById('ageAskModal').style.display = 'none';
+  ageAllowPremiumOnce = true;
+  const link = getPremiumNavLink();
+  try {
+    if (window.switchTab && link) {
+      window.switchTab('trending', link);
+    } else if (link) {
+      link.click();
+    }
+  } catch (err) { console.error(err); }
+  setTimeout(() => { ageAllowPremiumOnce = false; }, 1000);
+};
+</script>
 </body>
 </html>
