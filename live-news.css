@@ -1,0 +1,93 @@
+
+/* Live NewsAPI section */
+.live-news-panel {
+  max-width: 1200px;
+  margin: 28px auto;
+  padding: 0 15px;
+  color: var(--text-color, #222);
+}
+.live-news-panel .live-news-heading {
+  display:flex; flex-wrap:wrap; align-items:center;
+  justify-content:space-between; gap:12px; margin-bottom:14px;
+}
+.live-news-panel h2 { margin:0; font-size:clamp(1.35rem,3vw,2rem); }
+.live-news-panel .live-news-controls { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+.live-news-panel button, .live-news-panel input {
+  font:inherit; border-radius:8px; padding:9px 12px; border:1px solid #d1d5db;
+}
+.live-news-panel button { background:#f7f7f7; cursor:pointer; }
+.live-news-panel button.is-active { background:#b91c1c; color:#fff; border-color:#b91c1c; }
+.live-news-panel .live-news-search { display:flex; gap:8px; width:100%; margin-bottom:14px; }
+.live-news-panel .live-news-search input { flex:1; min-width:0; }
+.live-news-panel .live-news-search button, .live-news-panel .live-refresh {
+  background:#b91c1c; color:white; border-color:#b91c1c;
+}
+.live-news-panel .live-news-grid {
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px;
+}
+.live-news-panel .live-news-card {
+  display:flex; flex-direction:column; min-width:0; overflow:hidden;
+  background:var(--bg-color,#fff); border:1px solid #e5e7eb;
+  border-radius:12px; box-shadow:0 3px 12px #0000000c;
+}
+.live-news-panel .live-news-card img {
+  display:block; width:100%; height:190px; object-fit:cover; background:#e5e7eb;
+}
+.live-news-panel .live-news-content { padding:14px; display:flex; flex-direction:column; flex:1; }
+.live-news-panel .live-news-source { color:#b91c1c; font-size:.82rem; font-weight:700; }
+.live-news-panel .live-news-content h3 { font-size:1.1rem; line-height:1.55; margin:8px 0; overflow-wrap:anywhere; }
+.live-news-panel .live-news-content p { line-height:1.7; margin:0 0 10px; }
+.live-news-panel .live-news-meta { color:#737373; font-size:.8rem; margin-bottom:10px; }
+.live-news-panel .live-news-content a { color:#b91c1c; font-weight:700; text-decoration:none; margin-top:auto; }
+.live-news-panel .live-news-status { padding:12px 0; }
+@media(max-width:800px) { .live-news-panel .live-news-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:520px) {
+ .live-news-panel .live-news-grid { grid-template-columns:1fr; }
+ .live-news-panel .live-news-card img { height:210px; }
+ .live-news-panel .live-news-search { flex-wrap:wrap; }
+ .live-news-panel .live-news-search input { width:100%; flex-basis:100%; }
+}
+
+
+/* Clearly labeled responsive ads placed before every live-news story */
+.live-news-panel .live-news-card { overflow: hidden; }
+.live-news-panel .story-ad-slot {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:6px; width:100%; min-height:48px; padding:10px 8px 12px;
+  background:var(--bg-color, #fff); border-bottom:1px solid #e5e7eb;
+}
+.live-news-panel .story-ad-label {
+  display:block; font-size:11px; letter-spacing:.04em; color:#6b7280;
+}
+.live-news-panel .story-ad-frame {
+  display:flex; align-items:center; justify-content:center; width:100%; max-width:300px;
+  min-height:50px; overflow:hidden;
+}
+.live-news-panel .story-ad-frame iframe { max-width:100%; }
+.live-news-panel .story-sponsored-link {
+  display:inline-flex; align-items:center; justify-content:center; min-height:40px;
+  margin-top:6px; padding:9px 20px; border-radius:8px;
+  background:linear-gradient(135deg,#087f5b,#1677d2); color:#fff;
+  border:1px solid #087f5b; box-shadow:0 2px 7px #00000018;
+  font-weight:700; text-decoration:none; overflow-wrap:anywhere; text-align:center;
+  transition:filter .15s ease, transform .15s ease;
+}
+.live-news-panel .story-sponsored-link:hover,
+.live-news-panel .story-sponsored-link:focus { filter:brightness(.92); color:#fff; transform:translateY(-1px); }
+@media (max-width: 576px) {
+  .live-news-panel .live-news-grid { grid-template-columns:minmax(0,1fr); }
+  .live-news-panel .story-ad-slot { padding:8px 4px 10px; }
+}
+
+/* Each live-story banner uses an isolated iframe so Adsterra's document.write
+   tag can execute independently without replacing the main page. */
+.live-news-panel .story-ad-iframe {
+  display:block;
+  width:min(300px, 100%);
+  height:250px;
+  max-width:100%;
+  border:0;
+  margin:0 auto;
+  background:transparent;
+}
+.live-news-panel .story-ad-slot { min-height:0; }

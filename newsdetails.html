@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সংবাদ বিস্তারিত - বাংলার প্রথম অনলাইন সংবাদপত্র</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Locomotive Scroll -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&family=Playfair+Display:wght@600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #e74c3c;
+            --text-color: #333;
+            --bg-color: #fff;
+        }
+
+        .dark-mode {
+            --primary-color: #ecf0f1;
+            --secondary-color: #e67e22;
+            --text-color: #ffffff;
+            /* Ensure text is white in dark mode */
+            --bg-color: #2c3e50;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(var(--bg-color), 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .news-ticker {
+            background: var(--secondary-color);
+            color: white;
+            padding: 8px 0;
+            overflow: hidden;
+        }
+
+        .news-details {
+            margin-top: 30px;
+        }
+
+        .news-details img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .news-details h1 {
+            font-size: 2.5rem;
+            margin-top: 20px;
+        }
+
+        .news-details .meta {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .news-details .content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-top: 20px;
+        }
+
+        .social-share {
+            margin-top: 30px;
+        }
+
+        .social-share i {
+            font-size: 1.5rem;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        .reaction-buttons .btn {
+            margin: 0 5px;
+        }
+
+        .comment-section {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .comment-section h4 {
+            margin-bottom: 20px;
+        }
+
+        .comment-section textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .comment-section button {
+            margin-top: 10px;
+        }
+
+        .comments .comment {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .comments .comment:last-child {
+            border-bottom: none;
+        }
+
+        .comments .comment img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .comments .comment strong {
+            font-size: 1rem;
+        }
+
+        .comments .comment p {
+            margin-top: 5px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+    
+    /* Adsterra বিজ্ঞাপন: মোবাইল ও ডেস্কটপে responsive layout */
+    .ad-slot { margin: 24px auto; text-align: center; max-width: 100%; clear: both; }
+    .ad-label { display:block; color:#777; font-size:12px; margin-bottom:7px; }
+    .ad-banner-300 { width:300px; max-width:100%; min-height:250px; margin-left:auto; margin-right:auto; overflow:hidden; }
+    .ad-native { width:100%; min-height:100px; overflow:hidden; }
+    .ad-smartlink { display:inline-block; padding:10px 16px; border:1px solid #ddd; border-radius:6px; color:#34495e; background:#f8f9fa; text-decoration:none; }
+    .ad-smartlink:hover { text-decoration:underline; }
+    .ad-slot iframe { max-width:100%; }
+
+    </style>
+    <link rel="stylesheet" href="/live-news.css">
+</head>
+
+<body data-scroll-container>
+    <!-- News Ticker -->
+    <div class="news-ticker">
+        <marquee behavior="scroll" direction="left">
+            <span id="current-date"></span> |
+            <span id="current-time"></span> |
+            সর্বশেষ খবর: বাংলাদেশে নতুন অর্থনৈতিক নীতি ঘোষণা | বিশ্ব কাপ ফুটবলে আর্জেন্টিনার জয় | ঢাকায় নতুন মেট্রোরেল
+            পরিষেবা চালু
+        </marquee>
+    </div>
+
+    <!-- Header -->
+    <header class="sticky-nav">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+                <a class="navbar-brand" href="index.html"><img src="deshergorjon-test.png" alt="Logo" height="80"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link" href="index.html">সর্বশেষ</a></li>
+                        <li class="nav-item"><a class="nav-link" href="rajniti.html">রাজনীতি</a></li>
+                        <li class="nav-item"><a class="nav-link" href="bangladesh.html">বাংলাদেশ</a></li>
+                        <li class="nav-item"><a class="nav-link" href="aporadh.html">অপরাধ</a></li>
+                        <li class="nav-item"><a class="nav-link" href="antorjatik.html">বিশ্ব</a></li>
+                        <li class="nav-item"><a class="nav-link" href="byaboshay.html">বাণিজ্য</a></li>
+                        <li class="nav-item"><a class="nav-link" href="motamot.html">মতামত</a></li>
+                        <li class="nav-item"><a class="nav-link" href="khela.html">খেলা</a></li>
+                        <li class="nav-item"><a class="nav-link" href="binodon.html">বিনোদন</a></li>
+                        <li class="nav-item"><a class="nav-link" href="chakri.html">চাকরি</a></li>
+                        <li class="nav-item"><a class="nav-link" href="jibonjapon.html">জীবনযাপন</a></li>
+                    </ul>
+                    <div class="d-flex align-items-center">
+                        <!-- Search Bar -->
+                        <form class="d-flex me-2">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
+                        </form>
+
+                        <!-- Dark Mode Toggle -->
+                        <button id="darkModeToggle" class="btn btn-secondary me-2"><i class="fas fa-moon"></i></button>
+
+                        <!-- Language Dropdown -->
+                        <div class="dropdown language-dropdown">
+                            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="languageDropdown"
+                                data-bs-toggle="dropdown">
+                                <i class="fas fa-globe"></i> ভাষা
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">English</a></li>
+                                <li><a class="dropdown-item" href="#">বাংলা</a></li>
+                                <li><a class="dropdown-item" href="#">हिंदी</a></li>
+                                <li><a class="dropdown-item" href="#">Español</a></li>
+                                <li><a class="dropdown-item" href="#">日本語</a></li>
+                                <li><a class="dropdown-item" href="#">中文</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- User Login/Registration Button -->
+                        <button class="btn btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <i class="fas fa-user"></i> লগইন/রেজিস্ট্রেশন
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+
+        <!-- Adsterra Banner 300x250 -->
+        <div class="ad-slot ad-banner-300" aria-label="বিজ্ঞাপন">
+            <span class="ad-label">বিজ্ঞাপন</span>
+            <script>
+              atOptions = {
+                'key' : '5323d19afb267c0f1f923017f0a8a6a1',
+                'format' : 'iframe',
+                'height' : 250,
+                'width' : 300,
+                'params' : {}
+              };
+            </script>
+            <script src="https://bicea.org/22/5323d19afb267c0f1f923017f0a8a6a1"></script>
+        </div>
+
+        <!-- News Details Section -->
+        <div class="news-details">
+            <img src="featured.jpg" alt="News Image">
+            <h1>বাংলাদেশে নতুন অর্থনৈতিক নীতি ঘোষণা</h1>
+            <div class="meta">
+                <span><i class="fas fa-user"></i> রিপোর্টার: জাহিদ হাসান</span> |
+                <span><i class="fas fa-calendar"></i> ২৫ জুলাই ২০২৩</span>
+            </div>
+            <div class="content">
+                <p>প্রধানমন্ত্রী আজ বাংলাদেশের নতুন অর্থনৈতিক নীতি ঘোষণা করেছেন যার মাধ্যমে দেশের অর্থনীতিকে আরও
+                    শক্তিশালী করার পরিকল্পনা নেওয়া হয়েছে। এই নীতির মাধ্যমে সরকার দেশের অর্থনৈতিক প্রবৃদ্ধি ত্বরান্বিত
+                    করতে চায় এবং বেকারত্বের হার কমাতে চায়। নতুন নীতিতে বিশেষ গুরুত্ব দেওয়া হয়েছে কৃষি, শিল্প ও
+                    তথ্যপ্রযুক্তি খাতে।</p>
+                <p>প্রধানমন্ত্রী বলেন, "আমাদের লক্ষ্য হলো একটি সমৃদ্ধ ও আত্মনির্ভরশীল বাংলাদেশ গড়ে তোলা। এই নীতির
+                    মাধ্যমে আমরা দেশের প্রতিটি নাগরিকের জীবনমান উন্নত করতে চাই।" তিনি আরও বলেন, "আমরা কৃষকদের জন্য বিশেষ
+                    সহায়তা প্রদান করব এবং শিল্প খাতে বিনিয়োগ বাড়াব।"</p>
+                <p>অর্থনীতিবিদরা এই নীতিকে স্বাগত জানিয়েছেন। তারা বলেছেন, এই নীতি বাস্তবায়িত হলে বাংলাদেশের অর্থনীতি আরও
+                    গতিশীল হবে এবং বৈদেশিক বিনিয়োগ বৃদ্ধি পাবে।</p>
+            </div>
+
+        <!-- Adsterra Native Banner -->
+        <div class="ad-slot ad-native" aria-label="স্পনসরড বিজ্ঞাপন">
+            <span class="ad-label">স্পনসরড</span>
+            <script async="async" data-cfasync="false" src="https://bicea.org/21/f317481bc75504bccae0a976250e7ba3"></script>
+            <div id="container-f317481bc75504bccae0a976250e7ba3"></div>
+        </div>
+
+
+            <!-- Social Share Buttons -->
+            <div class="social-share">
+                <i class="fab fa-facebook text-primary"></i>
+                <i class="fab fa-twitter text-info"></i>
+                <i class="fab fa-whatsapp text-success"></i>
+            </div>
+
+            <!-- Reaction Buttons -->
+            <div class="reaction-buttons mt-4">
+                <button class="btn btn-outline-primary"><i class="fas fa-thumbs-up"></i> ২৩৪</button>
+                <button class="btn btn-outline-danger"><i class="fas fa-thumbs-down"></i> ১২</button>
+                <button class="btn btn-outline-warning"><i class="fas fa-heart"></i> ১৫৬</button>
+            </div>
+        </div>
+
+        <!-- Related News Section -->
+        <div class="related-news mt-5">
+            <h3 class="mb-3">সম্পর্কিত খবর</h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="News Image">
+                        <div class="card-body">
+                            <h5 class="card-title">সম্পর্কিত খবর 1</h5>
+                            <p class="card-text">সম্পর্কিত সংবাদের সংক্ষিপ্ত বিবরণ।</p>
+                            <a href="#" class="btn btn-primary">আরও পড়ুন</a>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="News Image">
+                        <div class="card-body">
+                            <h5 class="card-title">সম্পর্কিত খবর ২</h5>
+                            <p class="card-text">সম্পর্কিত সংবাদের সংক্ষিপ্ত বিবরণ।</p>
+                            <a href="#" class="btn btn-primary">আরও পড়ুন</a>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="News Image">
+                        <div class="card-body">
+                            <h5 class="card-title">সম্পর্কিত খবর ৩</h5>
+                            <p class="card-text">সম্পর্কিত সংবাদের সংক্ষিপ্ত বিবরণ।</p>
+                            <a href="#" class="btn btn-primary">আরও পড়ুন</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Page navigation" class="my-5">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">পূর্ববর্তী</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">পরবর্তী</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Comment Section -->
+        <div class="comment-section">
+            <h4>মন্তব্য করুন</h4>
+            <form id="commentForm">
+                <textarea placeholder="আপনার মন্তব্য লিখুন..." required></textarea>
+                <button type="submit" class="btn btn-primary mt-3">মন্তব্য প্রকাশ করুন</button>
+            </form>
+
+            <div class="comments mt-5">
+                <div class="comment">
+                    <div class="d-flex align-items-center">
+                        <img src="user1.jpg" alt="User">
+                        <strong>রহিম আহমেদ</strong>
+                    </div>
+                    <p>খুব ভালো প্রতিবেদন। ধন্যবাদ সম্পাদক মহোদয়।</p>
+                </div>
+
+                <div class="comment">
+                    <div class="d-flex align-items-center">
+                        <img src="user2.jpg" alt="User">
+                        <strong>সুমাইয়া ইসলাম</strong>
+                    </div>
+                    <p>অনেক গুরুত্বপূর্ণ তথ্য জানা গেল। আপনাদেরকে ধন্যবাদ।</p>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Adsterra Smartlink: স্পষ্ট বিজ্ঞাপন লিংক -->
+        <div class="ad-slot">
+            <span class="ad-label">স্পনসরড লিংক</span>
+            <a class="ad-smartlink" href="https://arwf.org/4/15c791dad56db996e6b3e5efb321df55"
+               target="_blank" rel="sponsored noopener noreferrer">বিজ্ঞাপন দেখুন</a>
+        </div>
+
+</main>
+
+
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">লগইন / রেজিস্ট্রেশন</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs mb-4">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#login">লগইন</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#register">রেজিস্ট্রেশন</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="login">
+                            <form>
+                                <div class="mb-3">
+                                    <input type="email" class="form-control" placeholder="ইমেইল ঠিকানা" required>
+                                </div>
+                                <div class="mb-3">
+                                    <input type="password" class="form-control" placeholder="পাসওয়ার্ড" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">লগইন করুন</button>
+                            </form>
+                        </div>
+
+                        <div class="tab-pane" id="register">
+                            <form>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" placeholder="নাম" required>
+                                </div>
+                                <div class="mb-3">
+                                    <input type="email" class="form-control" placeholder="ইমেইল ঠিকানা" required>
+                                </div>
+                                <div class="mb-3">
+                                    <input type="password" class="form-control" placeholder="পাসওয়ার্ড" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">রেজিস্ট্রেশন করুন</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    <script>
+        // Dark Mode Toggle
+        document.getElementById('darkModeToggle').addEventListener('click', function () {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        });
+
+        // Initialize Locomotive Scroll
+        const scroll = new LocomotiveScroll({
+            el: document.querySelector('[data-scroll-container]'),
+            smooth: true
+        });
+
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.from(".news-details", {
+            scrollTrigger: ".news-details",
+            opacity: 0,
+            y: 50,
+            duration: 1,
+        });
+
+        // Update Time
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('current-date').textContent = now.toLocaleDateString('bn-BD');
+            document.getElementById('current-time').textContent = now.toLocaleTimeString('bn-BD');
+        }
+        setInterval(updateTime, 1000);
+
+        // Comment Form Handling
+        document.getElementById('commentForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert('আপনার মন্তব্য সফলভাবে জমা হয়েছে!');
+            this.reset();
+        });
+    </script>
+<!-- Adsterra Social Bar -->
+    <script data-cfasync="false" src="https://bicea.org/14/8809c8f30a97173097e775bf43279e64"></script>
+
+    <script src="/live-news.js" defer></script>
+</body>
+
+</html>
